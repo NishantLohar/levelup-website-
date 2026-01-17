@@ -1,0 +1,377 @@
+/* Social Icon Styling for SVG */
+.social-icon {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.social-icon svg {
+  width: 150%;
+  height: 150%;
+  filter: drop-shadow(0 5px 20px rgba(0, 0, 0, 0.3));
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.social-card:hover .social-icon svg {
+  color: var(--social-color);
+  transform: scale(1.1) rotateY(10deg);
+}
+
+/* Special styling for each platform */
+.social-card:nth-child(1):hover .social-icon svg {
+  color: #E4405F; /* Instagram */
+}
+
+.social-card:nth-child(2):hover .social-icon svg {
+  color: #0077B5; /* LinkedIn */
+}
+
+.social-card:nth-child(3):hover .social-icon svg {
+  color: #5865F2; /* Discord */
+}
+
+.social-card:nth-child(4):hover .social-icon svg {
+  color: #000000; /* X */
+  filter: drop-shadow(0 5px 20px rgba(255, 255, 255, 0.5));
+}
+/* General Page Styles */
+.community-page {
+  font-family: "Poppins", sans-serif;
+  color: #fff;
+  background: transparent;
+  overflow-x: hidden;
+  padding-top: 100px;
+  /* min-height: 100vh; */
+}
+
+/* ========== HERO SECTION (Blue Background) ========== */
+.community-hero {
+  background: linear-gradient(135deg, rgba(30, 144, 255, 0.88) 0%, rgba(123, 97, 255, 0.88) 100%);
+  backdrop-filter: blur(20px);
+  color: white;
+  text-align: center;
+  padding: 100px 40px 80px;
+  margin: 0 20px 80px;
+  border-radius: 30px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.community-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.community-hero h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.community-hero p {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  max-width: 900px;
+  margin: 0 auto;
+  opacity: 0.95;
+  position: relative;
+  z-index: 1;
+}
+
+.community-hero strong {
+  font-weight: 600;
+  color: #00ffff;
+}
+
+/* ========== REGISTRATION CARDS ========== */
+.registration-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto 100px;
+  padding: 0 20px;
+}
+
+.registration-card {
+  background: rgba(99, 56, 56, 0.05);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  padding: 50px 40px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.registration-card:hover {
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  border-color: rgba(30, 144, 255, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.card-icon {
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+}
+
+.registration-card h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #1E90FF, #7B61FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.registration-card p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 2rem;
+}
+
+.registration-card strong {
+  color: #00ffff;
+  font-weight: 600;
+}
+
+.join-btn {
+  background: linear-gradient(135deg, #1E90FF, #7B61FF);
+  color: white;
+  padding: 16px 40px;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(30, 144, 255, 0.3);
+}
+
+.join-btn:hover {
+  box-shadow: 0 15px 40px rgba(30, 144, 255, 0.5);
+  transform: translateY(-3px);
+}
+
+/* ========== SOCIAL MEDIA SECTION ========== */
+.social-section {
+  padding: 80px 20px 100px;
+  text-align: center;
+  background: transparent;
+}
+
+.social-section h2 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #1E90FF, #7B61FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+.social-subtitle {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 700px;
+  margin: 0 auto 4rem;
+  line-height: 1.6;
+}
+
+.social-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+  padding: 0 20px;
+}
+
+.social-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 40px 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.social-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--social-color, #1E90FF), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.social-card:hover::before {
+  opacity: 0.1;
+}
+
+.social-card:hover {
+  border-color: var(--social-color);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.social-icon {
+  font-size: 4rem;
+  filter: drop-shadow(0 5px 20px rgba(0, 0, 0, 0.3));
+  position: relative;
+  z-index: 1;
+}
+
+.social-card h3 {
+  font-size: 1.5rem;
+  color: white;
+  font-weight: 600;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.social-handle {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.social-arrow {
+  font-size: 1.5rem;
+  color: var(--social-color);
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.social-card:hover .social-arrow {
+  transform: translateX(5px);
+}
+
+.cta-box {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 30px 40px;
+  max-width: 600px;
+  margin: 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.cta-box p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+@media (max-width: 768px) {
+  .community-page {
+    padding-top: 80px;
+  }
+
+  .community-hero {
+    padding: 80px 25px 60px;
+    margin: 0 15px 60px;
+  }
+
+  .community-hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .community-hero p {
+    font-size: 1.05rem;
+  }
+
+  .registration-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 80px;
+  }
+
+  .social-section h2 {
+    font-size: 2.2rem;
+  }
+  .social-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .community-hero h1 {
+    font-size: 2rem;
+  }
+
+  .community-hero p {
+    font-size: 1rem;
+  }
+
+  .registration-card {
+    padding: 40px 30px;
+  }
+
+  .registration-card h2 {
+    font-size: 1.7rem;
+  }
+
+  .social-section h2 {
+    font-size: 1.8rem;
+  }
+
+  .cta-box {
+    padding: 25px 30px;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

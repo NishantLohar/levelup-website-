@@ -1,0 +1,120 @@
+/* ========== PARTNERS & SPONSORS CAROUSEL ========== */
+
+.partners-section {
+  padding: 80px 20px 100px;
+  text-align: center;
+  position: relative;
+}
+
+.partners-section h2 {
+  font-size: 3rem;
+  margin-bottom: 3rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #1E90FF, #7B61FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Wrapper for fade masks */
+.partners-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Carousel */
+.partners-carousel {
+  overflow: hidden;
+  width: 100%;
+}
+
+.partners-track {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+  width: max-content;
+  animation: scrollPartners 25s linear infinite;
+}
+
+.partner-logo {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.partner-logo img {
+  height: 80px;
+  width: auto;
+  /* filter: grayscale(100%); */
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.partner-logo img:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Pause on hover */
+.partners-wrapper:hover .partners-track {
+  animation-play-state: paused;
+}
+
+/* Fade masks */
+.fade {
+  position: absolute;
+  top: 0;
+  width: 120px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.fade-left {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    #0b0f1a 0%,
+    rgba(11, 15, 26, 0) 100%
+  );
+}
+
+.fade-right {
+  right: 0;
+  background: linear-gradient(
+    to left,
+    #0b0f1a 0%,
+    rgba(11, 15, 26, 0) 100%
+  );
+}
+
+/* Infinite scroll animation */
+@keyframes scrollPartners {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .partners-section h2 {
+    font-size: 2.2rem;
+  }
+
+  .partner-logo img {
+    height: 60px;
+  }
+
+  .partners-track {
+    gap: 50px;
+  }
+
+  .fade {
+    width: 60px;
+  }
+}

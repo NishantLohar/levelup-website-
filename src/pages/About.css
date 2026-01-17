@@ -1,0 +1,604 @@
+/* Smooth scroll styles */
+html, body {
+  overflow-x: hidden !important;
+}
+
+.about-page {
+  overflow-x: hidden !important;
+}
+
+.vision-container,
+.mission-container,
+.team-container {
+  max-width: 100%;
+  overflow: hidden;
+}
+html {
+  scroll-behavior: smooth;
+}
+
+/* Add smooth transitions to all sections */
+.about-hero,
+.about-content,
+.vision-container,
+.mission-container,
+.about-mentors {
+  transition: all 0.3s ease-out;
+}
+
+/* Enhanced hover effects */
+.vision-image img,
+.mission-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vision-image img:hover,
+.mission-image img:hover {
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+
+/* Add smooth backdrop blur transitions */
+.about-content,
+.vision-container,
+.mission-container,
+.about-mentors p {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.about-content:hover,
+.vision-container:hover,
+.mission-container:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-5px);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
+}
+
+/* Smooth text animations */
+.about-content h2,
+.vision-text h2,
+.mission-text h2,
+.about-mentors h2 {
+  transition: all 0.3s ease;
+}
+
+/* Add subtle scale on scroll */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.about-content,
+.vision-container,
+.mission-container {
+  animation: scaleIn 0.6s ease-out;
+}
+/* General Page Styles */
+.about-page {
+  font-family: "Poppins", sans-serif;
+  line-height: 1.8;
+  color: #fff;
+  background: transparent; /* Show particles background */
+  overflow-x: hidden;
+  padding-top: 100px;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Hero Section - ONLY THIS HAS BLUE BACKGROUND */
+.about-hero {
+  background: linear-gradient(135deg, rgba(30, 144, 255, 0.88) 0%, rgba(123, 97, 255, 0.88) 100%);
+  backdrop-filter: blur(20px);
+  color: white;
+  text-align: center;
+  padding: 100px 20px 70px;
+  border-radius: 30px;
+  margin: 0 20px 80px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: fadeIn 1s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Optional: Add animated grid to hero section */
+.about-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.about-hero h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  z-index: 1;
+}
+
+.about-hero p {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.2rem;
+  opacity: 0.95;
+  line-height: 1.8;
+  position: relative;
+  z-index: 1;
+}
+
+/* Section Base - Rest of page shows particles */
+.about-content,
+.about-activities,
+.about-goals,
+.about-mentors {
+  padding: 80px 20px;
+  text-align: center;
+  transition: all 0.4s ease;
+  background: transparent; /* Show particles through */
+}
+
+.about-content h2,
+.about-activities h2,
+.about-goals h2,
+.about-mentors h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #1E90FF, #7B61FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  font-weight: 700;
+}
+
+.about-content h2::after,
+.about-activities h2::after,
+.about-goals h2::after,
+.about-mentors h2::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #1E90FF, #7B61FF);
+  margin: 15px auto 20px;
+  border-radius: 3px;
+}
+
+/* Who We Are - Glass effect over particles */
+.about-content {
+  max-width: 900px;
+  padding: 80px 40px;
+  margin: 0 auto 80px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: fadeUp 1s ease;
+}
+
+.about-content p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+/* Vision Section - Glass effect over particles */
+.about-activities {
+  background: transparent;
+  padding: 80px 20px;
+}
+
+.vision-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  max-width: 1200px;
+  margin: auto;
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  padding: 60px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.vision-text {
+  flex: 1;
+  text-align: left;
+  min-width: 300px;
+}
+
+.vision-text h2 {
+  font-size: 2.8rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.vision-text h2::after {
+  margin: 15px 0 20px;
+}
+
+.vision-text p {
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.9;
+  font-size: 1.1rem;
+}
+
+.vision-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  min-width: 300px;
+}
+
+.vision-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease;
+}
+
+.vision-image img:hover {
+  transform: scale(1.05);
+}
+
+/* Mission Section - Glass effect over particles */
+.about-goals {
+  padding: 80px 20px;
+  background: transparent;
+}
+
+.mission-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  max-width: 1200px;
+  margin: auto;
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  padding: 60px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.mission-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  min-width: 300px;
+}
+
+.mission-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease;
+}
+
+.mission-image img:hover {
+  transform: scale(1.05);
+}
+
+.mission-text {
+  flex: 1;
+  text-align: left;
+  min-width: 300px;
+}
+
+.mission-text h2 {
+  font-size: 2.8rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.mission-text h2::after {
+  margin: 15px 0 20px;
+}
+
+.mission-text p {
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.9;
+  font-size: 1.1rem;
+}
+
+/* Why Choose Us - Glass effect over particles */
+.about-mentors {
+  background: transparent;
+  padding: 80px 40px;
+  margin: 0 20px 40px;
+  border-radius: 30px;
+}
+
+.about-mentors h2 {
+  font-size: 2.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.about-mentors p {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.8;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  padding: 40px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+/* =============================
+   MY TEAM SECTION
+   ============================= */
+
+.about-team {
+  padding: 0px 20px;
+  text-align: center;
+  background: transparent;
+}
+
+.about-team h2 {
+  font-size: 2.8rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #1E90FF, #7B61FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
+
+.about-team h2::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #1E90FF, #7B61FF);
+  margin: 15px auto 30px;
+  border-radius: 3px;
+}
+
+.team-container {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.team-card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  padding: 30px;
+  width: 280px;
+  text-align: center;
+  border-radius: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.45);
+}
+
+.team-card img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.2);
+  margin-bottom: 15px;
+}
+
+.team-card h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.team-card p {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.85);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .team-card {
+    width: 240px;
+  }
+}
+
+@media (max-width: 480px) {
+  .team-card {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .vision-container,
+  .mission-container {
+    flex-direction: column;
+    text-align: center;
+    padding: 40px 30px;
+  }
+
+  .vision-text,
+  .mission-text {
+    text-align: center;
+  }
+
+  .vision-text h2::after,
+  .mission-text h2::after {
+    margin: 15px auto 20px;
+  }
+
+  .vision-image img,
+  .mission-image img {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-page {
+    padding-top: 80px;
+  }
+
+  .about-hero {
+    padding: 80px 20px 60px;
+    margin: 0 15px 60px;
+  }
+
+  .about-hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .about-hero p {
+    font-size: 1.05rem;
+  }
+
+  .about-content h2,
+  .about-activities h2,
+  .about-goals h2,
+  .about-mentors h2 {
+    font-size: 2rem;
+  }
+
+  .vision-text h2,
+  .mission-text h2 {
+    font-size: 2.2rem;
+  }
+
+  .about-content {
+    padding: 60px 30px;
+    margin: 0 15px 60px;
+  }
+
+  .vision-container,
+  .mission-container {
+    padding: 40px 25px;
+  }
+
+  .about-mentors {
+    padding: 60px 25px;
+    margin: 0 15px 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-page {
+    padding-top: 70px;
+  }
+
+  .about-hero {
+    padding: 60px 20px 50px;
+    margin: 0 10px 50px;
+  }
+
+  .about-hero h1 {
+    font-size: 2rem;
+  }
+
+  .about-hero p {
+    font-size: 1rem;
+  }
+
+  .about-content,
+  .about-goals,
+  .about-activities,
+  .about-mentors {
+    padding: 50px 20px;
+  }
+
+  .about-content h2,
+  .about-activities h2,
+  .about-goals h2,
+  .about-mentors h2 {
+    font-size: 1.7rem;
+  }
+
+  .vision-text h2,
+  .mission-text h2 {
+    font-size: 1.9rem;
+  }
+
+  .vision-container,
+  .mission-container {
+    padding: 30px 20px;
+  }
+
+  .about-mentors p {
+    padding: 30px 20px;
+    font-size: 1rem;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

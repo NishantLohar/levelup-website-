@@ -1,0 +1,85 @@
+/* ========== COMMUNITY INLINE STATS (SCOPED SAFELY) ========== */
+
+.community-stats {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.community-stats h2 {
+  font-size: 3rem;
+  margin-bottom: 3rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #1E90FF, #7B61FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Wrapper */
+.community-stats .stats-inline-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+/* Individual stat */
+.community-stats .stat-inline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 180px;
+}
+
+/* SVG Icon (SCOPED) */
+.community-stats .stat-icon {
+  width: 42px;
+  height: 42px;
+  fill: #00ffff;
+  margin-bottom: 12px;
+}
+
+/* Number */
+.community-stats .stat-number {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+/* Label */
+.community-stats .stat-label {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.75);
+  margin-top: 6px;
+}
+
+/* Divider */
+.community-stats .stat-divider {
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .community-stats .stats-inline-wrapper {
+    flex-direction: column;
+  }
+
+  .community-stats .stat-divider {
+    width: 60px;
+    height: 1px;
+  }
+
+  .community-stats .stat-number {
+    font-size: 2.8rem;
+  }
+}
