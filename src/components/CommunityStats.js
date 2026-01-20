@@ -93,7 +93,7 @@ const CommunityStats = () => {
             <path d="M16 13c-.91 0-1.77.13-2.57.37.88.9 1.57 2.09 1.57 3.63v2h9v-2c0-2.66-5.33-4-8-4z" />
           </svg>
           <div className="stat-number">{partners}</div>
-          <div className="stat-label">Partnerships</div>
+          <div className="stat-label">Partnerships & Sponsorship</div>
         </motion.div>
       </div>
     </section>

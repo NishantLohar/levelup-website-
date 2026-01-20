@@ -44,6 +44,67 @@ const Profile = () => {
       color: "#00D9FF",
       skills: ["JavaScript", "TypeScript", "Next.js", "Docker", "AWS", "PostgreSQL"]
     },
+    {
+      id: 4,
+      name: "Ripuranjan",
+      description: "Software development and R&D in STEM fields, Researcher in Astronomy.",
+      avatar: "R",
+      hackathons: 0,
+      projects: 1,
+      prizes: 1,
+      Events: 1,
+      color: "#00D9FF",
+      skills: ["Full Stack Developer", "AI/ML", "System Architect"]
+    },
+    {
+      id: 5,
+      name: "Gulam",
+      description: "Data Science.",
+      avatar: "G",
+      hackathons: 0,
+      projects: 0,
+      prizes: 0,
+      Events: 1,
+      color: "#00D9FF",
+      skills: ["Power BI", "ML", "Data Analysis" ]
+    },
+    {
+      id: 6,
+      name: "Sakshi",
+      description: "AI/ML.",
+      avatar: "S",
+      hackathons: 0,
+      projects: 0,
+      prizes: 0,
+      Events: 1,
+      color: "#00D9FF",
+      skills: ["Web Development","Python" ]
+    },
+    {
+      id: 7,
+      name: "Vivek",
+      description: "Web developer",
+      avatar: "V",
+      hackathons: 0,
+      projects: 1,
+      prizes: 0,
+      Events: 1,
+      color: "#00D9FF",
+      skills: ["Web Development","AI/DS" ]
+    },
+    // {
+    //   id: 8,
+    //   name: "Simmi",
+    //   description: "Web developer",
+    //   avatar: "S",
+    //   hackathons: 0,
+    //   projects: 1,
+    //   prizes: 0,
+    //   Events: 1,
+    //   color: "#00D9FF",
+    //   skills: ["Web Development","AI/DS" ]
+    // },
+
   ];
 
   // Initialize Lenis smooth scrolling
@@ -156,9 +217,9 @@ const Profile = () => {
             whileHover={{ y: -5 }}
           >
             {/* Rank Badge */}
-            <div className="rank-badge" style={{ background: user.color }}>
+            {/* <div className="rank-badge" style={{ background: user.color }}>
               {getMedalEmoji(index)}
-            </div>
+            </div> */}
 
             {/* Left Section: Avatar + Info */}
             <div className="profile-left">
@@ -221,11 +282,11 @@ const Profile = () => {
                 </motion.div>
               </div>
 
-              {index < 3 && (
+              {/* {index < 3 && (
                 <div className="spotlight-badge">
                   ⭐ Top Performer
                 </div>
-              )}
+              )} */}
             </div>
           </motion.div>
         ))}

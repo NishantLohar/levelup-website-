@@ -18,7 +18,7 @@ const AnnouncementBanner = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const message = "• Hack The Hype 🏆 2026 48hr Offline Hackathon";
+  const message = "• HackTheHype Hackathon🏆 Open Tech 2026";
   const repeatedMessage = Array(20).fill(message).join(" ");
 
   return (

@@ -278,7 +278,7 @@ const Home = () => {
         </motion.div>
       </section>
 
-      <PartnersCarousel title="Trusted by Our Partners" />
+      <PartnersCarousel title="Trusted by Our Partners & Sponsor" />
       <CommunityStats /> 
 
       {/* Mentor Section */}
@@ -290,7 +290,7 @@ const Home = () => {
     viewport={{ once: true }}
     transition={{ duration: 0.6 }}
   >
-    <h2>Meet Our Top<span className="highlight">Mentors</span></h2>
+    <h2>Meet Our Top <span className="highlight"> Mentors</span></h2>
     <p>Learn from industry experts who are passionate about guiding the next generation</p>
   </motion.div>
 
