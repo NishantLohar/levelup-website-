@@ -361,6 +361,30 @@ html {
 /* =============================
    MY TEAM SECTION
    ============================= */
+/* ===== TEAM LINKEDIN ICON ===== */
+
+.team-card {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.team-linkedin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0;
+}
+
+.team-linkedin i {
+  font-size: 20px;
+  color: #0A66C2;
+  transition: transform 0.3s ease;
+}
+
+.team-card:hover .team-linkedin i {
+  transform: scale(1.15);
+}
 
 .about-team {
   padding: 0px 20px;

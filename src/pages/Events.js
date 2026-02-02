@@ -289,7 +289,7 @@ const Events = () => {
       description:
         "Open Tech is an online session empowering students with AI and next-gen technical skills.",
       category: "Session",
-      image: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=500",
+      image: "/opentech-logo.jpeg",
       zohoForm: "https://forms.zohopublic.in/infolevelu1/form/OpenTech2026EventRegistration/formperma/9Eg9Dj7CCwUSv2528ajtVFcanyFwG08qROkOiAgYvo4",
       brochure: "/opentech.pdf",
       showDevfolio: false,
@@ -426,7 +426,7 @@ const Events = () => {
           >
             <div className="event-image">
               <img
-                src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=500"
+                src="/hackspace-logo.jpg"
                 alt="Hack Space 2025"
               />
               <span className="event-category">Completed</span>
