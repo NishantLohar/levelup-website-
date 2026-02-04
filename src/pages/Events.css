@@ -453,7 +453,7 @@
   margin: 0 auto;
   display: flex;
   justify-content: flex-start; /* LEFT SIDE */
-  gap: 40px;
+  gap: 30px;
 }
 
 /* Make completed event card smaller */

@@ -284,7 +284,7 @@ const Events = () => {
       id: 2,
       title: "Open Tech 2026",
       date: "Jan 25 to Feb 14",
-      time: "Announcing Soon",
+      time: "4 p.m.",
       location: "Virtual (YouTube)",
       description:
         "Open Tech is an online session empowering students with AI and next-gen technical skills.",
@@ -292,6 +292,20 @@ const Events = () => {
       image: "/opentech-logo.jpeg",
       zohoForm: "https://forms.zohopublic.in/infolevelu1/form/OpenTech2026EventRegistration/formperma/9Eg9Dj7CCwUSv2528ajtVFcanyFwG08qROkOiAgYvo4",
       brochure: "/opentech.pdf",
+      showDevfolio: false,
+    },
+    {
+      id: 3,
+      title: "NextGen Hackathon",
+      date: "Feb-22-2026",
+      time: "Announcing soon",
+      location: "Virtual",
+      description:
+        "NextGen is a 8hrs online Hackathon with tracks on AI/ML & Web Development",
+      category: "Hackathon",
+      image: "/nextgen-logo.png",
+      zohoForm: "https://docs.google.com/forms/d/e/1FAIpQLSdGaZUN8vq8MdWfWceFHEGg0wPSbAiVLESjk5dc6-xdDArJjg/viewform?usp=publish-editor",
+      brochure: "#",
       showDevfolio: false,
     },
   ];
