@@ -613,3 +613,21 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ================= MOBILE EVENTS STACK FIX ================= */
+
+@media (max-width: 768px) {
+
+  /* Upcoming events stack vertical */
+  .completed-events-wrapper {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  /* Each card full width in mobile */
+  .completed-events-wrapper .event-card {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+}
