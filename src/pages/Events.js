@@ -269,7 +269,7 @@ const Events = () => {
   const upcomingEvents = [
     {
       id: 1,
-      title: "HacktheHype 2026",
+      title: "HackTheHype 2026",
       date: "March 1st week (date yet to announce)",
       time: "Announcing Soon",
       location: "Mumbai",

@@ -18,7 +18,7 @@ const AnnouncementBanner = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const message = "• HackTheHype Hackathon🏆 NextGen";
+  const message = "• HackTheHype Hackathon • NextGen";
   const repeatedMessage = Array(20).fill(message).join(" ");
 
   return (
