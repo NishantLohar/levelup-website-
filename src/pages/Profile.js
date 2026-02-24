@@ -29,7 +29,7 @@ const Profile = () => {
       photo: "/users/ripu.jpg",
       hackathons: 0,
       projects: 1,
-      prizes: 1,
+      prizes: 2,
       Events: 1,
       color: "#00D9FF",
       skills: ["Full Stack Developer", "AI/ML", "System Architect"]
