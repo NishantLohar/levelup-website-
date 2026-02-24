@@ -234,6 +234,7 @@ import Lenis from "lenis";
 import "./Events.css";
 
 const Events = () => {
+
   /* ================= LENIS SMOOTH SCROLL ================= */
   useEffect(() => {
     const lenis = new Lenis({
@@ -275,43 +276,16 @@ const Events = () => {
       location: "Mumbai",
       description: "48-hour coding marathon with exciting prizes and mentorship.",
       category: "Hackathon",
-      image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500",
+      image: "./hack-logo.jpeg",
       zohoForm: "#",
       brochure: "/hackthehype-brochure.pdf",
-      showDevfolio: false,
-    },
-    {
-      id: 2,
-      title: "Open Tech 2026",
-      date: "Jan 25 to Feb 14",
-      time: "4 p.m.",
-      location: "Virtual (YouTube)",
-      description:
-        "Open Tech is an online session empowering students with AI and next-gen technical skills.",
-      category: "Session",
-      image: "/opentech-logo.jpeg",
-      zohoForm: "https://forms.zohopublic.in/infolevelu1/form/OpenTech2026EventRegistration/formperma/9Eg9Dj7CCwUSv2528ajtVFcanyFwG08qROkOiAgYvo4",
-      brochure: "/opentech.pdf",
-      showDevfolio: false,
-    },
-    {
-      id: 3,
-      title: "NextGen Hackathon",
-      date: "Feb-22-2026",
-      time: "Announcing soon",
-      location: "Virtual",
-      description:
-        "NextGen is a 8hrs online Hackathon with tracks on AI/ML & Web Development",
-      category: "Hackathon",
-      image: "/nextgen-logo.png",
-      zohoForm: "https://docs.google.com/forms/d/e/1FAIpQLSdGaZUN8vq8MdWfWceFHEGg0wPSbAiVLESjk5dc6-xdDArJjg/viewform?usp=publish-editor",
-      brochure: "#",
       showDevfolio: false,
     },
   ];
 
   return (
     <div className="events-page">
+
       {/* ================= HERO SECTION ================= */}
       <motion.section
         className="events-hero"
@@ -359,13 +333,11 @@ const Events = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               whileHover={{ y: -10, scale: 1.02 }}
             >
-              {/* Image */}
               <div className="event-image">
                 <img src={event.image} alt={event.title} />
                 <span className="event-category">{event.category}</span>
               </div>
 
-              {/* Content */}
               <div className="event-content">
                 <h3>{event.title}</h3>
 
@@ -383,8 +355,6 @@ const Events = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="register-btn"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
                   >
                     Register Now
                   </motion.a>
@@ -394,23 +364,10 @@ const Events = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="register-btn"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
                   >
                     About Event
                   </motion.a>
                 </div>
-
-                {event.showDevfolio && (
-                  <div className="devfolio-wrapper">
-                    <div
-                      className="apply-button"
-                      data-hackathon-slug="hack-space-1"
-                      data-button-theme="light"
-                      style={{ height: "44px", width: "312px" }}
-                    ></div>
-                  </div>
-                )}
               </div>
             </motion.div>
           ))}
@@ -430,51 +387,96 @@ const Events = () => {
         </motion.h2>
 
         <div className="completed-events-wrapper">
-          <motion.div
-            className="event-card"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            whileHover={{ y: -10, scale: 1.02 }}
-          >
-            <div className="event-image">
-              <img
-                src="/hackspace-logo.jpg"
-                alt="Hack Space 2025"
-              />
-              <span className="event-category">Completed</span>
-            </div>
 
-            <div className="event-content">
-              <h3>Hack Space 2025</h3>
+  {/* HackSpace FIRST */}
+  <motion.div className="event-card">
+    <div className="event-image">
+      <img src="/hackspace-logo.jpg" alt="Hack Space 2025" />
+      <span className="event-category">Completed</span>
+    </div>
 
-              <div className="event-details">
-                <p>📅 December 17, 2025</p>
-                <p>🕐 10:00 AM – 4:00 PM</p>
-                <p>📍 Virtual Event</p>
-              </div>
+    <div className="event-content">
+      <h3>Hack Space 2025</h3>
 
-              <p className="event-description">
-                Learn about Blockchain and trendy topics on Generative AI with
-                expert-led sessions.
-              </p>
+      <div className="event-details">
+        <p>📅 December 17, 2025</p>
+        <p>🕐 10:00 AM – 4:00 PM</p>
+        <p>📍 Virtual Event</p>
+      </div>
 
-              <div className="event-footer-buttons">
-                <motion.a
-                  href="https://www.youtube.com/@LevelUpOfficial-c7b/streams"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="register-btn"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  ▶ Watch Hack Space Session
-                </motion.a>
-              </div>
-            </div>
-          </motion.div>
-        </div>
+      <p className="event-description">
+        Learn about Blockchain and trendy topics on Generative AI with expert-led sessions.
+      </p>
+
+      <div className="event-footer-buttons">
+        <motion.a
+          href="https://www.youtube.com/watch?v=POm1ghTTI8E&list=PLZ6SfI6qnKOFYW5MkHoaUbECt18RzojlJ"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="register-btn"
+        >
+          ▶ Watch Hack Space Session
+        </motion.a>
+      </div>
+    </div>
+  </motion.div>
+
+
+  {/* Open Tech */}
+  <motion.div className="event-card">
+    <div className="event-image">
+      <img src="/opentech-logo.jpeg" alt="Open Tech 2026" />
+      <span className="event-category">Completed</span>
+    </div>
+
+    <div className="event-content">
+      <h3>Open Tech 2026</h3>
+
+      <div className="event-details">
+        <p>📅 Jan 25 – Feb 14</p>
+        <p>📍 Virtual (YouTube)</p>
+      </div>
+
+      <p className="event-description">
+        Online technical sessions empowering students with AI and next-gen skills.
+      </p>
+
+      <div className="event-footer-buttons">
+        <motion.a
+          href="https://www.youtube.com/watch?v=eci4mhWCHbY&list=PLZ6SfI6qnKOFhXgzLM98XPNsrNuzGsOmR"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="register-btn"
+        >
+          ▶ Watch Open Tech Sessions
+        </motion.a>
+      </div>
+    </div>
+  </motion.div>
+
+
+  {/* NextGen */}
+  <motion.div className="event-card">
+    <div className="event-image">
+      <img src="/nextgen-logo.png" alt="NextGen Hackathon" />
+      <span className="event-category">Completed</span>
+    </div>
+
+    <div className="event-content">
+      <h3>NextGen Hackathon</h3>
+
+      <div className="event-details">
+        <p>📅 Feb 22, 2026</p>
+        <p>📍 Virtual</p>
+      </div>
+
+      <p className="event-description">
+        8-hour online hackathon focused on AI/ML and Web Development tracks.
+      </p>
+    </div>
+  </motion.div>
+
+</div>
       </section>
 
       {/* ================= SPONSORS ================= */}
@@ -491,6 +493,7 @@ const Events = () => {
           </div>
         </div>
       </section>
+
     </div>
   );
 };

@@ -13,42 +13,20 @@ const Profile = () => {
       name: "Vivek",
       description: "Web development and AI&DS.",
       avatar: "V",
+      photo: "/users/vivek.jpg",   // add photo here
       hackathons: 0,
-      projects: 0,
+      projects: 2,
       prizes: 0,
-      Events: 0,
+      Events: 1,
       color: "#1E90FF",
       skills: ["React", "Node.js", "Python", "Machine Learning", "AI/DS", "MongoDB"]
     },
     {
       id: 2,
-      name: "Anjana",
-      description: "AI/ML enthusiast and full-stack developer.",
-      avatar: "A",
-      hackathons: 0,
-      projects: 0,
-      prizes: 0,
-      Events: 0,
-      color: "#7B61FF",
-      skills: ["TensorFlow", "PyTorch", "React", "Django", "Data Science", "Deep Learning"]
-    },
-    {
-      id: 3,
-      name: "Hinal",
-      description: "Tech, ai, full stack development, software Development",
-      avatar: "H",
-      hackathons: 0,
-      projects: 0,
-      prizes: 0,
-      Events: 0,
-      color: "#00D9FF",
-      skills: ["JavaScript", "TypeScript", "Next.js", "Docker", "AWS", "PostgreSQL"]
-    },
-    {
-      id: 4,
       name: "Ripuranjan",
       description: "Software development and R&D in STEM fields, Researcher in Astronomy.",
       avatar: "R",
+      photo: "/users/ripu.jpg",
       hackathons: 0,
       projects: 1,
       prizes: 1,
@@ -57,62 +35,92 @@ const Profile = () => {
       skills: ["Full Stack Developer", "AI/ML", "System Architect"]
     },
     {
-      id: 5,
-      name: "Gulam",
-      description: "Data Science.",
-      avatar: "G",
+      id: 3,
+      name: "Pranav",
+      description: "Computer Science",
+      avatar: "P",
+      photo: "/users/pranav.jpeg",
       hackathons: 0,
-      projects: 0,
-      prizes: 0,
+      projects: 1,
+      prizes: 1,
       Events: 1,
       color: "#00D9FF",
-      skills: ["Power BI", "ML", "Data Analysis" ]
+      skills: ["React", "Machine Learning", "Flutter", "Backend Development", "UI/UX Design"]
+    },
+    
+    {
+      id: 5,
+      name: "Sagar",
+      description: "Generative AI developer and Deep learning aspirant",
+      avatar: "S",
+      photo: "/users/sagar.jpeg",
+      hackathons: 1,
+      projects: 1,
+      prizes: 1,
+      Events: 1,
+      color: "#00D9FF",
+      skills: ["Frontend Developer", "GenAI", "Python", "React"]
     },
     {
       id: 6,
-      name: "Sakshi",
-      description: "AI/ML.",
+      name: "Soham",
+      description: "Artificial Intelligence and Data science Student",
       avatar: "S",
-      hackathons: 0,
-      projects: 0,
-      prizes: 0,
+      photo: "/users/soham.jpeg",
+      hackathons: 1,
+      projects: 1,
+      prizes: 1,
       Events: 1,
       color: "#00D9FF",
-      skills: ["Web Development","Python" ]
+      skills: ["Python", "JavaScript", "Oracle SQL", "Full Stack Developer"]
+    },
+    {
+      id: 4,
+      name: "Yeshvi",
+      description: "UI/UX Design and Frontend Development",
+      avatar: "Y",
+      photo: "/users/yeshvi.jpeg",
+      hackathons: 1,
+      projects: 1,
+      prizes: 1,
+      Events: 1,
+      color: "#00D9FF",
+      skills: ["Figma", "Product design"]
     },
     {
       id: 7,
-      name: "Vivek",
-      description: "Web developer",
-      avatar: "V",
-      hackathons: 0,
+      name: "Tirtha",
+      description: "Web development and Programming enthusiast",
+      avatar: "T",
+      photo: "/users/tritha.jpeg",
+      hackathons: 1,
       projects: 1,
-      prizes: 0,
+      prizes: 1,
       Events: 1,
       color: "#00D9FF",
-      skills: ["Web Development","AI/DS" ]
+      skills: ["C++", "Data Structures", "Python", "Mern"]
     },
-    // {
-    //   id: 8,
-    //   name: "Simmi",
-    //   description: "Web developer",
-    //   avatar: "S",
-    //   hackathons: 0,
-    //   projects: 1,
-    //   prizes: 0,
-    //   Events: 1,
-    //   color: "#00D9FF",
-    //   skills: ["Web Development","AI/DS" ]
-    // },
-
+    {
+      id: 8,
+      name: "Mrigesh",
+      description: "Android Developer",
+      avatar: "M",
+      photo: "/users/mrigesh.jpeg",
+      hackathons: 1,
+      projects: 1,
+      prizes: 1,
+      Events: 1,
+      color: "#00D9FF",
+      skills: ["Python", "Data Analysis", "Data Structures", "Graphic designer"]
+    }
   ];
 
-  // Initialize Lenis smooth scrolling
+  // Lenis smooth scroll
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
+      orientation: "vertical",
       smoothWheel: true,
       wheelMultiplier: 1,
       touchMultiplier: 2,
@@ -124,13 +132,10 @@ const Profile = () => {
     }
 
     requestAnimationFrame(raf);
-
-    return () => {
-      lenis.destroy();
-    };
+    return () => lenis.destroy();
   }, []);
 
-  // Search & filter logic
+  // Search & filter
   const filteredProfiles = profiles
     .filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
     .sort((a, b) => {
@@ -141,46 +146,20 @@ const Profile = () => {
       return 0;
     });
 
-  const getMedalEmoji = (index) => {
-    if (index === 0) return "🥇";
-    if (index === 1) return "🥈";
-    if (index === 2) return "🥉";
-    return `#${index + 1}`;
-  };
-
   return (
     <div className="profile-page">
-      {/* Hero Section */}
-      <motion.section 
-        className="profile-hero"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-      >
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
+      {/* HERO */}
+      <motion.section className="profile-hero" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
           🏆 Builders Leaderboard
         </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
+        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           Celebrating our top innovators, hackers, and creators who are building the future
         </motion.p>
       </motion.section>
 
-      {/* Search & Filter Section */}
-      <motion.div 
-        className="search-filter"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-      >
+      {/* SEARCH */}
+      <motion.div className="search-filter" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}>
         <div className="search-container">
           <span className="search-icon">🔍</span>
           <input
@@ -192,11 +171,7 @@ const Profile = () => {
           />
         </div>
 
-        <select
-          className="filter-select"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        >
+        <select className="filter-select" value={filter} onChange={(e) => setFilter(e.target.value)}>
           <option>Most Hackathons Attended</option>
           <option>Most Hackathons Won</option>
           <option>Most Projects Submitted</option>
@@ -204,102 +179,55 @@ const Profile = () => {
         </select>
       </motion.div>
 
-      {/* Profile Cards */}
+      {/* CARDS */}
       <div className="profile-list">
         {filteredProfiles.map((user, index) => (
-          <motion.div
-            key={user.id}
-            className={`profile-card ${index < 3 ? 'top-three' : ''}`}
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            whileHover={{ y: -5 }}
-          >
-            {/* Rank Badge */}
-            {/* <div className="rank-badge" style={{ background: user.color }}>
-              {getMedalEmoji(index)}
-            </div> */}
-
-            {/* Left Section: Avatar + Info */}
+          <motion.div key={user.id} className="profile-card" whileHover={{ y: -5 }}>
+            
+            {/* LEFT */}
             <div className="profile-left">
-              <div className="profile-avatar" style={{ background: `linear-gradient(135deg, ${user.color}, #7B61FF)` }}>
-                {user.avatar}
-              </div>
               
+              {/* PHOTO OR AVATAR */}
+              <div className="profile-avatar">
+                {user.photo ? (
+                  <img src={user.photo} alt={user.name} />
+                ) : (
+                  <span style={{ background: `linear-gradient(135deg, ${user.color}, #7B61FF)` }}>
+                    {user.avatar}
+                  </span>
+                )}
+              </div>
+
               <div className="profile-details">
                 <h3>{user.name}</h3>
                 <p className="desc">{user.description}</p>
-                
-                {/* Skills */}
+
                 <div className="skills-container">
                   {user.skills.map((skill, idx) => (
-                    <span key={idx} className="skill-tag">
-                      {skill}
-                    </span>
+                    <span key={idx} className="skill-tag">{skill}</span>
                   ))}
                 </div>
               </div>
             </div>
 
-            {/* Right Section: Stats */}
+            {/* RIGHT */}
             <div className="profile-right">
               <div className="stats">
-                <motion.div 
-                  className="stat"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <span className="stat-icon">🎯</span>
-                  <span className="stat-value">{user.hackathons}</span>
-                  <span className="stat-label">Hackathons</span>
-                </motion.div>
-                
-                <motion.div 
-                  className="stat"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <span className="stat-icon">💻</span>
-                  <span className="stat-value">{user.projects}</span>
-                  <span className="stat-label">Projects</span>
-                </motion.div>
-                
-                <motion.div 
-                  className="stat"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <span className="stat-icon">🏅</span>
-                  <span className="stat-value">{user.prizes}</span>
-                  <span className="stat-label">Prizes</span>
-                </motion.div>
-                
-                <motion.div 
-                  className="stat"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <span className="stat-icon">📅</span>
-                  <span className="stat-value">{user.Events}</span>
-                  <span className="stat-label">Events</span>
-                </motion.div>
+                <div className="stat"><span>🎯</span>{user.hackathons}<p>Hackathons</p></div>
+                <div className="stat"><span>💻</span>{user.projects}<p>Projects</p></div>
+                <div className="stat"><span>🏅</span>{user.prizes}<p>Prizes</p></div>
+                <div className="stat"><span>📅</span>{user.Events}<p>Events</p></div>
               </div>
-
-              {/* {index < 3 && (
-                <div className="spotlight-badge">
-                  ⭐ Top Performer
-                </div>
-              )} */}
             </div>
+
           </motion.div>
         ))}
       </div>
 
       {filteredProfiles.length === 0 && (
-        <motion.div 
-          className="no-results"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
+        <div className="no-results">
           <p>No builders found matching "{searchTerm}"</p>
-        </motion.div>
+        </div>
       )}
     </div>
   );
