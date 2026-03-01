@@ -357,7 +357,7 @@ const About = () => {
             <img src="/nishant.jpg" alt="Nishant Lohar" />
             <h3>Nishant Lohar</h3>
             
-            <p>Technical Dynamo</p>
+            <p>CTO</p>
             <span className="team-linkedin">
               <i className="fab fa-linkedin-in"></i>
             </span>
@@ -372,7 +372,7 @@ const About = () => {
             <img src="/paresh.jpg" alt="Paresh Sharma" />
             <h3>Paresh Sharma</h3>
             
-            <p>Chief Gatherer</p>
+            <p>CEO</p>
             <span className="team-linkedin">
               <i className="fab fa-linkedin-in"></i>
             </span>
@@ -387,7 +387,7 @@ const About = () => {
             <img src="/varun.jpg" alt="Varun Thakkar" />
             <h3>Varun Thakkar</h3>
             
-            <p>Growth Captain</p>
+            <p>CFO</p>
             <span className="team-linkedin">
               <i className="fab fa-linkedin-in"></i>
             </span>
@@ -402,7 +402,7 @@ const About = () => {
             <img src="/pratik.jpg" alt="Pratik Palande" />
             <h3>Pratik Palande</h3>
             
-            <p>Visibility Machine</p>
+            <p>CMO</p>
             <span className="team-linkedin">
               <i className="fab fa-linkedin-in"></i>
             </span>
@@ -417,7 +417,7 @@ const About = () => {
             <img src="/himani.jpg" alt="Himani Sharma" />
             <h3>Himani Sharma</h3>
             
-            <p>Buzz Boss</p>
+            <p>CBO</p>
             <span className="team-linkedin">
               <i className="fab fa-linkedin-in"></i>
             </span>
@@ -432,7 +432,7 @@ const About = () => {
             <img src="/zaid.jpg" alt="Zaid Siddiqui" />
             <h3>Zaid Siddiqui</h3>
             
-            <p>Tribe Builder</p>
+            <p>COO</p>
             <span className="team-linkedin">
               <i className="fab fa-linkedin-in"></i>
             </span>
@@ -447,7 +447,7 @@ const About = () => {
             <img src="/atharva.jpg" alt="Atharva Phad" />
             <h3>Atharva Phad</h3>
             
-            <p>Message Maestro</p>
+            <p>CCO</p>
             <span className="team-linkedin">
               <i className="fab fa-linkedin-in"></i>
             </span>
@@ -461,7 +461,7 @@ const About = () => {
           >
             <img src="/namrata.jpg" alt="Namrata Yadav" />
             <h3>Namrata Yadav</h3>
-            <p>Director of Flow</p>
+            <p>CPO</p>
             <span className="team-linkedin">
               <i className="fab fa-linkedin-in"></i>
             </span>

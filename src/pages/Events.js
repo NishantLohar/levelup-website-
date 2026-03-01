@@ -271,7 +271,7 @@ const Events = () => {
     {
       id: 1,
       title: "HackTheHype 2026",
-      date: "March 1st week (date yet to announce)",
+      date: "date yet to announce",
       time: "Announcing Soon",
       location: "Mumbai",
       description: "48-hour coding marathon with exciting prizes and mentorship.",
@@ -280,7 +280,23 @@ const Events = () => {
       zohoForm: "#",
       brochure: "/hackthehype-brochure.pdf",
       showDevfolio: false,
+      type: "normal"
     },
+    {
+      id: 2,
+      title: "Tech From Zero",
+      date: "2 March 2026 To 27 March 2026",
+      time: "10:00 AM",
+      location: "Virtual",
+      description: "Tech explained like you're NOT a computer scientist.",
+      category: "Youtube Series",
+      image: "./logoo.png",
+      // zohoForm: "#",
+      // brochure: "#",
+      showDevfolio: false,
+      youtubeLink: "https://www.youtube.com/@LevelUpOfficial-in", // change if needed
+      type: "youtube"
+    }
   ];
 
   return (
@@ -350,23 +366,42 @@ const Events = () => {
                 <p className="event-description">{event.description}</p>
 
                 <div className="event-footer-buttons">
+                {event.type === "youtube" ? (
                   <motion.a
-                    href={event.zohoForm}
+                    href={event.youtubeLink}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="register-btn"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    Register Now
+                    ▶ Watch Here
                   </motion.a>
+                ) : (
+                  <>
+                    <motion.a
+                      href={event.zohoForm}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="register-btn"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      Register Now
+                    </motion.a>
 
-                  <motion.a
-                    href={event.brochure}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="register-btn"
-                  >
-                    About Event
-                  </motion.a>
+                    <motion.a
+                      href={event.brochure}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="register-btn"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      About Event
+                    </motion.a>
+                  </>
+                )}
                 </div>
               </div>
             </motion.div>
