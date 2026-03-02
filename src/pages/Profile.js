@@ -116,7 +116,7 @@ const Profile = () => {
     {
       id: 9,
       name: "Anurag",
-      description: "App Developer",
+      description: "App Developer and hackathon enthusiast",
       avatar: "A",
       photo: "/users/anurag.jpg",
       hackathons: 0,
