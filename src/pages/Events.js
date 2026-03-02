@@ -294,7 +294,7 @@ const Events = () => {
       // zohoForm: "#",
       // brochure: "#",
       showDevfolio: false,
-      youtubeLink: "https://www.youtube.com/@LevelUpOfficial-in", // change if needed
+      youtubeLink: "https://youtube.com/playlist?list=PLZ6SfI6qnKOG3Q_EJ5gpte61E3-hcytsZ&si=2gHFuAnjUi_SKnFN", // change if needed
       type: "youtube"
     }
   ];

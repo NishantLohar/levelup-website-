@@ -112,7 +112,21 @@ const Profile = () => {
       Events: 1,
       color: "#00D9FF",
       skills: ["Python", "Data Analysis", "Data Structures", "Graphic designer"]
+    },
+    {
+      id: 9,
+      name: "Anurag",
+      description: "App Developer",
+      avatar: "A",
+      photo: "/users/anurag.jpg",
+      hackathons: 0,
+      projects: 1,
+      prizes: 0,
+      Events: 1,
+      color: "#00D9FF",
+      skills: ["React", "React-Native", "Gen-AI", "UI/UX", "Javascript", "C++"]
     }
+    
   ];
 
   // Lenis smooth scroll
