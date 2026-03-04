@@ -125,8 +125,20 @@ const Profile = () => {
       Events: 1,
       color: "#00D9FF",
       skills: ["React", "React-Native", "Gen-AI", "UI/UX", "Javascript", "C++"]
-    }
-    
+    },
+    {
+      id: 10,
+      name: "Gargi",
+      description: "Writer for Brands & Creators | I Write Scripts, Stories & Brand Content People Genuinely Connect With",
+      avatar: "G",
+      photo: "/users/gargi.png",
+      hackathons: 0,
+      projects: 2,
+      prizes: 0,
+      Events: 1,
+      color: "#00D9FF",
+      skills: ["Copywriting", "Storytelling", "Social Media Creatives", "Context Writing", "Script Writing"]
+    },
   ];
 
   // Lenis smooth scroll
