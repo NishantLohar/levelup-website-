@@ -139,6 +139,19 @@ const Profile = () => {
       color: "#00D9FF",
       skills: ["Copywriting", "Storytelling", "Social Media Creatives", "Context Writing", "Script Writing"]
     },
+    {
+      id: 11,
+      name: "Bhoomi",
+      description: "Full Stack Developer",
+      avatar: "B",
+      photo: "/users/1.jpg",
+      hackathons: 1,
+      projects: 1,
+      prizes: 0,
+      Events: 1,
+      color: "#00D9FF",
+      skills: ["HTML", "CSS", "JavaScript", "React"]
+    },
   ];
 
   // Lenis smooth scroll
