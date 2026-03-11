@@ -44,15 +44,15 @@ const Community = () => {
       handle: "LevelUp Community"
     },
     {
-      name: "X",
+      name: "YouTube",
       icon: (
-        <svg viewBox="0 0 24 24" fill="currentColor" width="60" height="60">
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        <svg viewBox="0 0 24 24" fill="currentColor" >
+    <path d="M23.5 6.2s-.2-1.7-.9-2.5c-.9-1-1.9-1-2.4-1.1C16.7 2.3 12 2.3 12 2.3h0s-4.7 0-8.2.3c-.5.1-1.5.1-2.4 1.1-.7.8-.9 2.5-.9 2.5S0 8.1 0 10v1.9c0 1.9.5 3.8.5 3.8s.2 1.7.9 2.5c.9 1 2.1 1 2.7 1.1 2 .2 7.9.3 7.9.3s4.7 0 8.2-.3c.5-.1 1.5-.1 2.4-1.1.7-.8.9-2.5.9-2.5s.5-1.9.5-3.8V10c0-1.9-.5-3.8-.5-3.8zM9.6 14.6V7.9l6.4 3.4-6.4 3.3z"/>
         </svg>
       ),
-      url: "https://x.com/LevelUpoff_",
-      color: "#000000",
-      handle: "@levelupevents"
+      url: "https://www.youtube.com/@LevelUpOfficial-in",
+      color: "#ff0033",
+      handle: "@LevelUpOfficial-in"
     }
   ];
 
