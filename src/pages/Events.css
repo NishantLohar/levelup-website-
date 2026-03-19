@@ -451,8 +451,10 @@
 .completed-events-wrapper {
   max-width: 1200px;
   margin: 0 auto;
-  display: flex;
-  justify-content: flex-start; /* LEFT SIDE */
+  /* display: flex;
+  justify-content: flex-start; LEFT SIDE */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 👈 3 cards per row */
   gap: 30px;
 }
 
@@ -615,7 +617,17 @@
 }
 
 /* ================= MOBILE EVENTS STACK FIX ================= */
+@media (max-width: 1024px) {
+  .completed-events-wrapper {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
+@media (max-width: 768px) {
+  .completed-events-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
 @media (max-width: 768px) {
 
   /* Upcoming events stack vertical */

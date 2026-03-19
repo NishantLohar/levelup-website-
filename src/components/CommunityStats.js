@@ -26,7 +26,7 @@ const useCountUp = (end, duration = 1500) => {
 };
 
 const CommunityStats = () => {
-  const students = useCountUp(500);
+  const students = useCountUp(600);
   const mentors = useCountUp(60);
   const partners = useCountUp(8);
 

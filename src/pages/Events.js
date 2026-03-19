@@ -427,7 +427,7 @@ const Events = () => {
   <motion.div className="event-card">
     <div className="event-image">
       <img src="/hackspace-logo.jpg" alt="Hack Space 2025" />
-      <span className="event-category">Completed</span>
+      {/* <span className="event-category">Completed</span> */}
     </div>
 
     <div className="event-content">
@@ -461,7 +461,7 @@ const Events = () => {
   <motion.div className="event-card">
     <div className="event-image">
       <img src="/opentech-logo.jpeg" alt="Open Tech 2026" />
-      <span className="event-category">Completed</span>
+      {/* <span className="event-category">Completed</span> */}
     </div>
 
     <div className="event-content">
@@ -494,7 +494,7 @@ const Events = () => {
   <motion.div className="event-card">
     <div className="event-image">
       <img src="/nextgen-logo.png" alt="NextGen Hackathon" />
-      <span className="event-category">Completed</span>
+      {/* <span className="event-category">Completed</span> */}
     </div>
 
     <div className="event-content">
@@ -510,6 +510,38 @@ const Events = () => {
       </p>
     </div>
   </motion.div>
+
+  {/* CEO Talk */}
+<motion.div className="event-card">
+  <div className="event-image">
+    <img src="/ceotalk-logo.png" alt="CEO Talk" />
+    {/* <span className="event-category"></span> */}
+  </div>
+
+  <div className="event-content">
+    <h3>CEO Talk (LevelUp x IIEC.CSMU)</h3>
+
+    <div className="event-details">
+      <p>📅 March 13, 2026</p>
+      <p>📍 Chhatrapati Shivaji Maharaj University, Navi Mumbai</p>
+    </div>
+
+    <p className="event-description">
+      Insightful session with industry leaders sharing real-world startup experiences, growth strategies, and career guidance.
+    </p>
+
+    {/* <div className="event-footer-buttons">
+      <motion.a
+        href="YOUR_YOUTUBE_LINK_HERE"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="register-btn"
+      >
+        ▶ Watch CEO Talk
+      </motion.a>
+    </div> */}
+  </div>
+</motion.div>
 
 </div>
       </section>

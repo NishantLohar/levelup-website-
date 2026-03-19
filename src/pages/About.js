@@ -354,7 +354,7 @@ const About = () => {
             rel="noopener noreferrer"
             className="team-card"
           >
-            <img src="/nishant.jpg" alt="Nishant Lohar" />
+            <img src="/nishant.jpeg" alt="Nishant Lohar" />
             <h3>Nishant Lohar</h3>
             
             <p>CTO</p>
