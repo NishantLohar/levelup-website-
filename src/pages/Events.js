@@ -284,7 +284,7 @@ const Events = () => {
     },
     {
       id: 2,
-      title: "Zero Doubt: zkVerify Mumbai Meetup",
+      title: "Zero Doubt: zkVerify Mumbai Meetup (LevelUp Community Partner)",
       date: "11th April 2026",
       time: "10:30 AM To 4:30 PM",
       location: "Mumbai",
@@ -312,7 +312,7 @@ const Events = () => {
     },
     {
       id: 4,
-      title: "Oscillation 3.0 2026",
+      title: "Oscillation 3.0 (IETE x LevelUp)",
       date: "4th April 2026",
       time: "8:30 AM To 4:00 PM",
       location:"Thakur College of Engineering and Technology, Kandivali (E)",
