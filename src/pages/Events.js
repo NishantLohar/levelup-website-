@@ -284,17 +284,30 @@ const Events = () => {
     },
     {
       id: 2,
-      title: "Tech From Zero",
-      date: "2 March 2026 To 27 March 2026",
-      time: "10:00 AM",
-      location: "Virtual",
-      description: "Tech explained like you're NOT a computer scientist.",
-      category: "Youtube Series",
-      image: "./logoo.png",
-      // zohoForm: "#",
-      // brochure: "#",
+      title: "Zero Doubt: zkVerify Mumbai Meetup",
+      date: "11th April 2026",
+      time: "10:30 AM To 4:30 PM",
+      location: "Mumbai",
+      description: "zkVerify is the universal verification layer that unlocks privacy and truth for SNARKs, TEEs, and Verifiable AI. Build faster without bottlenecks and prove what's true without ever exposing private data.",
+      category: "Workshop",
+      image: "./zk.jpeg",
+      zohoForm: "https://luma.com/cmxbxlej?tk=PEQpx6",
+      brochure: "#",
       showDevfolio: false,
-      youtubeLink: "https://youtube.com/playlist?list=PLZ6SfI6qnKOG3Q_EJ5gpte61E3-hcytsZ&si=2gHFuAnjUi_SKnFN", // change if needed
+      type: "normal"
+    },
+    {
+      id: 3,
+      title: "Campus Therapy",
+      date: "TBA",
+      time: "TBA",
+      location: "Virtual",
+      description: "Event details coming soon.",
+      category: "Youtube",
+      image: "./campus therapy-1.png",
+      youtubeLink: "https://www.youtube.com/@LevelUpOfficial-in/featured",
+      brochure: "#",
+      showDevfolio: false,
       type: "youtube"
     }
   ];
@@ -390,16 +403,18 @@ const Events = () => {
                       Register Now
                     </motion.a>
 
-                    <motion.a
-                      href={event.brochure}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="register-btn"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      About Event
-                    </motion.a>
+                    {event.brochure && event.brochure !== "#" && (
+                      <motion.a
+                        href={event.brochure}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="register-btn"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        About Event
+                      </motion.a>
+                    )}
                   </>
                 )}
                 </div>
@@ -422,6 +437,38 @@ const Events = () => {
         </motion.h2>
 
         <div className="completed-events-wrapper">
+
+  {/* Tech From Zero */}
+  <motion.div className="event-card">
+    <div className="event-image">
+      <img src="./logoo.png" alt="Tech From Zero" />
+    </div>
+
+    <div className="event-content">
+      <h3>Tech From Zero</h3>
+
+      <div className="event-details">
+        <p>📅 2 March 2026 To 27 March 2026</p>
+        <p>🕐 10:00 AM</p>
+        <p>📍 Virtual</p>
+      </div>
+
+      <p className="event-description">
+        Tech explained like you're NOT a computer scientist.
+      </p>
+
+      <div className="event-footer-buttons">
+        <motion.a
+          href="https://youtube.com/playlist?list=PLZ6SfI6qnKOG3Q_EJ5gpte61E3-hcytsZ&si=2gHFuAnjUi_SKnFN"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="register-btn"
+        >
+          ▶ Watch Here
+        </motion.a>
+      </div>
+    </div>
+  </motion.div>
 
   {/* HackSpace FIRST */}
   <motion.div className="event-card">
