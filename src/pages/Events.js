@@ -288,9 +288,9 @@ const Events = () => {
       date: "11th April 2026",
       time: "10:30 AM To 4:30 PM",
       location: "Mumbai",
-      description: "zkVerify is the universal verification layer that unlocks privacy and truth for SNARKs, TEEs, and Verifiable AI. Build faster without bottlenecks and prove what's true without ever exposing private data.",
+      description: "zkVerify is the universal verification layer that unlocks privacy and truth for SNARKs, TEEs, and Verifiable AI.",
       category: "Workshop",
-      image: "./zk.jpeg",
+      image: "./zk copy.jpeg",
       zohoForm: "https://luma.com/cmxbxlej?tk=PEQpx6",
       brochure: "#",
       showDevfolio: false,
@@ -309,6 +309,20 @@ const Events = () => {
       brochure: "#",
       showDevfolio: false,
       type: "youtube"
+    },
+    {
+      id: 4,
+      title: "Oscillation 3.0 2026",
+      date: "4th April 2026",
+      time: "8:30 AM To 4:00 PM",
+      location:"Thakur College of Engineering and Technology, Kandivali (E)",
+      description: "Ideathon & Project Presentation. To know more click the button below",
+      category: "Event",
+      image: "./iete.png",
+      zohoForm: "#",
+      brochure: "./oscillation.pdf",
+      showDevfolio: false,
+      type: "normal"
     }
   ];
 
@@ -392,16 +406,18 @@ const Events = () => {
                   </motion.a>
                 ) : (
                   <>
-                    <motion.a
-                      href={event.zohoForm}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="register-btn"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      Register Now
-                    </motion.a>
+                    {event.zohoForm && event.zohoForm !== "#" && (
+                      <motion.a
+                        href={event.zohoForm}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="register-btn"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        Register Now
+                      </motion.a>
+                    )}
 
                     {event.brochure && event.brochure !== "#" && (
                       <motion.a

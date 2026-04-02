@@ -8,6 +8,7 @@ const logos = [
   "/logos/logo22.png",
   "/logos/logo3.jpeg",
   "/logos/csmu.png",
+  "/logos/iete-bg.png",
 ];
 
 const PartnersCarousel = ({ title = "Our Partners & Sponsors" }) => {

@@ -28,7 +28,7 @@ const useCountUp = (end, duration = 1500) => {
 const CommunityStats = () => {
   const students = useCountUp(600);
   const mentors = useCountUp(60);
-  const partners = useCountUp(8);
+  const partners = useCountUp(9);
 
   return (
     <section className="community-stats">
