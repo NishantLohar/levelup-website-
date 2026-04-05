@@ -309,20 +309,6 @@ const Events = () => {
       brochure: "#",
       showDevfolio: false,
       type: "youtube"
-    },
-    {
-      id: 4,
-      title: "Oscillation 3.0 (IETE x LevelUp)",
-      date: "4th April 2026",
-      time: "8:30 AM To 4:00 PM",
-      location:"Thakur College of Engineering and Technology, Kandivali (E)",
-      description: "Ideathon & Project Presentation. To know more click the button below",
-      category: "Event",
-      image: "./iete.png",
-      zohoForm: "#",
-      brochure: "./oscillation.pdf",
-      showDevfolio: false,
-      type: "normal"
     }
   ];
 
@@ -453,6 +439,38 @@ const Events = () => {
         </motion.h2>
 
         <div className="completed-events-wrapper">
+
+  {/* Oscillation 3.0 */}
+  <motion.div className="event-card">
+    <div className="event-image">
+      <img src="./iete.png" alt="Oscillation 3.0" />
+    </div>
+
+    <div className="event-content">
+      <h3>Oscillation 3.0 (IETE x LevelUp)</h3>
+
+      <div className="event-details">
+        <p>📅 4th April 2026</p>
+        <p>🕐 8:30 AM To 4:00 PM</p>
+        <p>📍 Thakur College of Engineering and Technology, Kandivali (E)</p>
+      </div>
+
+      <p className="event-description">
+        Ideathon & Project Presentation. To know more click the button below
+      </p>
+
+      <div className="event-footer-buttons">
+        <motion.a
+          href="./oscillation.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="register-btn"
+        >
+          About Event
+        </motion.a>
+      </div>
+    </div>
+  </motion.div>
 
   {/* Tech From Zero */}
   <motion.div className="event-card">
