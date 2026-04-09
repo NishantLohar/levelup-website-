@@ -112,12 +112,11 @@ const Navbar = () => {
 </li>
 
           <li>
-            <Link 
-              to="/login" 
-              className={location.pathname === '/login' ? 'active' : ''}
+            <a 
+              href="https://account.levelupevents.in/accounts/signup/"
             >
-              Login
-            </Link>
+              Account
+            </a>
           </li>
         </ul>
       </div>
