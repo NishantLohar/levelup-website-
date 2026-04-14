@@ -283,20 +283,6 @@ const Events = () => {
       type: "normal"
     },
     {
-      id: 2,
-      title: "Zero Doubt: zkVerify Mumbai Meetup (LevelUp Community Partner)",
-      date: "11th April 2026",
-      time: "10:30 AM To 4:30 PM",
-      location: "Mumbai",
-      description: "zkVerify is the universal verification layer that unlocks privacy and truth for SNARKs, TEEs, and Verifiable AI.",
-      category: "Workshop",
-      image: "./zk copy.jpeg",
-      zohoForm: "https://luma.com/cmxbxlej?tk=PEQpx6",
-      brochure: "#",
-      showDevfolio: false,
-      type: "normal"
-    },
-    {
       id: 3,
       title: "Campus Therapy",
       date: "TBA",
@@ -439,6 +425,27 @@ const Events = () => {
         </motion.h2>
 
         <div className="completed-events-wrapper">
+
+  {/* Zero Doubt: zkVerify Mumbai Meetup */}
+  <motion.div className="event-card">
+    <div className="event-image">
+      <img src="./zk copy.jpeg" alt="Zero Doubt: zkVerify Mumbai Meetup" />
+    </div>
+
+    <div className="event-content">
+      <h3>Zero Doubt: zkVerify Mumbai Meetup (LevelUp Community Partner)</h3>
+
+      <div className="event-details">
+        <p>📅 11th April 2026</p>
+        <p>🕐 10:30 AM To 4:30 PM</p>
+        <p>📍 Mumbai</p>
+      </div>
+
+      <p className="event-description">
+        zkVerify is the universal verification layer that unlocks privacy and truth for SNARKs, TEEs, and Verifiable AI.
+      </p>
+    </div>
+  </motion.div>
 
   {/* Oscillation 3.0 */}
   <motion.div className="event-card">
