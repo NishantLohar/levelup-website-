@@ -467,6 +467,20 @@ const About = () => {
             </span>
           </motion.a>
 
+          <motion.a
+            href="https://www.linkedin.com/in/dr-loukik-salvi-589510164/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="team-card"
+          >
+            <img src="/loukik.jpg" alt="Loukik Salvi" />
+            <h3>Dr. Loukik Salvi</h3>
+            <p>Senior Adviser</p>
+            <span className="team-linkedin">
+              <i className="fab fa-linkedin-in"></i>
+            </span>
+          </motion.a>
+
         </div>
       </motion.section>
 
