@@ -4,7 +4,7 @@ import "./PartnersCarousel.css";
 const logos = [
   "/logos/devfolio.jpeg",
   "/logos/ethindia.jpeg",
-  "/logos/logo11.png",
+  // "/logos/logo11.png",
   "/logos/logo22.png",
   "/logos/logo3.jpeg",
   "/logos/csmu.png",
