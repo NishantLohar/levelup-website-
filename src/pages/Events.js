@@ -74,7 +74,7 @@
 
 //   return (
 //     <div className="events-page">
-      
+
 //       {/* Hero Section */}
 //       <motion.section 
 //         className="events-hero"
@@ -283,19 +283,34 @@ const Events = () => {
       type: "normal"
     },
     {
-      id: 3,
-      title: "Campus Therapy",
-      date: "TBA",
+      id: 2,
+      title: "Idea2Impact",
+      date: "June 25 2026",
       time: "TBA",
-      location: "Virtual",
-      description: "Event details coming soon.",
-      category: "Youtube",
-      image: "./campus therapy-1.png",
-      youtubeLink: "https://www.youtube.com/@LevelUpOfficial-in/featured",
-      brochure: "#",
+      location: "Hybrid",
+      description: "The Circuit is fully primed for your ideas 11 Themes, 21 Days, 1 Impact. The mentors are ready. The investors are waiting. What are you waiting for. Register Now.!",
+      category: "Ideathon",
+      image: "./I2I.jpeg",
+      zohoForm: "https://account.levelupevents.in/events/",
+      //youtubeLink: "https://www.youtube.com/@LevelUpOfficial-in/featured",
+      brochure: "Idea2Impact Event brochure.pdf",
       showDevfolio: false,
-      type: "youtube"
-    }
+      type: "normal"
+    },
+    // {
+    //   id: 3,
+    //   title: "Campus Therapy",
+    //   date: "TBA",
+    //   time: "TBA",
+    //   location: "Virtual",
+    //   description: "Event details coming soon.",
+    //   category: "Youtube",
+    //   image: "./campus therapy-1.png",
+    //   youtubeLink: "https://www.youtube.com/@LevelUpOfficial-in/featured",
+    //   brochure: "#",
+    //   showDevfolio: false,
+    //   type: "youtube"
+    // }
   ];
 
   return (
@@ -365,46 +380,46 @@ const Events = () => {
                 <p className="event-description">{event.description}</p>
 
                 <div className="event-footer-buttons">
-                {event.type === "youtube" ? (
-                  <motion.a
-                    href={event.youtubeLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="register-btn"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    ▶ Watch Here
-                  </motion.a>
-                ) : (
-                  <>
-                    {event.zohoForm && event.zohoForm !== "#" && (
-                      <motion.a
-                        href={event.zohoForm}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="register-btn"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        Register Now
-                      </motion.a>
-                    )}
+                  {event.type === "youtube" ? (
+                    <motion.a
+                      href={event.youtubeLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="register-btn"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      ▶ Watch Here
+                    </motion.a>
+                  ) : (
+                    <>
+                      {event.zohoForm && event.zohoForm !== "#" && (
+                        <motion.a
+                          href={event.zohoForm}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="register-btn"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          Register Now
+                        </motion.a>
+                      )}
 
-                    {event.brochure && event.brochure !== "#" && (
-                      <motion.a
-                        href={event.brochure}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="register-btn"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        About Event
-                      </motion.a>
-                    )}
-                  </>
-                )}
+                      {event.brochure && event.brochure !== "#" && (
+                        <motion.a
+                          href={event.brochure}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="register-btn"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          About Event
+                        </motion.a>
+                      )}
+                    </>
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -426,199 +441,199 @@ const Events = () => {
 
         <div className="completed-events-wrapper">
 
-  {/* Zero Doubt: zkVerify Mumbai Meetup */}
-  <motion.div className="event-card">
-    <div className="event-image">
-      <img src="./zk copy.jpeg" alt="Zero Doubt: zkVerify Mumbai Meetup" />
-    </div>
+          {/* Zero Doubt: zkVerify Mumbai Meetup */}
+          <motion.div className="event-card">
+            <div className="event-image">
+              <img src="./zk copy.jpeg" alt="Zero Doubt: zkVerify Mumbai Meetup" />
+            </div>
 
-    <div className="event-content">
-      <h3>Zero Doubt: zkVerify Mumbai Meetup (LevelUp Community Partner)</h3>
+            <div className="event-content">
+              <h3>Zero Doubt: zkVerify Mumbai Meetup (LevelUp Community Partner)</h3>
 
-      <div className="event-details">
-        <p>📅 11th April 2026</p>
-        <p>🕐 10:30 AM To 4:30 PM</p>
-        <p>📍 Mumbai</p>
-      </div>
+              <div className="event-details">
+                <p>📅 11th April 2026</p>
+                <p>🕐 10:30 AM To 4:30 PM</p>
+                <p>📍 Mumbai</p>
+              </div>
 
-      <p className="event-description">
-        zkVerify is the universal verification layer that unlocks privacy and truth for SNARKs, TEEs, and Verifiable AI.
-      </p>
-    </div>
-  </motion.div>
+              <p className="event-description">
+                zkVerify is the universal verification layer that unlocks privacy and truth for SNARKs, TEEs, and Verifiable AI.
+              </p>
+            </div>
+          </motion.div>
 
-  {/* Oscillation 3.0 */}
-  <motion.div className="event-card">
-    <div className="event-image">
-      <img src="./iete.png" alt="Oscillation 3.0" />
-    </div>
+          {/* Oscillation 3.0 */}
+          <motion.div className="event-card">
+            <div className="event-image">
+              <img src="./iete.png" alt="Oscillation 3.0" />
+            </div>
 
-    <div className="event-content">
-      <h3>Oscillation 3.0 (IETE x LevelUp)</h3>
+            <div className="event-content">
+              <h3>Oscillation 3.0 (IETE x LevelUp)</h3>
 
-      <div className="event-details">
-        <p>📅 4th April 2026</p>
-        <p>🕐 8:30 AM To 4:00 PM</p>
-        <p>📍 Thakur College of Engineering and Technology, Kandivali (E)</p>
-      </div>
+              <div className="event-details">
+                <p>📅 4th April 2026</p>
+                <p>🕐 8:30 AM To 4:00 PM</p>
+                <p>📍 Thakur College of Engineering and Technology, Kandivali (E)</p>
+              </div>
 
-      <p className="event-description">
-        Ideathon & Project Presentation. To know more click the button below
-      </p>
+              <p className="event-description">
+                Ideathon & Project Presentation. To know more click the button below
+              </p>
 
-      <div className="event-footer-buttons">
-        <motion.a
-          href="./oscillation.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="register-btn"
-        >
-          About Event
-        </motion.a>
-      </div>
-    </div>
-  </motion.div>
+              <div className="event-footer-buttons">
+                <motion.a
+                  href="./oscillation.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="register-btn"
+                >
+                  About Event
+                </motion.a>
+              </div>
+            </div>
+          </motion.div>
 
-  {/* Tech From Zero */}
-  <motion.div className="event-card">
-    <div className="event-image">
-      <img src="./logoo.png" alt="Tech From Zero" />
-    </div>
+          {/* Tech From Zero */}
+          <motion.div className="event-card">
+            <div className="event-image">
+              <img src="./logoo.png" alt="Tech From Zero" />
+            </div>
 
-    <div className="event-content">
-      <h3>Tech From Zero</h3>
+            <div className="event-content">
+              <h3>Tech From Zero</h3>
 
-      <div className="event-details">
-        <p>📅 2 March 2026 To 27 March 2026</p>
-        <p>🕐 10:00 AM</p>
-        <p>📍 Virtual</p>
-      </div>
+              <div className="event-details">
+                <p>📅 2 March 2026 To 27 March 2026</p>
+                <p>🕐 10:00 AM</p>
+                <p>📍 Virtual</p>
+              </div>
 
-      <p className="event-description">
-        Tech explained like you're NOT a computer scientist.
-      </p>
+              <p className="event-description">
+                Tech explained like you're NOT a computer scientist.
+              </p>
 
-      <div className="event-footer-buttons">
-        <motion.a
-          href="https://youtube.com/playlist?list=PLZ6SfI6qnKOG3Q_EJ5gpte61E3-hcytsZ&si=2gHFuAnjUi_SKnFN"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="register-btn"
-        >
-          ▶ Watch Here
-        </motion.a>
-      </div>
-    </div>
-  </motion.div>
+              <div className="event-footer-buttons">
+                <motion.a
+                  href="https://youtube.com/playlist?list=PLZ6SfI6qnKOG3Q_EJ5gpte61E3-hcytsZ&si=2gHFuAnjUi_SKnFN"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="register-btn"
+                >
+                  ▶ Watch Here
+                </motion.a>
+              </div>
+            </div>
+          </motion.div>
 
-  {/* HackSpace FIRST */}
-  <motion.div className="event-card">
-    <div className="event-image">
-      <img src="/hackspace-logo.jpg" alt="Hack Space 2025" />
-      {/* <span className="event-category">Completed</span> */}
-    </div>
+          {/* HackSpace FIRST */}
+          <motion.div className="event-card">
+            <div className="event-image">
+              <img src="/hackspace-logo.jpg" alt="Hack Space 2025" />
+              {/* <span className="event-category">Completed</span> */}
+            </div>
 
-    <div className="event-content">
-      <h3>Hack Space 2025</h3>
+            <div className="event-content">
+              <h3>Hack Space 2025</h3>
 
-      <div className="event-details">
-        <p>📅 December 17, 2025</p>
-        <p>🕐 10:00 AM – 4:00 PM</p>
-        <p>📍 Virtual Event</p>
-      </div>
+              <div className="event-details">
+                <p>📅 December 17, 2025</p>
+                <p>🕐 10:00 AM – 4:00 PM</p>
+                <p>📍 Virtual Event</p>
+              </div>
 
-      <p className="event-description">
-        Learn about Blockchain and trendy topics on Generative AI with expert-led sessions.
-      </p>
+              <p className="event-description">
+                Learn about Blockchain and trendy topics on Generative AI with expert-led sessions.
+              </p>
 
-      <div className="event-footer-buttons">
-        <motion.a
-          href="https://www.youtube.com/watch?v=POm1ghTTI8E&list=PLZ6SfI6qnKOFYW5MkHoaUbECt18RzojlJ"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="register-btn"
-        >
-          ▶ Watch Hack Space Session
-        </motion.a>
-      </div>
-    </div>
-  </motion.div>
-
-
-  {/* Open Tech */}
-  <motion.div className="event-card">
-    <div className="event-image">
-      <img src="/opentech-logo.jpeg" alt="Open Tech 2026" />
-      {/* <span className="event-category">Completed</span> */}
-    </div>
-
-    <div className="event-content">
-      <h3>Open Tech 2026</h3>
-
-      <div className="event-details">
-        <p>📅 Jan 25 – Feb 14</p>
-        <p>📍 Virtual (YouTube)</p>
-      </div>
-
-      <p className="event-description">
-        Online technical sessions empowering students with AI and next-gen skills.
-      </p>
-
-      <div className="event-footer-buttons">
-        <motion.a
-          href="https://www.youtube.com/watch?v=eci4mhWCHbY&list=PLZ6SfI6qnKOFhXgzLM98XPNsrNuzGsOmR"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="register-btn"
-        >
-          ▶ Watch Open Tech Sessions
-        </motion.a>
-      </div>
-    </div>
-  </motion.div>
+              <div className="event-footer-buttons">
+                <motion.a
+                  href="https://www.youtube.com/watch?v=POm1ghTTI8E&list=PLZ6SfI6qnKOFYW5MkHoaUbECt18RzojlJ"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="register-btn"
+                >
+                  ▶ Watch Hack Space Session
+                </motion.a>
+              </div>
+            </div>
+          </motion.div>
 
 
-  {/* NextGen */}
-  <motion.div className="event-card">
-    <div className="event-image">
-      <img src="/nextgen-logo.png" alt="NextGen Hackathon" />
-      {/* <span className="event-category">Completed</span> */}
-    </div>
+          {/* Open Tech */}
+          <motion.div className="event-card">
+            <div className="event-image">
+              <img src="/opentech-logo.jpeg" alt="Open Tech 2026" />
+              {/* <span className="event-category">Completed</span> */}
+            </div>
 
-    <div className="event-content">
-      <h3>NextGen Hackathon</h3>
+            <div className="event-content">
+              <h3>Open Tech 2026</h3>
 
-      <div className="event-details">
-        <p>📅 Feb 22, 2026</p>
-        <p>📍 Virtual</p>
-      </div>
+              <div className="event-details">
+                <p>📅 Jan 25 – Feb 14</p>
+                <p>📍 Virtual (YouTube)</p>
+              </div>
 
-      <p className="event-description">
-        8-hour online hackathon focused on AI/ML and Web Development tracks.
-      </p>
-    </div>
-  </motion.div>
+              <p className="event-description">
+                Online technical sessions empowering students with AI and next-gen skills.
+              </p>
 
-  {/* CEO Talk */}
-<motion.div className="event-card">
-  <div className="event-image">
-    <img src="/ceotalk-logo.png" alt="CEO Talk" />
-    {/* <span className="event-category"></span> */}
-  </div>
+              <div className="event-footer-buttons">
+                <motion.a
+                  href="https://www.youtube.com/watch?v=eci4mhWCHbY&list=PLZ6SfI6qnKOFhXgzLM98XPNsrNuzGsOmR"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="register-btn"
+                >
+                  ▶ Watch Open Tech Sessions
+                </motion.a>
+              </div>
+            </div>
+          </motion.div>
 
-  <div className="event-content">
-    <h3>CEO Talk (LevelUp x IIEC.CSMU)</h3>
 
-    <div className="event-details">
-      <p>📅 March 13, 2026</p>
-      <p>📍 Chhatrapati Shivaji Maharaj University, Navi Mumbai</p>
-    </div>
+          {/* NextGen */}
+          <motion.div className="event-card">
+            <div className="event-image">
+              <img src="/nextgen-logo.png" alt="NextGen Hackathon" />
+              {/* <span className="event-category">Completed</span> */}
+            </div>
 
-    <p className="event-description">
-      Insightful session with industry leaders sharing real-world startup experiences, growth strategies, and career guidance.
-    </p>
+            <div className="event-content">
+              <h3>NextGen Hackathon</h3>
 
-    {/* <div className="event-footer-buttons">
+              <div className="event-details">
+                <p>📅 Feb 22, 2026</p>
+                <p>📍 Virtual</p>
+              </div>
+
+              <p className="event-description">
+                8-hour online hackathon focused on AI/ML and Web Development tracks.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* CEO Talk */}
+          <motion.div className="event-card">
+            <div className="event-image">
+              <img src="/ceotalk-logo.png" alt="CEO Talk" />
+              {/* <span className="event-category"></span> */}
+            </div>
+
+            <div className="event-content">
+              <h3>CEO Talk (LevelUp x IIEC.CSMU)</h3>
+
+              <div className="event-details">
+                <p>📅 March 13, 2026</p>
+                <p>📍 Chhatrapati Shivaji Maharaj University, Navi Mumbai</p>
+              </div>
+
+              <p className="event-description">
+                Insightful session with industry leaders sharing real-world startup experiences, growth strategies, and career guidance.
+              </p>
+
+              {/* <div className="event-footer-buttons">
       <motion.a
         href="YOUR_YOUTUBE_LINK_HERE"
         target="_blank"
@@ -628,10 +643,10 @@ const Events = () => {
         ▶ Watch CEO Talk
       </motion.a>
     </div> */}
-  </div>
-</motion.div>
+            </div>
+          </motion.div>
 
-</div>
+        </div>
       </section>
 
       {/* ================= SPONSORS ================= */}
