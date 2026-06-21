@@ -494,37 +494,6 @@ const Events = () => {
             </div>
           </motion.div>
 
-          {/* Tech From Zero */}
-          <motion.div className="event-card">
-            <div className="event-image">
-              <img src="./logoo.png" alt="Tech From Zero" />
-            </div>
-
-            <div className="event-content">
-              <h3>Tech From Zero</h3>
-
-              <div className="event-details">
-                <p>📅 2 March 2026 To 27 March 2026</p>
-                <p>🕐 10:00 AM</p>
-                <p>📍 Virtual</p>
-              </div>
-
-              <p className="event-description">
-                Tech explained like you're NOT a computer scientist.
-              </p>
-
-              <div className="event-footer-buttons">
-                <motion.a
-                  href="https://youtube.com/playlist?list=PLZ6SfI6qnKOG3Q_EJ5gpte61E3-hcytsZ&si=2gHFuAnjUi_SKnFN"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="register-btn"
-                >
-                  ▶ Watch Here
-                </motion.a>
-              </div>
-            </div>
-          </motion.div>
 
           {/* HackSpace FIRST */}
           <motion.div className="event-card">
@@ -560,37 +529,6 @@ const Events = () => {
           </motion.div>
 
 
-          {/* Open Tech */}
-          <motion.div className="event-card">
-            <div className="event-image">
-              <img src="/opentech-logo.jpeg" alt="Open Tech 2026" />
-              {/* <span className="event-category">Completed</span> */}
-            </div>
-
-            <div className="event-content">
-              <h3>Open Tech 2026</h3>
-
-              <div className="event-details">
-                <p>📅 Jan 25 – Feb 14</p>
-                <p>📍 Virtual (YouTube)</p>
-              </div>
-
-              <p className="event-description">
-                Online technical sessions empowering students with AI and next-gen skills.
-              </p>
-
-              <div className="event-footer-buttons">
-                <motion.a
-                  href="https://www.youtube.com/watch?v=eci4mhWCHbY&list=PLZ6SfI6qnKOFhXgzLM98XPNsrNuzGsOmR"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="register-btn"
-                >
-                  ▶ Watch Open Tech Sessions
-                </motion.a>
-              </div>
-            </div>
-          </motion.div>
 
 
           {/* NextGen */}
@@ -643,6 +581,118 @@ const Events = () => {
         ▶ Watch CEO Talk
       </motion.a>
     </div> */}
+            </div>
+          </motion.div>
+
+        </div>
+      </section>
+
+      {/* ================= YOUTUBE SERIES ================= */}
+      <section className="events-grid-section">
+        <motion.h2
+          className="section-title"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          YouTube Series
+        </motion.h2>
+
+        <div className="completed-events-wrapper">
+
+          {/* Tech From Zero */}
+          <motion.div className="event-card">
+            <div className="event-image">
+              <img src="./logoo.png" alt="Tech From Zero" />
+            </div>
+
+            <div className="event-content">
+              <h3>Tech From Zero</h3>
+
+              <div className="event-details">
+                <p>📅 2 March 2026 To 27 March 2026</p>
+                <p>🕐 10:00 AM</p>
+                <p>📍 Virtual</p>
+              </div>
+
+              <p className="event-description">
+                Tech explained like you're NOT a computer scientist.
+              </p>
+
+              <div className="event-footer-buttons">
+                <motion.a
+                  href="https://youtube.com/playlist?list=PLZ6SfI6qnKOG3Q_EJ5gpte61E3-hcytsZ&si=2gHFuAnjUi_SKnFN"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="register-btn"
+                >
+                  ▶ Watch Here
+                </motion.a>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Open Tech */}
+          <motion.div className="event-card">
+            <div className="event-image">
+              <img src="/opentech-logo.jpeg" alt="Open Tech 2026" />
+              {/* <span className="event-category">Completed</span> */}
+            </div>
+
+            <div className="event-content">
+              <h3>Open Tech 2026</h3>
+
+              <div className="event-details">
+                <p>📅 Jan 25 – Feb 14</p>
+                <p>📍 Virtual (YouTube)</p>
+              </div>
+
+              <p className="event-description">
+                Online technical sessions empowering students with AI and next-gen skills.
+              </p>
+
+              <div className="event-footer-buttons">
+                <motion.a
+                  href="https://www.youtube.com/watch?v=eci4mhWCHbY&list=PLZ6SfI6qnKOFhXgzLM98XPNsrNuzGsOmR"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="register-btn"
+                >
+                  ▶ Watch Open Tech Sessions
+                </motion.a>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Campus Therapy */}
+          <motion.div className="event-card">
+            <div className="event-image">
+              <img src="./campus therapy-1.png" alt="Campus Therapy" />
+            </div>
+
+            <div className="event-content">
+              <h3>Campus Therapy</h3>
+
+              <div className="event-details">
+                <p>📅 April 17 to May 13</p>
+                <p>📍 Virtual</p>
+              </div>
+
+              <p className="event-description">
+                In this session of Campus Therapy, we explore how stress, pressure, overthinking, and exhaustion can make even small tasks feel impossible and why being overwhelmed is often mistaken for laziness.
+              </p>
+
+              <div className="event-footer-buttons">
+                <motion.a
+                  href="https://www.youtube.com/playlist?list=PLZ6SfI6qnKOFa0jntOvmQmBj73p0gX548"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="register-btn"
+                >
+                  ▶ Watch Here
+                </motion.a>
+              </div>
             </div>
           </motion.div>
 
