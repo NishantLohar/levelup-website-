@@ -441,6 +441,27 @@ const Events = () => {
 
         <div className="completed-events-wrapper">
 
+          {/* LevelUp x Master's Union */}
+          <motion.div className="event-card">
+            <div className="event-image">
+              <img src="./master.jpeg" alt="LevelUp x Master's Union" />
+            </div>
+
+            <div className="event-content">
+              <h3>LevelUp x Master's Union</h3>
+
+              <div className="event-details">
+                <p>📅 23rd May 2026</p>
+                <p>🕐 6:00 PM</p>
+                <p>📍 Powai, Mumbai</p>
+              </div>
+
+              <p className="event-description">
+                An exclusive meetup and networking event by LevelUp in collaboration with Master's Union.
+              </p>
+            </div>
+          </motion.div>
+
           {/* Zero Doubt: zkVerify Mumbai Meetup */}
           <motion.div className="event-card">
             <div className="event-image">
