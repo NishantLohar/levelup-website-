@@ -230,14 +230,14 @@
 //             <p>Director of flow</p>
 //           </motion.div>
 
-          
-
-          
 
 
-        
 
-          
+
+
+
+
+
 
 //         </div>
 //       </motion.section>
@@ -258,7 +258,7 @@ const About = () => {
     <div className="about-page">
 
       {/* Hero Section */}
-      <motion.section 
+      <motion.section
         className="about-hero"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -274,7 +274,7 @@ const About = () => {
       </motion.section>
 
       {/* Who We Are */}
-      <motion.section 
+      <motion.section
         className="about-content"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -327,7 +327,7 @@ const About = () => {
       </section>
 
       {/* ✅ WHY CHOOSE LEVELUP (RESTORED) */}
-      <motion.section 
+      <motion.section
         className="about-mentors"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -356,7 +356,7 @@ const About = () => {
           >
             <img src="/nishant.jpeg" alt="Nishant Lohar" />
             <h3>Nishant Lohar</h3>
-            
+
             <p>CTO</p>
             <span className="team-linkedin">
               <i className="fab fa-linkedin-in"></i>
@@ -371,7 +371,7 @@ const About = () => {
           >
             <img src="/paresh.jpg" alt="Paresh Sharma" />
             <h3>Paresh Sharma</h3>
-            
+
             <p>CEO</p>
             <span className="team-linkedin">
               <i className="fab fa-linkedin-in"></i>
@@ -386,7 +386,7 @@ const About = () => {
           >
             <img src="/varun.jpg" alt="Varun Thakkar" />
             <h3>Varun Thakkar</h3>
-            
+
             <p>CFO</p>
             <span className="team-linkedin">
               <i className="fab fa-linkedin-in"></i>
@@ -401,7 +401,7 @@ const About = () => {
           >
             <img src="/pratik.jpg" alt="Pratik Palande" />
             <h3>Pratik Palande</h3>
-            
+
             <p>CMO</p>
             <span className="team-linkedin">
               <i className="fab fa-linkedin-in"></i>
@@ -416,7 +416,7 @@ const About = () => {
           >
             <img src="/himani.jpg" alt="Himani Sharma" />
             <h3>Himani Sharma</h3>
-            
+
             <p>CBO</p>
             <span className="team-linkedin">
               <i className="fab fa-linkedin-in"></i>
@@ -431,7 +431,7 @@ const About = () => {
           >
             <img src="/zaid.jpg" alt="Zaid Siddiqui" />
             <h3>Zaid Siddiqui</h3>
-            
+
             <p>COO</p>
             <span className="team-linkedin">
               <i className="fab fa-linkedin-in"></i>
@@ -444,28 +444,16 @@ const About = () => {
             rel="noopener noreferrer"
             className="team-card"
           >
-            <img src="/atharva.jpg" alt="Atharva Phad" />
+            <img src="/atharva.jpeg" alt="Atharva Phad" />
             <h3>Atharva Phad</h3>
-            
+
             <p>CCO</p>
             <span className="team-linkedin">
               <i className="fab fa-linkedin-in"></i>
             </span>
           </motion.a>
 
-          <motion.a
-            href="https://www.linkedin.com/in/namrataydv/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="team-card"
-          >
-            <img src="/namrata.jpg" alt="Namrata Yadav" />
-            <h3>Namrata Yadav</h3>
-            <p>CPO</p>
-            <span className="team-linkedin">
-              <i className="fab fa-linkedin-in"></i>
-            </span>
-          </motion.a>
+
 
           <motion.a
             href="https://www.linkedin.com/in/dr-loukik-salvi-589510164/"

@@ -9,7 +9,7 @@
   font-size: 3rem;
   margin-bottom: 3rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #1E90FF, #7B61FF);
+  background: var(--color-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -37,7 +37,7 @@
 .community-stats .stat-icon {
   width: 42px;
   height: 42px;
-  fill: #00ffff;
+  fill: var(--color-primary);
   margin-bottom: 12px;
 }
 

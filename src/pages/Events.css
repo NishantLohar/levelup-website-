@@ -11,14 +11,14 @@
 
 /* ========== HERO SECTION (Blue Background) ========== */
 .events-hero {
-  background: linear-gradient(135deg, rgba(30, 144, 255, 0.88) 0%, rgba(123, 97, 255, 0.88) 100%);
+  background: rgba(17, 17, 17, 0.88);
   backdrop-filter: blur(20px);
-  color: white;
+  color: var(--text-white);
   text-align: center;
   padding: 100px 20px 80px;
   margin: 0 20px 80px;
   border-radius: 30px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: none;
   border: 1px solid rgba(255, 255, 255, 0.2);
   position: relative;
   overflow: hidden;
@@ -72,7 +72,7 @@
   font-size: 3rem;
   text-align: center;
   margin-bottom: 4rem;
-  background: linear-gradient(135deg, #1E90FF, #7B61FF);
+  background: var(--color-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -90,20 +90,20 @@
 
 /* Event Card */
 .event-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-dark-secondary);
   backdrop-filter: blur(20px);
   border-radius: 25px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: none;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
 
 .event-card:hover {
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  box-shadow: none;
   border-color: rgba(30, 144, 255, 0.5);
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-dark-secondary);
 }
 
 .event-image {
@@ -128,15 +128,15 @@
   position: absolute;
   top: 15px;
   right: 15px;
-  background: linear-gradient(135deg, #1E90FF, #7B61FF);
-  color: white;
+  background: var(--color-primary);
+  color: var(--text-white);
   padding: 8px 18px;
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: none;
 }
 
 .event-content {
@@ -145,7 +145,7 @@
 
 .event-content h3 {
   font-size: 1.6rem;
-  color: white;
+  color: var(--text-white);
   margin-bottom: 15px;
   font-weight: 700;
 }
@@ -189,13 +189,13 @@
 
 .spots-left {
   font-size: 0.9rem;
-  color: #00D9FF;
+  color: var(--color-primary);
   font-weight: 600;
 }
 
 .register-btn {
-  background: linear-gradient(135deg, #1E90FF, #7B61FF);
-  color: white;
+  background: var(--color-primary);
+  color: var(--text-white);
   padding: 12px 28px;
   border: none;
   border-radius: 25px;
@@ -203,11 +203,11 @@
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 5px 20px rgba(30, 144, 255, 0.3);
+  box-shadow: none;
 }
 
 .register-btn:hover {
-  box-shadow: 0 8px 30px rgba(30, 144, 255, 0.5);
+  box-shadow: none;
   transform: translateY(-2px);
 }
 
@@ -227,19 +227,19 @@
 }
 
 .past-event-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-dark-secondary);
   backdrop-filter: blur(20px);
   border-radius: 20px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: none;
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .past-event-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+  box-shadow: none;
   border-color: rgba(30, 144, 255, 0.5);
 }
 
@@ -274,7 +274,7 @@
 }
 
 .participants-count {
-  color: white;
+  color: var(--text-white);
   font-weight: 600;
   font-size: 1rem;
 }
@@ -286,7 +286,7 @@
 
 .past-event-info h3 {
   font-size: 1.3rem;
-  color: white;
+  color: var(--text-white);
   margin-bottom: 8px;
   font-weight: 600;
 }
@@ -320,7 +320,7 @@
   max-width: 500px;
   width: 100%;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5);
+  box-shadow: none;
   position: relative;
 }
 
@@ -330,7 +330,7 @@
   right: 20px;
   background: rgba(255, 255, 255, 0.1);
   border: none;
-  color: white;
+  color: var(--text-white);
   font-size: 1.5rem;
   width: 35px;
   height: 35px;
@@ -349,7 +349,7 @@
 
 .form-container h2 {
   font-size: 2rem;
-  color: white;
+  color: var(--text-white);
   margin-bottom: 10px;
   text-align: center;
 }
@@ -379,8 +379,8 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
+  background: var(--bg-dark-secondary);
+  color: var(--text-white);
   transition: all 0.3s ease;
 }
 
@@ -389,10 +389,10 @@
 }
 
 .form-container input:focus {
-  border-color: #7B61FF;
+  border-color: var(--color-primary);
   outline: none;
   background: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 0 20px rgba(123, 97, 255, 0.3);
+  box-shadow: none;
 }
 
 .form-actions {
@@ -403,8 +403,8 @@
 
 .submit-btn {
   flex: 1;
-  background: linear-gradient(135deg, #1E90FF, #7B61FF);
-  color: white;
+  background: var(--color-primary);
+  color: var(--text-white);
   padding: 14px 24px;
   border: none;
   border-radius: 12px;
@@ -412,18 +412,18 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 30px rgba(30, 144, 255, 0.3);
+  box-shadow: none;
 }
 
 .submit-btn:hover {
-  box-shadow: 0 15px 40px rgba(30, 144, 255, 0.5);
+  box-shadow: none;
   transform: translateY(-2px);
 }
 
 .cancel-btn {
   flex: 1;
   background: rgba(255, 255, 255, 0.1);
-  color: white;
+  color: var(--text-white);
   padding: 14px 24px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
@@ -492,10 +492,10 @@
 
 .sponsor-card {
   padding: 20px 30px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-dark-secondary);
   border-radius: 16px;
   backdrop-filter: blur(6px);
-  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  box-shadow: none;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -507,7 +507,7 @@
 
 .sponsor-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 0 25px rgba(0,0,0,0.35);
+  box-shadow: none;
 }
 
 

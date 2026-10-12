@@ -11,14 +11,14 @@
 
 /* ========== HERO SECTION (Blue Background) ========== */
 .profile-hero {
-  background: linear-gradient(135deg, rgba(30, 144, 255, 0.88) 0%, rgba(123, 97, 255, 0.88) 100%);
+  background: rgba(17, 17, 17, 0.88);
   backdrop-filter: blur(20px);
-  color: white;
+  color: var(--text-white);
   text-align: center;
   padding: 100px 40px 80px;
   margin: 0 20px 80px;
   border-radius: 30px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: none;
   border: 1px solid rgba(255, 255, 255, 0.2);
   position: relative;
   overflow: hidden;
@@ -119,9 +119,9 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 15px;
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-dark-secondary);
   backdrop-filter: blur(20px);
-  color: white;
+  color: var(--text-white);
   transition: all 0.3s ease;
 }
 
@@ -130,10 +130,10 @@
 }
 
 .search-input:focus {
-  border-color: #7B61FF;
+  border-color: var(--color-primary);
   outline: none;
   background: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 0 20px rgba(123, 97, 255, 0.3);
+  box-shadow: none;
 }
 
 .filter-select {
@@ -143,22 +143,22 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 15px;
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-dark-secondary);
   backdrop-filter: blur(20px);
-  color: white;
+  color: var(--text-white);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .filter-select:focus {
-  border-color: #7B61FF;
+  border-color: var(--color-primary);
   outline: none;
-  box-shadow: 0 0 20px rgba(123, 97, 255, 0.3);
+  box-shadow: none;
 }
 
 .filter-select option {
   background: #1a1a2e;
-  color: white;
+  color: var(--text-white);
 }
 
 /* ========== PROFILE CARDS (FULL WIDTH) ========== */
@@ -172,12 +172,12 @@
 }
 
 .profile-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-dark-secondary);
   backdrop-filter: blur(20px);
   border-radius: 25px;
   padding: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: none;
   position: relative;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
@@ -186,14 +186,14 @@
 }
 
 .profile-card:hover {
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  box-shadow: none;
   border-color: rgba(30, 144, 255, 0.5);
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-dark-secondary);
 }
 
 .profile-card.top-three {
   border: 2px solid rgba(255, 215, 0, 0.5);
-  box-shadow: 0 20px 60px rgba(255, 215, 0, 0.2);
+  box-shadow: none;
 }
 
 .rank-badge {
@@ -202,14 +202,14 @@
   left: 30px;
   width: 55px;
   height: 55px;
-  background: linear-gradient(135deg, #1E90FF, #7B61FF);
+  background: var(--color-primary);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 1.3rem;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: none;
   border: 3px solid rgba(255, 255, 255, 0.2);
   z-index: 2;
 }
@@ -231,8 +231,8 @@
   justify-content: center;
   font-size: 3rem;
   font-weight: 700;
-  color: white;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  color: var(--text-white);
+  box-shadow: none;
   border: 3px solid rgba(255, 255, 255, 0.2);
   flex-shrink: 0;
 }
@@ -244,7 +244,7 @@
 
 .profile-details h3 {
   font-size: 2rem;
-  color: white;
+  color: var(--text-white);
   margin-bottom: 8px;
   font-weight: 700;
 }
@@ -267,7 +267,7 @@
 .skill-tag {
   background: rgba(30, 144, 255, 0.2);
   border: 1px solid rgba(30, 144, 255, 0.4);
-  color: #00D9FF;
+  color: var(--color-primary);
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -303,7 +303,7 @@
   align-items: center;
   text-align: center;
   padding: 15px 10px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-dark-secondary);
   border-radius: 12px;
   transition: all 0.3s ease;
 }
@@ -316,7 +316,7 @@
 .stat-value {
   font-size: 2rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #1E90FF, #00ffff);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -339,7 +339,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+  box-shadow: none;
   white-space: nowrap;
 }
 
@@ -349,10 +349,10 @@
   padding: 80px 20px;
   max-width: 600px;
   margin: 0 auto;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-dark-secondary);
   backdrop-filter: blur(20px);
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .no-results p {

@@ -63,7 +63,7 @@ html {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(30, 144, 255, 0.88) 0%, rgba(123, 97, 255, 0.88) 100%);
+  background: rgba(17, 17, 17, 0.88);
   z-index: 1;
 }
 
@@ -143,7 +143,7 @@ html {
   /* padding-bottom: 100px; */
   font-size: 4.5rem;
   line-height: 1.1;
-  color: white;
+  color: var(--text-white);
   font-weight: 400;
   margin: 0;
   text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
@@ -151,7 +151,7 @@ html {
 
 .gradient-text {
   font-weight: 800;
-  background: linear-gradient(135deg, #ffffff 0%, #00ffff 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #aaaaaa 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -192,13 +192,13 @@ html {
 
 .cta-button.primary {
   background: white;
-  color: #1E90FF;
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+  color: var(--color-primary);
+  box-shadow: none;
 }
 
 .cta-button.secondary {
   background: rgba(255, 255, 255, 0.1);
-  color: white;
+  color: var(--text-white);
   border: 2px solid rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(10px);
 }
@@ -229,9 +229,7 @@ html {
   justify-content: center;
   align-items: center;
   /* backdrop-filter: blur(20px); */
-  /* box-shadow:  
-    0 20px 60px rgba(0, 0, 0, 0.4),
-    inset 0 0 60px rgba(255, 255, 255, 0.1);*/
+  /* box-shadow: none;*/
   /* border: 3px solid rgba(255, 255, 255, 0.3); */
   position: relative;
   z-index: 2;
@@ -284,13 +282,13 @@ html {
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  color: white;
+  color: var(--text-white);
   z-index: 3;
 }
 
 .scroll-arrow {
   font-size: 2rem;
-  color: white;
+  color: var(--text-white);
 }
 
 .scroll-indicator p {
@@ -319,12 +317,12 @@ html {
   justify-content: space-between;
   gap: 60px;
   flex-wrap: wrap;
-  background: rgba(255, 255, 255, 0.05); /* Glass effect */
+  background: var(--bg-dark-secondary); /* Glass effect */
   backdrop-filter: blur(20px);
   padding: 60px;
   border-radius: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: none;
 }
 
 .about-text {
@@ -333,13 +331,13 @@ html {
 
 .about-text h1 {
   font-size: 3rem;
-  color: white;
+  color: var(--text-white);
   font-weight: 700;
   margin-bottom: 20px;
 }
 
 .about-text .highlight {
-  background: linear-gradient(135deg, #1E90FF, #7B61FF);
+  background: var(--color-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -354,7 +352,7 @@ html {
 }
 
 .about-btn {
-  background: linear-gradient(135deg, #1E90FF, #7B61FF);
+  background: var(--color-primary);
   color: #fff;
   padding: 14px 32px;
   border-radius: 30px;
@@ -362,12 +360,12 @@ html {
   font-weight: 600;
   display: inline-block;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 30px rgba(30, 144, 255, 0.3);
+  box-shadow: none;
 }
 
 .about-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(30, 144, 255, 0.5);
+  box-shadow: none;
 }
 
 .about-image {
@@ -381,7 +379,7 @@ html {
   height: auto;
   object-fit: cover;
   border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: none;
 }
 
 /* ========== COMMUNITY SECTION ========== */
@@ -403,12 +401,12 @@ html {
   justify-content: space-between;
   gap: 60px;
   flex-wrap: wrap;
-  background: rgba(255, 255, 255, 0.05); /* Glass effect */
+  background: var(--bg-dark-secondary); /* Glass effect */
   backdrop-filter: blur(20px);
   padding: 60px;
   border-radius: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: none;
 }
 
 .community-image {
@@ -422,7 +420,7 @@ html {
   height: auto;
   object-fit: cover;
   border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: none;
 }
 
 .community-text {
@@ -440,13 +438,13 @@ html {
 
 .community-text h2 {
   font-size: 3rem;
-  color: white;
+  color: var(--text-white);
   font-weight: 700;
   margin-bottom: 20px;
 }
 
 .community-text .highlight {
-  background: linear-gradient(135deg, #1E90FF, #7B61FF);
+  background: var(--color-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -461,7 +459,7 @@ html {
 }
 
 .community-btn {
-  background: linear-gradient(135deg, #1E90FF, #7B61FF);
+  background: var(--color-primary);
   color: #fff;
   padding: 14px 32px;
   border-radius: 30px;
@@ -469,12 +467,12 @@ html {
   font-weight: 600;
   display: inline-block;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 30px rgba(30, 144, 255, 0.3);
+  box-shadow: none;
 }
 
 .community-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(30, 144, 255, 0.5);
+  box-shadow: none;
 }
 /* ========== MENTOR SECTION ========== */
 .mentor-section {
@@ -493,13 +491,13 @@ html {
 
 .mentor-header h2 {
   font-size: 3rem;
-  color: white;
+  color: var(--text-white);
   margin-bottom: 1rem;
   font-weight: 700;
 }
 
 .mentor-header .highlight {
-  background: linear-gradient(135deg, #1E90FF, #7B61FF);
+  background: var(--color-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -522,19 +520,19 @@ html {
 }
 
 .mentor-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-dark-secondary);
   backdrop-filter: blur(20px);
   border-radius: 25px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: none;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .mentor-card:hover {
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  box-shadow: none;
   border-color: rgba(30, 144, 255, 0.5);
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-dark-secondary);
 }
 
 .mentor-image-wrapper {
@@ -565,7 +563,7 @@ html {
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 700;
-  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+  box-shadow: none;
 }
 
 .mentor-info {
@@ -574,14 +572,14 @@ html {
 
 .mentor-info h3 {
   font-size: 1.8rem;
-  color: white;
+  color: var(--text-white);
   margin-bottom: 8px;
   font-weight: 700;
 }
 
 .mentor-role {
   font-size: 1rem;
-  color: #00D9FF;
+  color: var(--color-primary);
   margin-bottom: 15px;
   font-weight: 600;
 }
@@ -603,7 +601,7 @@ html {
 .mentor-skills .skill-tag {
   background: rgba(30, 144, 255, 0.2);
   border: 1px solid rgba(30, 144, 255, 0.4);
-  color: #00D9FF;
+  color: var(--color-primary);
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -625,14 +623,14 @@ html {
   justify-content: center;
   background: rgba(30, 144, 255, 0.2);
   border-radius: 50%;
-  color: white;
+  color: var(--text-white);
   transition: all 0.3s ease;
 }
 
 .mentor-social a:hover {
-  background: #1E90FF;
+  background: var(--color-primary);
   transform: translateY(-3px);
-  box-shadow: 0 5px 20px rgba(30, 144, 255, 0.4);
+  box-shadow: none;
 }
 
 /* Responsive Design */
@@ -666,14 +664,14 @@ html {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  background: rgba(255, 255, 255, 0.05); /* Glass effect */
+  background: var(--bg-dark-secondary); /* Glass effect */
   backdrop-filter: blur(20px);
   border-radius: 30px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: none;
   overflow: hidden;
   max-width: 1100px;
   margin: auto;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .contact-left,
@@ -685,7 +683,7 @@ html {
 
 .contact-left h2 {
   font-size: 2.5rem;
-  color: white;
+  color: var(--text-white);
   margin-bottom: 10px;
   font-weight: 700;
 }
@@ -710,8 +708,8 @@ html {
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
+  background: var(--bg-dark-secondary);
+  color: var(--text-white);
   transition: all 0.3s ease;
 }
 
@@ -722,15 +720,15 @@ html {
 
 .contact-form input:focus,
 .contact-form textarea:focus {
-  border-color: #7B61FF;
+  border-color: var(--color-primary);
   outline: none;
   background: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 0 20px rgba(123, 97, 255, 0.3);
+  box-shadow: none;
 }
 
 .send-btn {
-  background: linear-gradient(90deg, #1E90FF 0%, #7B61FF 100%);
-  color: white;
+  background: var(--color-primary);
+  color: var(--text-white);
   border: none;
   padding: 14px 24px;
   border-radius: 12px;
@@ -738,12 +736,12 @@ html {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 30px rgba(30, 144, 255, 0.3);
+  box-shadow: none;
 }
 
 .send-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(30, 144, 255, 0.5);
+  box-shadow: none;
 }
 
 .contact-right {
@@ -758,7 +756,7 @@ html {
   max-width: 100%;
   height: auto;
   border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: none;
 }
 
 /* ========== RESPONSIVE DESIGN ========== */

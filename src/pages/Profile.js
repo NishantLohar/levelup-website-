@@ -21,19 +21,7 @@ const Profile = () => {
       color: "#1E90FF",
       skills: ["React", "Node.js", "Python", "Machine Learning", "AI/DS", "MongoDB"]
     },
-    {
-      id: 2,
-      name: "Ripuranjan",
-      description: "Software development and R&D in STEM fields, Researcher in Astronomy.",
-      avatar: "R",
-      photo: "/users/ripu.jpg",
-      hackathons: 0,
-      projects: 1,
-      prizes: 2,
-      Events: 1,
-      color: "#00D9FF",
-      skills: ["Full Stack Developer", "AI/ML", "System Architect"]
-    },
+
     {
       id: 3,
       name: "Pranav",
@@ -47,7 +35,7 @@ const Profile = () => {
       color: "#00D9FF",
       skills: ["React", "Machine Learning", "Flutter", "Backend Development", "UI/UX Design"]
     },
-    
+
     {
       id: 5,
       name: "Sagar",
@@ -222,10 +210,10 @@ const Profile = () => {
       <div className="profile-list">
         {filteredProfiles.map((user, index) => (
           <motion.div key={user.id} className="profile-card" whileHover={{ y: -5 }}>
-            
+
             {/* LEFT */}
             <div className="profile-left">
-              
+
               {/* PHOTO OR AVATAR */}
               <div className="profile-avatar">
                 {user.photo ? (

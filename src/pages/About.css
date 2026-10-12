@@ -32,13 +32,13 @@ html {
   max-width: 100%;
   height: auto;
   border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: none;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .vision-image img:hover,
 .mission-image img:hover {
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  box-shadow: none;
 }
 
 /* Add smooth backdrop blur transitions */
@@ -52,9 +52,9 @@ html {
 .about-content:hover,
 .vision-container:hover,
 .mission-container:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-dark-secondary);
   transform: translateY(-5px);
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
+  box-shadow: none;
 }
 
 /* Smooth text animations */
@@ -96,14 +96,14 @@ html {
 
 /* Hero Section - ONLY THIS HAS BLUE BACKGROUND */
 .about-hero {
-  background: linear-gradient(135deg, rgba(30, 144, 255, 0.88) 0%, rgba(123, 97, 255, 0.88) 100%);
+  background: rgba(17, 17, 17, 0.88);
   backdrop-filter: blur(20px);
-  color: white;
+  color: var(--text-white);
   text-align: center;
   padding: 100px 20px 70px;
   border-radius: 30px;
   margin: 0 20px 80px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: none;
   border: 1px solid rgba(255, 255, 255, 0.2);
   animation: fadeIn 1s ease-in-out;
   position: relative;
@@ -166,7 +166,7 @@ html {
 .about-mentors h2 {
   font-size: 2.5rem;
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, #1E90FF, #7B61FF);
+  background: var(--color-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -182,7 +182,7 @@ html {
   display: block;
   width: 80px;
   height: 4px;
-  background: linear-gradient(90deg, #1E90FF, #7B61FF);
+  background: var(--color-primary);
   margin: 15px auto 20px;
   border-radius: 3px;
 }
@@ -192,11 +192,11 @@ html {
   max-width: 900px;
   padding: 80px 40px;
   margin: 0 auto 80px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-dark-secondary);
   backdrop-filter: blur(20px);
   border-radius: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: none;
   animation: fadeUp 1s ease;
 }
 
@@ -220,12 +220,12 @@ html {
   max-width: 1200px;
   margin: auto;
   flex-wrap: wrap;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-dark-secondary);
   backdrop-filter: blur(20px);
   padding: 60px;
   border-radius: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: none;
 }
 
 .vision-text {
@@ -261,7 +261,7 @@ html {
   max-width: 100%;
   height: auto;
   border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: none;
   transition: transform 0.3s ease;
 }
 
@@ -283,12 +283,12 @@ html {
   max-width: 1200px;
   margin: auto;
   flex-wrap: wrap;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-dark-secondary);
   backdrop-filter: blur(20px);
   padding: 60px;
   border-radius: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: none;
 }
 
 .mission-image {
@@ -302,7 +302,7 @@ html {
   max-width: 100%;
   height: auto;
   border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: none;
   transition: transform 0.3s ease;
 }
 
@@ -351,12 +351,12 @@ html {
   font-size: 1.15rem;
   color: rgba(255, 255, 255, 0.9);
   line-height: 1.8;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-dark-secondary);
   backdrop-filter: blur(20px);
   padding: 40px;
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: none;
 }
 /* =============================
    MY TEAM SECTION
@@ -395,7 +395,7 @@ html {
 .about-team h2 {
   font-size: 2.8rem;
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, #1E90FF, #7B61FF);
+  background: var(--color-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 700;
@@ -406,7 +406,7 @@ html {
   display: block;
   width: 80px;
   height: 4px;
-  background: linear-gradient(90deg, #1E90FF, #7B61FF);
+  background: var(--color-primary);
   margin: 15px auto 30px;
   border-radius: 3px;
 }
@@ -428,13 +428,13 @@ html {
   text-align: center;
   border-radius: 25px;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  box-shadow: none;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .team-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 30px 80px rgba(0,0,0,0.45);
+  box-shadow: none;
 }
 
 .team-card img {
