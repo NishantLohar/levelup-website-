@@ -117,20 +117,24 @@ const Leaderboard = () => {
                       <tbody className="font-grotesk font-semibold text-lg text-white">
                           {loading ? (
                             <tr>
-                              <td colSpan="4" className="text-center py-24 text-gold font-heading tracking-widest uppercase text-sm">
-                                <span className="inline-block animate-pulse mr-3 text-lg">✦</span>
-                                SYNCHRONIZING LIVE ARENA SCORES...
+                              <td colSpan="4" className="py-24 px-6 text-center whitespace-normal">
+                                <div className="flex items-center justify-center gap-3 text-gold font-heading tracking-widest uppercase text-sm">
+                                  <span className="inline-block animate-pulse text-lg">✦</span>
+                                  <span>SYNCHRONIZING LIVE ARENA SCORES...</span>
+                                </div>
                               </td>
                             </tr>
                           ) : boardData.length === 0 ? (
                             <tr>
-                              <td colSpan="4" className="text-center py-24 text-lightgrey font-grotesk tracking-widest">
-                                <div className="text-gold font-heading text-xl font-bold mb-3 tracking-widest uppercase">
-                                  AWAITING ARENA ACTIVITY
+                              <td colSpan="4" className="py-24 px-6 text-center whitespace-normal">
+                                <div className="max-w-xl mx-auto flex flex-col items-center justify-center text-center">
+                                  <div className="text-gold font-heading text-xl md:text-2xl font-bold mb-3 tracking-widest uppercase">
+                                    AWAITING ARENA ACTIVITY
+                                  </div>
+                                  <p className="text-xs md:text-sm text-lightgrey/70 uppercase tracking-wider leading-relaxed text-center">
+                                    Live rankings and XP scores will be displayed here in real time as participants complete challenges and earn points.
+                                  </p>
                                 </div>
-                                <p className="text-xs text-lightgrey/60 uppercase max-w-md mx-auto">
-                                  Live rankings and XP scores will be displayed here in real time as participants complete challenges and earn points.
-                                </p>
                               </td>
                             </tr>
                           ) : (
