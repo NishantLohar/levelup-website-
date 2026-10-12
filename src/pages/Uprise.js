@@ -215,9 +215,7 @@ const Uprise = () => {
     setSubmitStatus('Submitting...');
     
     try {
-      const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-        ? 'http://localhost:8000' 
-        : 'https://account.levelupevents.in';
+      const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
 
       const response = await fetch(`${API_BASE_URL}/api/v1/uprise/register`, {
         method: 'POST',

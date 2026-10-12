@@ -15,9 +15,7 @@ const Leaderboard = () => {
     let isMounted = true;
     setLoading(true);
 
-    const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-      ? 'http://localhost:8000'
-      : 'https://account.levelupevents.in';
+    const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
 
     fetch(`${API_BASE_URL}/api/v1/uprise/leaderboard?role=${activeBoard}&limit=100`)
       .then(res => res.json())
