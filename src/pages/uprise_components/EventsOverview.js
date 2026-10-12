@@ -33,12 +33,20 @@ const EventsOverview = ({ onOpenModal }) => {
                         </p>
                     </div>
                 </div>
-                <a href="https://account.levelupevents.in/events/6/" target="_blank" rel="noopener noreferrer" className="text-gold font-heading text-xs font-bold tracking-[0.2em] group-hover:underline uppercase mt-6 block">Register for Hackathon &rarr;</a>
+                <a 
+                    href="https://account.levelupevents.in/events/6/" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="w-full mt-8 py-3.5 px-4 bg-gold bright text-pitchblack font-heading text-xs font-bold tracking-[0.2em] uppercase text-center sharp hover:bg-white transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-[0_0_15px_#FFFFFF]"
+                >
+                    <span>REGISTER FOR HACKATHON</span>
+                    <span className="text-sm">&rarr;</span>
+                </a>
             </div>
 
             {/*  Startup Expo  */}
-            <div className="reveal glass-card border border-gold/30 p-10 flex flex-col items-start justify-between h-full min-h-[400px] sharp hover:bg-gold/5 transition-all duration-500 gold-glow group tilt-card cursor-pointer" style={{transitionDelay: "100ms"}}>
-                <div className="tilt-content">
+            <div className="reveal glass-card border border-gold/30 p-10 flex flex-col items-start justify-between h-full min-h-[400px] sharp hover:bg-gold/5 transition-all duration-500 gold-glow group tilt-card" style={{transitionDelay: "100ms"}}>
+                <div className="tilt-content w-full">
                     <div className="w-16 h-16 border-2 border-gold flex items-center justify-center mb-8 text-gold group-hover:bg-gold group-hover:text-pitchblack transition-colors sharp">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="square" strokeLinejoin="miter" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
                     </div>
@@ -47,12 +55,18 @@ const EventsOverview = ({ onOpenModal }) => {
                         Where capital meets code. 200+ startups showcasing their protocols to top-tier investors in our closed-door VIP pitch arenas. 
                     </p>
                 </div>
-                <button onClick={() => onOpenModal && onOpenModal('soon')} className="text-gold font-heading text-xs font-bold tracking-[0.2em] group-hover:underline uppercase mt-6 block outline-none">Explore Exhibition &rarr;</button>
+                <button 
+                    onClick={() => onOpenModal && onOpenModal('soon')} 
+                    className="w-full mt-8 py-3.5 px-4 bg-transparent border border-gold text-gold font-heading text-xs font-bold tracking-[0.2em] uppercase text-center sharp hover:bg-gold hover:text-pitchblack transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-[0_0_15px_#D4AF37] cursor-pointer"
+                >
+                    <span>EXPLORE EXHIBITION</span>
+                    <span className="text-sm">&rarr;</span>
+                </button>
             </div>
 
             {/*  Award Ceremony  */}
-            <div className="reveal glass-card border border-gold/30 p-10 flex flex-col items-start justify-between h-full min-h-[400px] sharp hover:bg-gold/5 transition-all duration-500 gold-glow group tilt-card cursor-pointer" style={{transitionDelay: "200ms"}}>
-                <div className="tilt-content">
+            <div className="reveal glass-card border border-gold/30 p-10 flex flex-col items-start justify-between h-full min-h-[400px] sharp hover:bg-gold/5 transition-all duration-500 gold-glow group tilt-card" style={{transitionDelay: "200ms"}}>
+                <div className="tilt-content w-full">
                     <div className="w-16 h-16 border-2 border-gold flex items-center justify-center mb-8 text-gold group-hover:bg-gold group-hover:text-pitchblack transition-colors sharp">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="square" strokeLinejoin="miter" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
                     </div>
@@ -61,7 +75,13 @@ const EventsOverview = ({ onOpenModal }) => {
                         The ultimate climax. Honoring the relentless top 50 entrepreneurs, top 25 investors, and the brightest college communities in the nation.
                     </p>
                 </div>
-                <button onClick={() => onOpenModal && onOpenModal('soon')} className="text-gold font-heading text-xs font-bold tracking-[0.2em] group-hover:underline uppercase mt-6 block outline-none">See Nominations &rarr;</button>
+                <button 
+                    onClick={() => onOpenModal && onOpenModal('soon')} 
+                    className="w-full mt-8 py-3.5 px-4 bg-transparent border border-gold text-gold font-heading text-xs font-bold tracking-[0.2em] uppercase text-center sharp hover:bg-gold hover:text-pitchblack transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-[0_0_15px_#D4AF37] cursor-pointer"
+                >
+                    <span>SEE NOMINATIONS</span>
+                    <span className="text-sm">&rarr;</span>
+                </button>
             </div>
         </div>
     </div>
