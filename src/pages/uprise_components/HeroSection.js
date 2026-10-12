@@ -1,7 +1,27 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const HeroSection = ({ onOpenModal }) => {
+  const navigate = useNavigate();
+  const [isRegistered, setIsRegistered] = useState(false);
+
+  useEffect(() => {
+    const registered = 
+      localStorage.getItem('prehackathon_registered') === 'true' || 
+      document.cookie.includes('prehackathon_registered=true');
+    setIsRegistered(registered);
+  }, []);
+
+  const handlePreHackathonClick = (e) => {
+    const registered = 
+      localStorage.getItem('prehackathon_registered') === 'true' || 
+      document.cookie.includes('prehackathon_registered=true');
+    if (registered) {
+      e.preventDefault();
+      navigate('/pre-hackathon');
+    }
+  };
   return (
     <>
       <section className="min-h-screen flex flex-col justify-center items-center relative px-6 pt-20 pb-12 overflow-hidden border-b border-gold/20">
@@ -51,8 +71,14 @@ const HeroSection = ({ onOpenModal }) => {
             <a href="https://account.levelupevents.in/events/6/" target="_blank" rel="noopener noreferrer" className="magnetic-btn sharp bg-gold bright hover:bg-white text-pitchblack font-heading font-bold py-5 px-12 transition-all duration-300 text-center tracking-widest text-sm hover:shadow-[0_0_20px_#FFFFFF] shimmer-btn animate-pulse-gold">
                 REGISTER FOR HACKATHON
             </a>
-            <a href="https://account.levelupevents.in/events/register/1/" target="_blank" rel="noopener noreferrer" className="magnetic-btn sharp bg-transparent border border-gold text-gold font-heading font-bold py-5 px-12 transition-all duration-300 text-center tracking-widest text-sm hover:bg-gold/10 hover:shadow-[0_0_15px_#D4AF37]">
-                PARTICIPATE IN PRE-HACKATHON
+            <a 
+                href={isRegistered ? "/pre-hackathon" : "https://account.levelupevents.in/events/register/1/"} 
+                target={isRegistered ? "_self" : "_blank"} 
+                rel="noopener noreferrer" 
+                onClick={handlePreHackathonClick}
+                className="magnetic-btn sharp bg-transparent border border-gold text-gold font-heading font-bold py-5 px-12 transition-all duration-300 text-center tracking-widest text-sm hover:bg-gold/10 hover:shadow-[0_0_15px_#D4AF37]"
+            >
+                {isRegistered ? "PRE-HACKATHON DETAILS" : "PARTICIPATE IN PRE-HACKATHON"}
             </a>
             <button onClick={() => onOpenModal && onOpenModal('soon')} className="magnetic-btn sharp bg-transparent border border-lightgrey text-white font-heading font-bold py-5 px-12 transition-all duration-300 text-center tracking-widest text-sm hover:border-white hover:bg-white/10">
                 SUBMIT NOMINATION

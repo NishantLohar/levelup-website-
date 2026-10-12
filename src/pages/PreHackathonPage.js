@@ -1,10 +1,21 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './Uprise.css'; // Reuse the same CSS for consistent animations
 
 const PreHackathonPage = () => {
+    const location = useLocation();
+    const isRegisteredParam = new URLSearchParams(location.search).get('registered') === 'true';
+
     useEffect(() => {
+        // Automatically register status in localStorage & cookie
+        localStorage.setItem('prehackathon_registered', 'true');
+        try {
+            document.cookie = "prehackathon_registered=true; path=/; max-age=10368000";
+            if (window.location.hostname.includes('levelupevents.in')) {
+                document.cookie = "prehackathon_registered=true; path=/; max-age=10368000; domain=.levelupevents.in";
+            }
+        } catch (e) {}
         // --- Hover effect for interactive elements ---
         const addHover = () => document.body.classList.add('cursor-hover');
         const removeHover = () => document.body.classList.remove('cursor-hover');
@@ -100,6 +111,17 @@ const PreHackathonPage = () => {
                 <div className="max-w-6xl mx-auto">
                     {/* Header Section */}
                     <div className="text-center mb-24">
+                        {isRegisteredParam && (
+                            <motion.div 
+                                initial={{ opacity: 0, y: -20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6 }}
+                                className="mb-10 p-5 bg-gold/10 border-2 border-gold text-gold font-heading tracking-widest text-sm uppercase sharp gold-glow inline-flex items-center gap-3"
+                            >
+                                <span className="text-xl font-bold">✓</span>
+                                <span>REGISTRATION CONFIRMED — YOU ARE OFFICIALLY IN THE PRE-HACKATHON</span>
+                            </motion.div>
+                        )}
                         <motion.div 
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
