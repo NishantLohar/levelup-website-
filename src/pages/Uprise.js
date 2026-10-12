@@ -13,7 +13,6 @@ import Agenda from './uprise_components/Agenda';
 import Awards from './uprise_components/Awards';
 
 const Uprise = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [activeModal, setActiveModal] = useState(null); // 'club', 'member', 'builder', null
   const [formData, setFormData] = useState({ name: '', email: '', contact: '', organization: '', members: '', coupon: '' });
   const [submitStatus, setSubmitStatus] = useState(null);
@@ -207,20 +206,6 @@ const Uprise = () => {
     };
   }, []);
 
-  const handleScrollToLeaderboard = (e) => {
-    e.preventDefault();
-    const elem = document.getElementById('arena');
-    if(elem) elem.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleModalOpen = (type, e) => {
-    e.preventDefault();
-    setActiveModal(type);
-    setIsDropdownOpen(false);
-    setSubmitStatus(null);
-    setFormData({ name: '', email: '', contact: '', organization: '', members: '', coupon: '' });
-  };
-
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -350,9 +335,9 @@ const Uprise = () => {
         <footer className="py-16 bg-pitchblack text-center text-lightgrey text-xs font-grotesk tracking-[0.3em] uppercase z-10 relative">
             <p className="mb-4">© 2027 UPRISE SUMMIT. ALL RIGHTS RESERVED.</p>
             <div className="flex justify-center gap-6 mt-6">
-                <a href="#" className="hover:text-gold transition-colors">TWITTER</a>
-                <a href="#" className="hover:text-gold transition-colors">LINKEDIN</a>
-                <a href="#" className="hover:text-gold transition-colors">DISCORD</a>
+                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">TWITTER</a>
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">LINKEDIN</a>
+                <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">DISCORD</a>
             </div>
         </footer>
       </main>

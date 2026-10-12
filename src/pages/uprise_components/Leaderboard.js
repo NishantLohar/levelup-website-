@@ -127,7 +127,6 @@ const Leaderboard = () => {
                       </thead>
                       <tbody className="font-grotesk font-semibold text-lg text-white">
                           {currentData.map(row => {
-                            let isCutoff = false;
                             let html = [];
                             if (row.rank === boards[activeBoard].cutoff + 1) {
                               html.push(
