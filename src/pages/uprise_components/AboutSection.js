@@ -17,7 +17,7 @@ const AboutSection = () => {
                     MORE THAN A <span className="text-gold bright">HACKATHON.</span>
                 </h2>
                 <p className="text-lightgrey font-grotesk text-lg leading-relaxed mb-8">
-                    UPRISE 2027 is the epicenter of India's technological revolution. It's a 48-hour crucible where the nation's most elite builders, visionary startups, and top-tier investors collide to forge the future.
+                    UPRISE 2027 is the epicenter of India's technological revolution. It's a 36-hour crucible where the nation's most elite builders, visionary startups, and top-tier investors collide to forge the future.
                 </p>
                 <p className="text-lightgrey/70 font-grotesk text-base leading-relaxed mb-10">
                     Forget traditional networking. This is a high-stakes arena designed to push limits. Whether you are building the next generation of AI, securing decentralized networks, or hunting for your next unicorn investment, UPRISE is where the ecosystem levels up.
@@ -25,7 +25,7 @@ const AboutSection = () => {
                 
                 <div className="grid grid-cols-2 gap-8 border-l-2 border-gold pl-6">
                     <div>
-                        <h4 className="text-white font-heading font-bold text-xl mb-2">48 HOURS</h4>
+                        <h4 className="text-white font-heading font-bold text-xl mb-2">36 HOURS</h4>
                         <p className="text-lightgrey/50 font-grotesk text-sm uppercase tracking-widest">Of Uninterrupted Building</p>
                     </div>
                     <div>

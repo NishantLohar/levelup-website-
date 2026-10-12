@@ -8,7 +8,7 @@ const Agenda = () => {
       <div className="max-w-5xl mx-auto">
           {/* Header */}
           <div className="text-center mb-20">
-              <h2 className="text-4xl md:text-[3.5rem] text-white font-black mb-6 tracking-wider uppercase scramble-text">THE 48-HOUR TIMELINE</h2>
+              <h2 className="text-4xl md:text-[3.5rem] text-white font-black mb-6 tracking-wider uppercase scramble-text">THE 36-HOUR TIMELINE</h2>
           </div>
 
           {/* Tabs */}
