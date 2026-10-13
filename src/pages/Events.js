@@ -230,6 +230,7 @@
 
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import Lenis from "lenis";
 import "./Events.css";
 
@@ -270,47 +271,18 @@ const Events = () => {
   const upcomingEvents = [
     {
       id: 1,
-      title: "HackTheHype 2026",
-      date: "date yet to announce",
+      title: "Uprise 2027",
+      date: "March 2027",
       time: "Announcing Soon",
       location: "Mumbai",
-      description: "48-hour coding marathon with exciting prizes and mentorship.",
+      description: "36-hour hackathon — build, ship, and compete for direct qualification. The biggest LevelUp event yet.",
       category: "Hackathon",
       image: "./hack-logo.jpeg",
       zohoForm: "#",
-      brochure: "/hackthehype-brochure.pdf",
+      internalLink: "/uprise",
       showDevfolio: false,
-      type: "normal"
+      type: "uprise"
     },
-    {
-      id: 2,
-      title: "Idea2Impact",
-      date: "June 25 2026",
-      time: "TBA",
-      location: "Hybrid",
-      description: "The Circuit is fully primed for your ideas 11 Themes, 21 Days, 1 Impact. The mentors are ready. The investors are waiting. What are you waiting for. Register Now.!",
-      category: "Ideathon",
-      image: "./I2I.jpeg",
-      zohoForm: "https://account.levelupevents.in/events/",
-      //youtubeLink: "https://www.youtube.com/@LevelUpOfficial-in/featured",
-      brochure: "Idea2Impact Event brochure.pdf",
-      showDevfolio: false,
-      type: "normal"
-    },
-    // {
-    //   id: 3,
-    //   title: "Campus Therapy",
-    //   date: "TBA",
-    //   time: "TBA",
-    //   location: "Virtual",
-    //   description: "Event details coming soon.",
-    //   category: "Youtube",
-    //   image: "./campus therapy-1.png",
-    //   youtubeLink: "https://www.youtube.com/@LevelUpOfficial-in/featured",
-    //   brochure: "#",
-    //   showDevfolio: false,
-    //   type: "youtube"
-    // }
   ];
 
   return (
@@ -391,6 +363,16 @@ const Events = () => {
                     >
                       ▶ Watch Here
                     </motion.a>
+                  ) : event.type === "uprise" ? (
+                    <Link to={event.internalLink}>
+                      <motion.button
+                        className="register-btn"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        See Details
+                      </motion.button>
+                    </Link>
                   ) : (
                     <>
                       {event.zohoForm && event.zohoForm !== "#" && (
@@ -440,6 +422,41 @@ const Events = () => {
         </motion.h2>
 
         <div className="completed-events-wrapper">
+
+          {/* Idea2Impact — moved from Upcoming */}
+          <motion.div className="event-card">
+            <div className="event-image">
+              <img src="./I2I.jpeg" alt="Idea2Impact" />
+              <span className="event-category">Ideathon</span>
+            </div>
+
+            <div className="event-content">
+              <h3>Idea2Impact</h3>
+
+              <div className="event-details">
+                <p>📅 June 25 2026</p>
+                <p>🕐 TBA</p>
+                <p>📍 Hybrid</p>
+              </div>
+
+              <p className="event-description">
+                The Circuit is fully primed for your ideas — 11 Themes, 21 Days, 1 Impact. The mentors are ready. The investors are waiting.
+              </p>
+
+              <div className="event-footer-buttons">
+                <motion.a
+                  href="Idea2Impact Event brochure.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="register-btn"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  About Event
+                </motion.a>
+              </div>
+            </div>
+          </motion.div>
 
           {/* LevelUp x Master's Union */}
           <motion.div className="event-card">
