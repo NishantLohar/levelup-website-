@@ -131,7 +131,7 @@ const PreHackathonPage = () => {
                                 DIRECT <span className="text-gold bright drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]">QUALIFICATION</span>
                             </h1>
                             <p className="text-xl md:text-3xl text-lightgrey tracking-[0.2em] font-heading mb-12">
-                                SOLVE THE PROBLEM STATEMENT. SECURE YOUR SPOT.
+                                SOLVE THE PROBLEM STATEMENT AND GET A CHANCE TO SECURE YOUR SPOT IN TOP 1200
                             </p>
                         </motion.div>
 
@@ -144,10 +144,10 @@ const PreHackathonPage = () => {
                             <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent opacity-50 pointer-events-none"></div>
                             
                             <h2 className="text-3xl md:text-5xl font-heading font-bold text-white mb-8 leading-snug">
-                                COMPLETE THE <span className="text-gold">PROBLEM STATEMENT</span><br/> IN <span className="text-[#E63946]">15 DAYS</span>
+                                COMPLETE THE <span className="text-gold">PROBLEM STATEMENT</span><br/> IN <span className="text-[#E63946]">45 DAYS</span>
                             </h2>
                             <p className="text-lg md:text-xl text-lightgrey leading-relaxed max-w-4xl mx-auto mb-10">
-                                As part of the Pre-Hackathon, all registered teams will receive an exclusive problem statement. The stakes are massive: The team that successfully completes and submits the most innovative solution within exactly 15 days will bypass the entire gauntlet and 
+                                As part of the Pre-Hackathon, all registered teams will receive an exclusive problem statement. The stakes are massive: The team that successfully completes and submits the most innovative solution within exactly 45 days will bypass the entire gauntlet and 
                                 <strong className="text-white block mt-4 text-2xl tracking-wide uppercase border-b border-gold/30 pb-2 inline-block">Directly Qualify for the Final Hackathon.</strong>
                             </p>
                             
