@@ -336,7 +336,46 @@ const Events = () => {
               whileHover={{ y: -10, scale: 1.02 }}
             >
               <div className="event-image">
-                <img src={event.image} alt={event.title} />
+                {event.type === "uprise" ? (
+                  <div style={{
+                    width: "100%",
+                    height: "100%",
+                    minHeight: "200px",
+                    background: "linear-gradient(135deg, #0a0a0a 0%, #1a1200 50%, #0a0a0a 100%)",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                    border: "1px solid rgba(212,175,55,0.3)"
+                  }}>
+                    <span style={{
+                      fontSize: "2rem",
+                      fontWeight: "900",
+                      letterSpacing: "0.15em",
+                      color: "#D4AF37",
+                      textShadow: "0 0 20px rgba(212,175,55,0.6)",
+                      fontFamily: "monospace",
+                      textTransform: "uppercase"
+                    }}>UPRISE</span>
+                    <span style={{
+                      fontSize: "1.1rem",
+                      fontWeight: "700",
+                      color: "#ffffff",
+                      letterSpacing: "0.3em",
+                      fontFamily: "monospace"
+                    }}>2027</span>
+                    <span style={{
+                      fontSize: "0.65rem",
+                      color: "rgba(212,175,55,0.6)",
+                      letterSpacing: "0.4em",
+                      textTransform: "uppercase",
+                      marginTop: "4px"
+                    }}>by LevelUp</span>
+                  </div>
+                ) : (
+                  <img src={event.image} alt={event.title} />
+                )}
                 <span className="event-category">{event.category}</span>
               </div>
 
