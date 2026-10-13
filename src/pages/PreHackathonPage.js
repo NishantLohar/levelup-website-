@@ -90,6 +90,96 @@ const PreHackathonPage = () => {
         { date: '27/02/27', day: 'Saturday', title: 'Weekly Chat 4', type: 'Medium', completion: 500, win: 0 }
     ];
 
+    const socialTasks = [
+        {
+            title: "Instagram",
+            action: "Follow @levelupofficial.in on Instagram",
+            xp: "20 XP",
+            link: "https://www.instagram.com/levelupofficial.in/",
+            btnText: "Follow",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+            )
+        },
+        {
+            title: "YouTube",
+            action: "Subscribe to LevelUp Official",
+            xp: "20 XP",
+            link: "https://www.youtube.com/@LevelUpOfficial-in",
+            btnText: "Subscribe",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+            )
+        },
+        {
+            title: "LinkedIn",
+            action: "Follow LevelUp Events on LinkedIn",
+            xp: "20 XP",
+            link: "https://linkedin.com/company/levelupevents",
+            btnText: "Follow",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+            )
+        },
+        {
+            title: "WhatsApp Group",
+            action: "Join LevelUp Official WhatsApp Community",
+            xp: "40 XP",
+            link: "https://chat.whatsapp.com/",
+            btnText: "Join Group",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                </svg>
+            )
+        },
+        {
+            title: "Discord",
+            action: "Join LevelUp Discord Server & Community",
+            xp: "40 XP",
+            link: "https://discord.com/invite/5WjkenMeHC",
+            btnText: "Join Discord",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                </svg>
+            )
+        },
+        {
+            title: "Instagram Story",
+            action: "Share story & tag @levelupofficial.in",
+            xp: "20 XP",
+            link: "https://www.instagram.com/levelupofficial.in/",
+            btnText: "Share Story",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+            )
+        },
+        {
+            title: "LinkedIn Post",
+            action: "Post about joining & tag LevelUp Events",
+            xp: "30 XP",
+            link: "https://linkedin.com/company/levelupevents",
+            btnText: "Post & Tag",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+            )
+        }
+    ];
+
     return (
         <div className="bg-obsidian min-h-screen text-white font-grotesk overflow-x-hidden relative selection:bg-gold/30 selection:text-gold">
             {/* Glowing background spotlight */}
@@ -157,8 +247,70 @@ const PreHackathonPage = () => {
                         </motion.div>
                     </div>
 
-                    {/* Pre-Hackathon Schedule */}
+                    {/* Pre-Hackathon Schedule & Tasks */}
                     <div className="mt-32">
+                        {/* Following Social Media Points Section */}
+                        <div className="mb-20">
+                            <div className="text-center mb-12">
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.6 }}
+                                >
+                                    <span className="text-xs font-mono uppercase tracking-[0.3em] text-gold px-4 py-1.5 border border-gold/30 bg-gold/5 inline-block mb-4">
+                                        COMMUNITY GAUNTLET · INSTANT XP
+                                    </span>
+                                    <h3 className="text-4xl md:text-5xl text-white font-black mb-4 tracking-tighter uppercase">
+                                        FOLLOWING <span className="text-gold bright drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]">SOCIAL MEDIA</span>
+                                    </h3>
+                                    <p className="text-lightgrey tracking-[0.2em] font-heading uppercase text-xs md:text-sm max-w-2xl mx-auto">
+                                        COMPLETE SOCIAL TASKS TO SECURE IMMEDIATE XP & BOOST YOUR RANK ON THE LEADERBOARD
+                                    </p>
+                                </motion.div>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                {socialTasks.map((task, index) => (
+                                    <motion.div
+                                        key={index}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ duration: 0.4, delay: index * 0.05 }}
+                                        className="glass-card border border-gold/25 hover:border-gold p-6 sharp bg-obsidian/90 hover:bg-gold/10 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden"
+                                    >
+                                        <div className="flex items-start justify-between mb-4">
+                                            <div className="w-10 h-10 border border-gold/30 bg-pitchblack text-gold group-hover:text-white group-hover:border-gold flex items-center justify-center transition-colors">
+                                                {task.icon}
+                                            </div>
+                                            <span className="font-heading font-black text-sm px-3 py-1 bg-gold/15 border border-gold text-gold tracking-widest gold-glow">
+                                                +{task.xp}
+                                            </span>
+                                        </div>
+                                        <div className="mb-4">
+                                            <h4 className="text-base lg:text-lg font-bold text-white uppercase tracking-tight group-hover:text-gold transition-colors mb-1">
+                                                {task.title}
+                                            </h4>
+                                            <p className="text-xs text-lightgrey font-grotesk leading-relaxed">
+                                                {task.action}
+                                            </p>
+                                        </div>
+                                        <a
+                                            href={task.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-xs uppercase font-heading font-bold py-2.5 px-4 border border-gold/40 hover:border-gold bg-gold/5 hover:bg-gold hover:text-pitchblack text-white text-center tracking-wider transition-all duration-200 mt-auto flex items-center justify-center gap-2"
+                                        >
+                                            <span>{task.btnText}</span>
+                                            <span>&rarr;</span>
+                                        </a>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Activities Table */}
                         <div className="text-center mb-16">
                             <h3 className="text-4xl md:text-5xl text-white font-black mb-4 tracking-tighter uppercase">
                                 PRE-HACKATHON <span className="text-gold">ACTIVITIES</span>
