@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
+import UpriseNavbar from './uprise_components/UpriseNavbar';
+import UpriseLoginModal from './uprise_components/UpriseLoginModal';
 import './Uprise.css'; // Reuse the same CSS for consistent animations
 
 const PreHackathonPage = () => {
@@ -90,8 +92,90 @@ const PreHackathonPage = () => {
         { date: '27/02/27', day: 'Saturday', title: 'Weekly Chat 4', type: 'Medium', completion: 500, win: 0 }
     ];
 
+    // User Authentication & XP Claim State
+    const [currentUser, setCurrentUser] = useState(() => {
+        try {
+            const saved = localStorage.getItem('uprise_user');
+            return saved ? JSON.parse(saved) : null;
+        } catch (e) {
+            return null;
+        }
+    });
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+    const [claimingKey, setClaimingKey] = useState(null);
+    const [toastMsg, setToastMsg] = useState(null);
+
+    // Sync status from SaaS API on mount if user is logged in
+    useEffect(() => {
+        if (currentUser?.email) {
+            const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
+            fetch(`${API_BASE_URL}/api/v1/uprise/user-status?email=${encodeURIComponent(currentUser.email)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.user) {
+                        setCurrentUser(prev => {
+                            const updated = { ...prev, ...data.user };
+                            localStorage.setItem('uprise_user', JSON.stringify(updated));
+                            return updated;
+                        });
+                    }
+                })
+                .catch(err => console.log('Sync user status error:', err));
+        }
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem('uprise_user');
+        setCurrentUser(null);
+    };
+
+    const handleTaskClick = async (e, task) => {
+        if (!currentUser) {
+            e.preventDefault();
+            setIsLoginModalOpen(true);
+            setToastMsg('Please sign in to earn and credit XP to your account!');
+            setTimeout(() => setToastMsg(null), 4000);
+            return;
+        }
+
+        const isAlreadyClaimed = currentUser.claimed_tasks?.includes(task.key);
+        if (!isAlreadyClaimed) {
+            setClaimingKey(task.key);
+            const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/v1/uprise/claim-task-xp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: currentUser.email,
+                        task_key: task.key,
+                    }),
+                });
+                const data = await res.json();
+                if (data.success) {
+                    setCurrentUser(prev => {
+                        const updated = {
+                            ...prev,
+                            total_xp: data.total_xp,
+                            claimed_tasks: data.claimed_tasks || [...(prev?.claimed_tasks || []), task.key],
+                        };
+                        localStorage.setItem('uprise_user', JSON.stringify(updated));
+                        return updated;
+                    });
+                    setToastMsg(`🎉 +${task.xp} CREDITED TO YOUR ACCOUNT!`);
+                    setTimeout(() => setToastMsg(null), 4500);
+                }
+            } catch (err) {
+                console.error('Claim XP error:', err);
+            } finally {
+                setClaimingKey(null);
+            }
+        }
+    };
+
     const socialTasks = [
         {
+            key: "instagram",
             title: "Instagram",
             action: "Follow @levelupofficial.in on Instagram",
             xp: "20 XP",
@@ -104,6 +188,7 @@ const PreHackathonPage = () => {
             )
         },
         {
+            key: "youtube",
             title: "YouTube",
             action: "Subscribe to LevelUp Official",
             xp: "20 XP",
@@ -116,6 +201,7 @@ const PreHackathonPage = () => {
             )
         },
         {
+            key: "linkedin",
             title: "LinkedIn",
             action: "Follow LevelUp Events on LinkedIn",
             xp: "20 XP",
@@ -128,6 +214,7 @@ const PreHackathonPage = () => {
             )
         },
         {
+            key: "whatsapp",
             title: "WhatsApp Group",
             action: "Join LevelUp Official WhatsApp Community",
             xp: "40 XP",
@@ -140,6 +227,7 @@ const PreHackathonPage = () => {
             )
         },
         {
+            key: "discord",
             title: "Discord",
             action: "Join LevelUp Discord Server & Community",
             xp: "40 XP",
@@ -152,6 +240,7 @@ const PreHackathonPage = () => {
             )
         },
         {
+            key: "instagram_story",
             title: "Instagram Story",
             action: "Share story & tag @levelupofficial.in",
             xp: "20 XP",
@@ -166,6 +255,7 @@ const PreHackathonPage = () => {
             )
         },
         {
+            key: "linkedin_post",
             title: "LinkedIn Post",
             action: "Post about joining & tag LevelUp Events",
             xp: "30 XP",
@@ -187,14 +277,27 @@ const PreHackathonPage = () => {
                 background: `radial-gradient(circle 600px at var(--mouse-x) var(--mouse-y), rgba(212, 175, 55, 0.05), transparent 80%)`
             }}></div>
 
-            {/*  Navigation (Minimal)  */}
-            <nav className="fixed w-full z-50 top-0 p-6 flex justify-between items-center bg-gradient-to-b from-pitchblack to-transparent pointer-events-auto">
-                <Link to="/uprise" className="text-white text-3xl font-black tracking-tighter cursor-pointer group uppercase flex items-center gap-4">
-                    <div className="w-10 h-10 border-2 border-white flex items-center justify-center group-hover:border-gold transition-colors duration-300">
-                        <span className="text-gold font-heading leading-none -mt-1 group-hover:text-white transition-colors duration-300">&larr;</span>
-                    </div>
-                </Link>
-            </nav>
+            {/* Uprise Navigation Bar */}
+            <UpriseNavbar 
+                user={currentUser} 
+                onOpenLogin={() => setIsLoginModalOpen(true)} 
+                onLogout={handleLogout} 
+            />
+
+            {/* Celebratory Notification Toast */}
+            <AnimatePresence>
+                {toastMsg && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -50 }}
+                        className="fixed top-24 left-1/2 transform -translate-x-1/2 z-[99999] px-6 py-3 bg-pitchblack border-2 border-gold text-gold font-heading font-black tracking-widest text-xs uppercase gold-glow shadow-2xl flex items-center gap-3 sharp"
+                    >
+                        <span>⚡</span>
+                        <span>{toastMsg}</span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Main Content */}
             <section className="pt-32 pb-20 px-6 relative z-10">
@@ -265,48 +368,65 @@ const PreHackathonPage = () => {
                                         FOLLOWING <span className="text-gold bright drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]">SOCIAL MEDIA</span>
                                     </h3>
                                     <p className="text-lightgrey tracking-[0.2em] font-heading uppercase text-xs md:text-sm max-w-2xl mx-auto">
-                                        COMPLETE SOCIAL TASKS TO SECURE IMMEDIATE XP & BOOST YOUR RANK ON THE LEADERBOARD
+                                        CLICK TO COMPLETE SOCIAL TASKS — XP IS CREDITED DIRECTLY TO YOUR LEADERBOARD PROFILE
                                     </p>
                                 </motion.div>
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                                {socialTasks.map((task, index) => (
-                                    <motion.div
-                                        key={index}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ duration: 0.4, delay: index * 0.05 }}
-                                        className="glass-card border border-gold/25 hover:border-gold p-6 sharp bg-obsidian/90 hover:bg-gold/10 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden"
-                                    >
-                                        <div className="flex items-start justify-between mb-4">
-                                            <div className="w-10 h-10 border border-gold/30 bg-pitchblack text-gold group-hover:text-white group-hover:border-gold flex items-center justify-center transition-colors">
-                                                {task.icon}
-                                            </div>
-                                            <span className="font-heading font-black text-sm px-3 py-1 bg-gold/15 border border-gold text-gold tracking-widest gold-glow">
-                                                +{task.xp}
-                                            </span>
-                                        </div>
-                                        <div className="mb-4">
-                                            <h4 className="text-base lg:text-lg font-bold text-white uppercase tracking-tight group-hover:text-gold transition-colors mb-1">
-                                                {task.title}
-                                            </h4>
-                                            <p className="text-xs text-lightgrey font-grotesk leading-relaxed">
-                                                {task.action}
-                                            </p>
-                                        </div>
-                                        <a
-                                            href={task.link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-xs uppercase font-heading font-bold py-2.5 px-4 border border-gold/40 hover:border-gold bg-gold/5 hover:bg-gold hover:text-pitchblack text-white text-center tracking-wider transition-all duration-200 mt-auto flex items-center justify-center gap-2"
+                                {socialTasks.map((task, index) => {
+                                    const isClaimed = currentUser?.claimed_tasks?.includes(task.key);
+                                    const isClaiming = claimingKey === task.key;
+
+                                    return (
+                                        <motion.div
+                                            key={task.key || index}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true }}
+                                            transition={{ duration: 0.4, delay: index * 0.05 }}
+                                            className={`glass-card border ${isClaimed ? 'border-green-500/50 bg-green-500/5' : 'border-gold/25 hover:border-gold bg-obsidian/90 hover:bg-gold/10'} p-6 sharp transition-all duration-300 flex flex-col justify-between group relative overflow-hidden`}
                                         >
-                                            <span>{task.btnText}</span>
-                                            <span>&rarr;</span>
-                                        </a>
-                                    </motion.div>
-                                ))}
+                                            <div className="flex items-start justify-between mb-4">
+                                                <div className={`w-10 h-10 border ${isClaimed ? 'border-green-400 text-green-400' : 'border-gold/30 text-gold group-hover:text-white group-hover:border-gold'} bg-pitchblack flex items-center justify-center transition-colors`}>
+                                                    {task.icon}
+                                                </div>
+                                                <div className="flex items-center gap-1.5">
+                                                    {isClaimed && (
+                                                        <span className="font-heading font-bold text-[10px] px-2 py-0.5 border border-green-500 bg-green-500/20 text-green-400 tracking-wider">
+                                                            CLAIMED ✓
+                                                        </span>
+                                                    )}
+                                                    <span className={`font-heading font-black text-sm px-3 py-1 ${isClaimed ? 'bg-green-500/10 border border-green-500 text-green-400' : 'bg-gold/15 border border-gold text-gold gold-glow'} tracking-widest`}>
+                                                        +{task.xp}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="mb-4">
+                                                <h4 className={`text-base lg:text-lg font-bold uppercase tracking-tight mb-1 ${isClaimed ? 'text-green-300' : 'text-white group-hover:text-gold'} transition-colors`}>
+                                                    {task.title}
+                                                </h4>
+                                                <p className="text-xs text-lightgrey font-grotesk leading-relaxed">
+                                                    {task.action}
+                                                </p>
+                                            </div>
+                                            <a
+                                                href={task.link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                onClick={(e) => handleTaskClick(e, task)}
+                                                className={`text-xs uppercase font-heading font-bold py-2.5 px-4 border ${
+                                                    isClaimed 
+                                                        ? 'border-green-500/40 text-green-300 hover:bg-green-500/20' 
+                                                        : 'border-gold/40 hover:border-gold bg-gold/5 hover:bg-gold hover:text-pitchblack text-white'
+                                                } text-center tracking-wider transition-all duration-200 mt-auto flex items-center justify-center gap-2 cursor-pointer`}
+                                            >
+                                                <span>{isClaiming ? 'CREDITING...' : isClaimed ? 'VISITED ✓' : task.btnText}</span>
+                                                <span>&rarr;</span>
+                                            </a>
+                                        </motion.div>
+                                    );
+                                })}
                             </div>
                         </div>
 
@@ -354,6 +474,16 @@ const PreHackathonPage = () => {
                     </div>
                 </div>
             </section>
+
+            <UpriseLoginModal
+                isOpen={isLoginModalOpen}
+                onClose={() => setIsLoginModalOpen(false)}
+                onLoginSuccess={(user) => {
+                    setCurrentUser(user);
+                    setToastMsg(`Welcome back, ${user.full_name || 'Hacker'}!`);
+                    setTimeout(() => setToastMsg(null), 4000);
+                }}
+            />
         </div>
     );
 };

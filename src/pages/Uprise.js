@@ -11,14 +11,51 @@ import HackathonTracks from './uprise_components/HackathonTracks';
 import StartupExpo from './uprise_components/StartupExpo';
 import Agenda from './uprise_components/Agenda';
 import Awards from './uprise_components/Awards';
+import UpriseNavbar from './uprise_components/UpriseNavbar';
+import UpriseLoginModal from './uprise_components/UpriseLoginModal';
 
 const Uprise = () => {
   const [activeModal, setActiveModal] = useState(null); // 'club', 'member', 'builder', null
   const [formData, setFormData] = useState({ name: '', email: '', contact: '', organization: '', members: '', coupon: '' });
   const [submitStatus, setSubmitStatus] = useState(null);
 
+  // Authentication State
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('uprise_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      return null;
+    }
+  });
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
   // Preloader state
   const [loading, setLoading] = useState(true);
+
+  // Sync user status on mount if email exists
+  useEffect(() => {
+    if (currentUser?.email) {
+      const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
+      fetch(`${API_BASE_URL}/api/v1/uprise/user-status?email=${encodeURIComponent(currentUser.email)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.user) {
+            setCurrentUser(prev => {
+              const updated = { ...prev, ...data.user };
+              localStorage.setItem('uprise_user', JSON.stringify(updated));
+              return updated;
+            });
+          }
+        })
+        .catch(err => console.log('Status sync error:', err));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('uprise_user');
+    setCurrentUser(null);
+  };
 
   useEffect(() => {
     // --- Preloader Logic ---
@@ -319,7 +356,13 @@ const Uprise = () => {
       </div>
 
 
-      <main className="relative z-10">
+      <UpriseNavbar 
+        user={currentUser} 
+        onOpenLogin={() => setIsLoginModalOpen(true)} 
+        onLogout={handleLogout} 
+      />
+
+      <main className="relative z-10 pt-20">
         <HeroSection onOpenModal={setActiveModal} />
         <AboutSection />
         <EventsOverview onOpenModal={setActiveModal} />
@@ -407,6 +450,14 @@ const Uprise = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <UpriseLoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        onLoginSuccess={(user) => {
+          setCurrentUser(user);
+        }}
+      />
     </div>
   );
 };
