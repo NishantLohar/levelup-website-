@@ -109,7 +109,7 @@ const Leaderboard = () => {
                           <tr className="border-b border-gold/30 bg-pitchblack/80 text-gold font-heading text-xs tracking-widest uppercase">
                               <th className="p-6 w-24">Rank</th>
                               <th className="p-6">Name</th>
-                              <th className="p-6">Details</th>
+                              <th className="p-6">Organisation</th>
                               <th className="p-6 text-right">Score/XP</th>
                           </tr>
                       </thead>
