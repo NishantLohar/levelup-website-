@@ -145,6 +145,12 @@ const PreHackathonPage = () => {
     };
 
     const handleTaskClick = async (e, task) => {
+        if (task.key === 'hirestop') {
+            e.preventDefault();
+            window.open(task.link, '_blank');
+            return;
+        }
+
         if (!currentUser) {
             e.preventDefault();
             setIsLoginModalOpen(true);
@@ -317,6 +323,21 @@ const PreHackathonPage = () => {
                     <circle cx="12" cy="7" r="4"></circle>
                 </svg>
             )
+        },
+        {
+            key: "hirestop",
+            title: "Hirestop Eligibility",
+            action: "Give at least 2 AI job interviews & 3 skill tests (avg 70) OR gain 2,000 XP",
+            xp: "ELIGIBLE",
+            link: "https://hirestop.in",
+            btnText: "Get Eligible",
+            isExternal: true,
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                </svg>
+            )
         }
     ];
 
@@ -378,139 +399,41 @@ const PreHackathonPage = () => {
                             </p>
                         </motion.div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 text-left max-w-7xl mx-auto">
-                            {/* Card 1: Direct Hackathon Qualification */}
-                            <motion.div 
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, delay: 0.2 }}
-                                className="glass-card border border-gold/60 p-8 sm:p-12 relative overflow-hidden sharp group gold-glow bg-gold/5 flex flex-col justify-between"
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 1, delay: 0.3 }}
+                            className="glass-card border border-gold p-12 lg:p-16 relative overflow-hidden sharp group gold-glow bg-gold/5 max-w-5xl mx-auto"
+                        >
+                            <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent opacity-50 pointer-events-none"></div>
+                            
+                            <h2 className="text-3xl md:text-5xl font-heading font-bold text-white mb-8 leading-snug">
+                                COMPLETE THE <span className="text-gold">PROBLEM STATEMENT</span><br/> IN <span className="text-[#E63946]">45 DAYS</span>
+                            </h2>
+                            <p className="text-lg md:text-xl text-lightgrey leading-relaxed max-w-4xl mx-auto mb-10">
+                                As part of the Pre-Hackathon, all registered teams will receive an exclusive problem statement. The stakes are massive: The team that successfully completes and submits the most innovative solution within exactly 45 days will bypass the entire gauntlet and 
+                                <strong className="text-white block mt-4 text-2xl tracking-wide uppercase border-b border-gold/30 pb-2 inline-block">Directly Qualify for the Final Hackathon.</strong>
+                            </p>
+
+                            {/* Don't Just Compete. Cash Out Callout */}
+                            <div className="mb-10 p-6 sm:p-8 bg-pitchblack/90 border border-gold/40 relative sharp max-w-3xl mx-auto text-center shadow-[0_0_25px_rgba(212,175,55,0.18)]">
+                                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent"></div>
+                                <h3 className="text-2xl sm:text-3xl font-black font-heading tracking-wider uppercase text-gold bright mb-3">
+                                    DON'T JUST COMPETE. CASH OUT.
+                                </h3>
+                                <p className="text-sm sm:text-base text-white/90 leading-relaxed font-grotesk max-w-2xl mx-auto">
+                                    No participation trophies. No waiting for the finale. Deliver production-grade solutions during the online Gauntlet, and if our corporate partners acquire your code, you get money.
+                                </p>
+                            </div>
+                            
+                            <button 
+                                type="button"
+                                onClick={() => setIsRevealingSoonOpen(true)}
+                                className="magnetic-btn sharp bg-gold bright hover:bg-white text-pitchblack font-heading font-bold py-5 px-12 transition-all duration-300 text-center tracking-widest text-sm hover:shadow-[0_0_20px_#FFFFFF] shimmer-btn animate-pulse-gold inline-block cursor-pointer"
                             >
-                                <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent opacity-40 pointer-events-none"></div>
-                                
-                                <div>
-                                    <div className="flex items-center gap-2 mb-4">
-                                        <span className="text-[11px] font-mono uppercase tracking-[0.25em] text-gold px-3 py-1 border border-gold/40 bg-pitchblack/60">
-                                            PATHWAY 01 · DIRECT ENTRY
-                                        </span>
-                                    </div>
-
-                                    <h2 className="text-2xl sm:text-4xl font-heading font-bold text-white mb-6 leading-tight">
-                                        COMPLETE THE <span className="text-gold">PROBLEM STATEMENT</span> IN <span className="text-[#E63946]">45 DAYS</span>
-                                    </h2>
-
-                                    <p className="text-sm sm:text-base text-lightgrey leading-relaxed mb-6">
-                                        All registered teams will receive an exclusive problem statement. The team that successfully completes and submits the most innovative solution within exactly 45 days will bypass the entire gauntlet and <strong className="text-white font-bold">Directly Qualify for the Final Hackathon.</strong>
-                                    </p>
-
-                                    {/* Don't Just Compete. Cash Out Callout */}
-                                    <div className="mb-8 p-5 bg-pitchblack/90 border border-gold/40 relative sharp shadow-[0_0_20px_rgba(212,175,55,0.15)]">
-                                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent"></div>
-                                        <h3 className="text-lg sm:text-xl font-black font-heading tracking-wider uppercase text-gold bright mb-2">
-                                            DON'T JUST COMPETE. CASH OUT.
-                                        </h3>
-                                        <p className="text-xs sm:text-sm text-white/90 leading-relaxed font-grotesk">
-                                            No participation trophies. No waiting for the finale. Deliver production-grade solutions during the online Gauntlet, and if our corporate partners acquire your code, you get money.
-                                        </p>
-                                    </div>
-                                </div>
-                                
-                                <button 
-                                    type="button"
-                                    onClick={() => setIsRevealingSoonOpen(true)}
-                                    className="w-full magnetic-btn sharp bg-gold bright hover:bg-white text-pitchblack font-heading font-bold py-4 px-6 transition-all duration-300 text-center tracking-widest text-xs sm:text-sm hover:shadow-[0_0_20px_#FFFFFF] shimmer-btn animate-pulse-gold inline-block cursor-pointer uppercase mt-auto"
-                                >
-                                    REGISTER TO RECEIVE THE PROBLEM
-                                </button>
-                            </motion.div>
-
-                            {/* Card 2: Get Eligible for Hirestop */}
-                            <motion.div 
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, delay: 0.35 }}
-                                className="glass-card border border-gold/60 p-8 sm:p-12 relative overflow-hidden sharp group gold-glow bg-pitchblack/70 flex flex-col justify-between"
-                            >
-                                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-gold/10 opacity-40 pointer-events-none"></div>
-
-                                <div>
-                                    <div className="flex items-center gap-2 mb-4">
-                                        <span className="text-[11px] font-mono uppercase tracking-[0.25em] text-gold px-3 py-1 border border-gold/40 bg-pitchblack/60">
-                                            PATHWAY 02 · CAREER LAUNCHPAD
-                                        </span>
-                                    </div>
-
-                                    <h2 className="text-2xl sm:text-4xl font-heading font-bold text-white mb-6 leading-tight">
-                                        GET ELIGIBLE FOR <span className="text-gold bright">HIRESTOP</span>
-                                    </h2>
-
-                                    <p className="text-sm sm:text-base text-lightgrey leading-relaxed mb-6">
-                                        Unlock direct access to top tech recruiters, exclusive corporate hiring pipelines, and placement opportunities on Hirestop AI. Meet any of the two qualifying benchmarks below:
-                                    </p>
-
-                                    {/* Criteria / Benchmarks Box */}
-                                    <div className="space-y-3 mb-8">
-                                        {/* Option A */}
-                                        <div className="p-4 bg-pitchblack/90 border border-gold/30 relative sharp">
-                                            <div className="flex items-start gap-3">
-                                                <div className="w-7 h-7 rounded-full bg-gold/20 border border-gold flex items-center justify-center shrink-0 mt-0.5">
-                                                    <span className="text-gold font-bold text-xs font-heading">01</span>
-                                                </div>
-                                                <div>
-                                                    <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-white font-heading">
-                                                        AI Interviews & Skill Tests
-                                                    </h4>
-                                                    <p className="text-xs sm:text-sm text-lightgrey mt-1 leading-relaxed">
-                                                        Give at least <strong className="text-gold font-bold">2 AI Job Interviews</strong> and <strong className="text-gold font-bold">3 Skill Tests</strong> with an average score of <strong className="text-gold font-bold">70% or higher</strong>.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* Divider OR */}
-                                        <div className="flex items-center justify-center gap-3 my-2">
-                                            <div className="h-[1px] flex-1 bg-gold/20"></div>
-                                            <span className="text-xs font-heading font-black tracking-widest text-gold px-2">OR</span>
-                                            <div className="h-[1px] flex-1 bg-gold/20"></div>
-                                        </div>
-
-                                        {/* Option B */}
-                                        <div className="p-4 bg-pitchblack/90 border border-gold/30 relative sharp">
-                                            <div className="flex items-start gap-3">
-                                                <div className="w-7 h-7 rounded-full bg-gold/20 border border-gold flex items-center justify-center shrink-0 mt-0.5">
-                                                    <span className="text-gold font-bold text-xs font-heading">02</span>
-                                                </div>
-                                                <div className="flex-1">
-                                                    <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-white font-heading">
-                                                        Gauntlet XP Leaderboard
-                                                    </h4>
-                                                    <p className="text-xs sm:text-sm text-lightgrey mt-1 leading-relaxed">
-                                                        Accumulate <strong className="text-gold font-bold text-sm">2,000+ XP</strong> across pre-hackathon activities, challenges, and social tasks.
-                                                    </p>
-                                                    {currentUser && (
-                                                        <div className="mt-2 text-[11px] font-mono text-gold flex items-center justify-between border-t border-gold/10 pt-2">
-                                                            <span>YOUR CURRENT XP: <strong className="text-white">{currentUser.total_xp || 0} XP</strong></span>
-                                                            <span className={currentUser.total_xp >= 2000 ? "text-green-400 font-bold" : "text-lightgrey"}>
-                                                                {currentUser.total_xp >= 2000 ? "✓ QUALIFIED VIA XP" : `${Math.max(0, 2000 - (currentUser.total_xp || 0))} XP needed`}
-                                                            </span>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <a 
-                                    href="https://hirestop.in"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="w-full magnetic-btn sharp bg-gold bright hover:bg-white text-pitchblack font-heading font-bold py-4 px-6 transition-all duration-300 text-center tracking-widest text-xs sm:text-sm hover:shadow-[0_0_20px_#FFFFFF] shimmer-btn animate-pulse-gold inline-block cursor-pointer uppercase mt-auto text-decoration-none"
-                                >
-                                    GET STARTED ON HIRESTOP &rarr;
-                                </a>
-                            </motion.div>
-                        </div>
+                                REGISTER TO RECEIVE THE PROBLEM
+                            </button>
+                        </motion.div>
                     </div>
 
                     {/* Pre-Hackathon Schedule & Tasks */}
@@ -536,7 +459,7 @@ const PreHackathonPage = () => {
                                 </motion.div>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {socialTasks.map((task, index) => {
                                     const isManualTask = task.key === 'instagram_story' || task.key === 'linkedin_post';
                                     const isManualClicked = isManualTask && manualClickedTasks.includes(task.key);
@@ -579,12 +502,12 @@ const PreHackathonPage = () => {
                                                             DISCORD PROOF
                                                         </span>
                                                     )}
-                                                    <span className={`font-heading font-black text-sm px-3 py-1 ${
+                                                    <span className={`font-heading font-black text-xs px-2.5 py-1 ${
                                                         isClaimed 
                                                             ? 'bg-green-500/10 border border-green-500 text-green-400' 
                                                             : 'bg-gold/15 border border-gold text-gold gold-glow'
-                                                    } tracking-widest`}>
-                                                        +{task.xp}
+                                                    } tracking-wider uppercase`}>
+                                                        {task.xp.includes('XP') ? `+${task.xp}` : task.xp}
                                                     </span>
                                                 </div>
                                             </div>
