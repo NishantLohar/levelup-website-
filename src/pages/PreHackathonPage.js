@@ -95,7 +95,7 @@ const PreHackathonPage = () => {
     // User Authentication & XP Claim State
     const [currentUser, setCurrentUser] = useState(() => {
         try {
-            const saved = localStorage.getItem('uprise_user');
+            const saved = localStorage.getItem('uprise_user') || sessionStorage.getItem('uprise_user');
             return saved ? JSON.parse(saved) : null;
         } catch (e) {
             return null;
@@ -123,7 +123,11 @@ const PreHackathonPage = () => {
                     if (data.success && data.user) {
                         setCurrentUser(prev => {
                             const updated = { ...prev, ...data.user };
-                            localStorage.setItem('uprise_user', JSON.stringify(updated));
+                            if (localStorage.getItem('uprise_user') || localStorage.getItem('uprise_remember_me') !== 'false') {
+                                localStorage.setItem('uprise_user', JSON.stringify(updated));
+                            } else {
+                                sessionStorage.setItem('uprise_user', JSON.stringify(updated));
+                            }
                             return updated;
                         });
                     }
@@ -134,6 +138,9 @@ const PreHackathonPage = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('uprise_user');
+        sessionStorage.removeItem('uprise_user');
+        localStorage.removeItem('uprise_remember_me');
+        localStorage.removeItem('uprise_remembered_email');
         setCurrentUser(null);
     };
 

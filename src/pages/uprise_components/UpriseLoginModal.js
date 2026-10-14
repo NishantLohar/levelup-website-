@@ -2,8 +2,22 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const UpriseLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState(() => {
+        try {
+            return localStorage.getItem('uprise_remembered_email') || '';
+        } catch (e) {
+            return '';
+        }
+    });
     const [password, setPassword] = useState('');
+    const [rememberMe, setRememberMe] = useState(() => {
+        try {
+            const saved = localStorage.getItem('uprise_remember_me');
+            return saved !== null ? saved === 'true' : true;
+        } catch (e) {
+            return true;
+        }
+    });
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState(null);
     const [needsProfileSetup, setNeedsProfileSetup] = useState(false);
@@ -34,8 +48,18 @@ const UpriseLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
             const data = await res.json();
 
             if (data.success && data.user) {
-                // Save user session in localStorage
-                localStorage.setItem('uprise_user', JSON.stringify(data.user));
+                // Save user session in localStorage or sessionStorage based on rememberMe
+                if (rememberMe) {
+                    localStorage.setItem('uprise_user', JSON.stringify(data.user));
+                    localStorage.setItem('uprise_remember_me', 'true');
+                    localStorage.setItem('uprise_remembered_email', email.trim().toLowerCase());
+                    sessionStorage.removeItem('uprise_user');
+                } else {
+                    sessionStorage.setItem('uprise_user', JSON.stringify(data.user));
+                    localStorage.removeItem('uprise_user');
+                    localStorage.setItem('uprise_remember_me', 'false');
+                    localStorage.removeItem('uprise_remembered_email');
+                }
                 onLoginSuccess(data.user);
                 onClose();
             } else if (data.needs_profile_completion) {
@@ -123,6 +147,62 @@ const UpriseLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
                             />
                         </div>
 
+                        {/* Remember Me Button / Toggle */}
+                        <div className="flex items-center justify-between py-1 px-0.5 select-none">
+                            <button
+                                type="button"
+                                id="uprise-remember-me-btn"
+                                onClick={() => setRememberMe(prev => !prev)}
+                                className="flex items-center gap-2.5 text-left bg-transparent border-0 p-0 cursor-pointer group outline-none"
+                            >
+                                <div
+                                    style={{
+                                        width: '18px',
+                                        height: '18px',
+                                        border: rememberMe ? '1px solid #D4AF37' : '1px solid rgba(212, 175, 55, 0.4)',
+                                        backgroundColor: rememberMe ? '#D4AF37' : 'rgba(0, 0, 0, 0.6)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        transition: 'all 0.2s ease',
+                                        boxShadow: rememberMe ? '0 0 10px rgba(212, 175, 55, 0.35)' : 'none',
+                                    }}
+                                >
+                                    {rememberMe && (
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                    )}
+                                </div>
+                                <span
+                                    style={{
+                                        color: rememberMe ? '#FFFFFF' : '#A0A0A0',
+                                        fontSize: '11px',
+                                        fontFamily: "'Space Grotesk', 'Montserrat', sans-serif",
+                                        fontWeight: '700',
+                                        letterSpacing: '1px',
+                                        textTransform: 'uppercase',
+                                        transition: 'color 0.2s ease',
+                                    }}
+                                    className="group-hover:text-white"
+                                >
+                                    Remember Me
+                                </span>
+                            </button>
+                            <span
+                                style={{
+                                    fontSize: '10px',
+                                    color: rememberMe ? '#D4AF37' : '#666666',
+                                    letterSpacing: '1px',
+                                    textTransform: 'uppercase',
+                                    fontWeight: '700',
+                                    fontFamily: "'Space Grotesk', monospace",
+                                }}
+                            >
+                                {rememberMe ? 'ALWAYS LOGGED IN' : 'SESSION ONLY'}
+                            </span>
+                        </div>
+
                         {/* Error Notice */}
                         {errorMsg && (
                             <div className="p-3 bg-red-500/10 border border-red-500/40 text-red-300 text-xs leading-relaxed">
@@ -182,7 +262,7 @@ const UpriseLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
                                 outline: 'none',
                                 cursor: loading ? 'not-allowed' : 'pointer',
                                 transition: 'all 0.3s ease',
-                                marginTop: '8px',
+                                marginTop: '4px',
                             }}
                             onMouseEnter={(e) => {
                                 if (!loading) {
