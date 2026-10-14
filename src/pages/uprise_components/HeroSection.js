@@ -68,9 +68,13 @@ const HeroSection = ({ onOpenModal }) => {
 
         {/*  CTA Buttons  */}
         <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-6 reveal delay-200">
-            <a href="https://account.levelupevents.in/events/6/" target="_blank" rel="noopener noreferrer" className="magnetic-btn sharp bg-gold bright hover:bg-white text-pitchblack font-heading font-bold py-5 px-12 transition-all duration-300 text-center tracking-widest text-sm hover:shadow-[0_0_20px_#FFFFFF] shimmer-btn animate-pulse-gold">
+            <button 
+                type="button"
+                onClick={() => onOpenModal && onOpenModal('soon')} 
+                className="magnetic-btn sharp bg-gold bright hover:bg-white text-pitchblack font-heading font-bold py-5 px-12 transition-all duration-300 text-center tracking-widest text-sm hover:shadow-[0_0_20px_#FFFFFF] shimmer-btn animate-pulse-gold cursor-pointer"
+            >
                 REGISTER FOR STARTUP EXPO
-            </a>
+            </button>
             <a 
                 href={isRegistered ? "/pre-hackathon" : "https://account.levelupevents.in/events/register/1/"} 
                 target={isRegistered ? "_self" : "_blank"} 
