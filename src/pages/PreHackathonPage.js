@@ -343,6 +343,17 @@ const PreHackathonPage = () => {
                                 As part of the Pre-Hackathon, all registered teams will receive an exclusive problem statement. The stakes are massive: The team that successfully completes and submits the most innovative solution within exactly 45 days will bypass the entire gauntlet and 
                                 <strong className="text-white block mt-4 text-2xl tracking-wide uppercase border-b border-gold/30 pb-2 inline-block">Directly Qualify for the Final Hackathon.</strong>
                             </p>
+
+                            {/* Don't Just Compete. Cash Out Callout */}
+                            <div className="mb-10 p-6 sm:p-8 bg-pitchblack/90 border border-gold/40 relative sharp max-w-3xl mx-auto text-center shadow-[0_0_25px_rgba(212,175,55,0.18)]">
+                                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent"></div>
+                                <h3 className="text-2xl sm:text-3xl font-black font-heading tracking-wider uppercase text-gold bright mb-3">
+                                    DON'T JUST COMPETE. CASH OUT.
+                                </h3>
+                                <p className="text-sm sm:text-base text-white/90 leading-relaxed font-grotesk max-w-2xl mx-auto">
+                                    No participation trophies. No waiting for the finale. Deliver production-grade solutions during the online Gauntlet, and if our corporate partners acquire your code, you get money.
+                                </p>
+                            </div>
                             
                             <a href="https://account.levelupevents.in/events/6/" target="_blank" rel="noopener noreferrer" className="magnetic-btn sharp bg-gold bright hover:bg-white text-pitchblack font-heading font-bold py-5 px-12 transition-all duration-300 text-center tracking-widest text-sm hover:shadow-[0_0_20px_#FFFFFF] shimmer-btn animate-pulse-gold inline-block">
                                 REGISTER TO RECEIVE THE PROBLEM
