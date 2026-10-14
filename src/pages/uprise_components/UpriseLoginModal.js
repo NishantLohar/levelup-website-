@@ -85,9 +85,6 @@ const UpriseLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
 
                     {/* Header */}
                     <div className="text-center mb-8">
-                        <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-gold border border-gold/30 bg-gold/10 px-3 py-1 inline-block mb-3">
-                            NEURAL LINK · AUTH
-                        </span>
                         <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white font-heading">
                             SIGN IN TO <span className="text-gold bright">UPRISE</span>
                         </h3>
@@ -206,14 +203,14 @@ const UpriseLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
 
                     {/* Footer register link */}
                     <div className="mt-6 pt-4 border-t border-lightgrey/10 text-center text-xs text-lightgrey">
-                        <span>Haven't registered for Uprise yet? </span>
+                        <span>Haven't registered or need to set password? </span>
                         <a
-                            href="https://account.levelupevents.in/events/6/"
+                            href="https://account.levelupevents.in/accounts/profile/"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-gold font-bold hover:underline"
                         >
-                            Register Now
+                            Register / Complete Profile
                         </a>
                     </div>
                 </motion.div>
