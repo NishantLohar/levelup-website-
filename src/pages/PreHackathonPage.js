@@ -103,6 +103,13 @@ const PreHackathonPage = () => {
     });
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isRevealingSoonOpen, setIsRevealingSoonOpen] = useState(false);
+    const [manualClickedTasks, setManualClickedTasks] = useState(() => {
+        try {
+            return JSON.parse(localStorage.getItem('manual_tasks_clicked') || '[]');
+        } catch (e) {
+            return [];
+        }
+    });
     const [claimingKey, setClaimingKey] = useState(null);
     const [toastMsg, setToastMsg] = useState(null);
 
@@ -139,6 +146,27 @@ const PreHackathonPage = () => {
             return;
         }
 
+        // Manual verification tasks (Instagram Story & LinkedIn Post) - NO automated XP
+        if (task.key === 'instagram_story' || task.key === 'linkedin_post') {
+            if (manualClickedTasks.includes(task.key)) {
+                // If clicked again, take user directly to Discord to post their proof
+                e.preventDefault();
+                window.open('https://discord.gg/BxkRwU6X5', '_blank');
+                return;
+            }
+
+            // First click: record task as clicked, open social link, do NOT call automated claim API
+            const updated = [...manualClickedTasks, task.key];
+            setManualClickedTasks(updated);
+            try {
+                localStorage.setItem('manual_tasks_clicked', JSON.stringify(updated));
+            } catch (err) {}
+            setToastMsg('Post and tag LevelUp, then share your post link on Discord to gain XP!');
+            setTimeout(() => setToastMsg(null), 5000);
+            return;
+        }
+
+        // Automated tasks (Instagram follow, YouTube, LinkedIn follow, WhatsApp, Discord)
         const isAlreadyClaimed = currentUser.claimed_tasks?.includes(task.key);
         if (!isAlreadyClaimed) {
             setClaimingKey(task.key);
@@ -232,7 +260,7 @@ const PreHackathonPage = () => {
             title: "Discord",
             action: "Join LevelUp Discord Server & Community",
             xp: "40 XP",
-            link: "https://discord.com/invite/5WjkenMeHC",
+            link: "https://discord.gg/BxkRwU6X5",
             btnText: "Join Discord",
             icon: (
                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
@@ -391,7 +419,9 @@ const PreHackathonPage = () => {
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                                 {socialTasks.map((task, index) => {
-                                    const isClaimed = currentUser?.claimed_tasks?.includes(task.key);
+                                    const isManualTask = task.key === 'instagram_story' || task.key === 'linkedin_post';
+                                    const isManualClicked = isManualTask && manualClickedTasks.includes(task.key);
+                                    const isClaimed = !isManualTask && currentUser?.claimed_tasks?.includes(task.key);
                                     const isClaiming = claimingKey === task.key;
 
                                     return (
@@ -401,10 +431,22 @@ const PreHackathonPage = () => {
                                             whileInView={{ opacity: 1, y: 0 }}
                                             viewport={{ once: true }}
                                             transition={{ duration: 0.4, delay: index * 0.05 }}
-                                            className={`glass-card border ${isClaimed ? 'border-green-500/50 bg-green-500/5' : 'border-gold/25 hover:border-gold bg-obsidian/90 hover:bg-gold/10'} p-6 sharp transition-all duration-300 flex flex-col justify-between group relative overflow-hidden`}
+                                            className={`glass-card border ${
+                                                isClaimed 
+                                                    ? 'border-green-500/50 bg-green-500/5' 
+                                                    : isManualClicked
+                                                    ? 'border-gold/60 bg-gold/10 shadow-[0_0_20px_rgba(212,175,55,0.15)]'
+                                                    : 'border-gold/25 hover:border-gold bg-obsidian/90 hover:bg-gold/10'
+                                            } p-6 sharp transition-all duration-300 flex flex-col justify-between group relative overflow-hidden`}
                                         >
                                             <div className="flex items-start justify-between mb-4">
-                                                <div className={`w-10 h-10 border ${isClaimed ? 'border-green-400 text-green-400' : 'border-gold/30 text-gold group-hover:text-white group-hover:border-gold'} bg-pitchblack flex items-center justify-center transition-colors`}>
+                                                <div className={`w-10 h-10 border ${
+                                                    isClaimed 
+                                                        ? 'border-green-400 text-green-400' 
+                                                        : isManualClicked
+                                                        ? 'border-gold text-gold'
+                                                        : 'border-gold/30 text-gold group-hover:text-white group-hover:border-gold'
+                                                } bg-pitchblack flex items-center justify-center transition-colors`}>
                                                     {task.icon}
                                                 </div>
                                                 <div className="flex items-center gap-1.5">
@@ -413,13 +455,24 @@ const PreHackathonPage = () => {
                                                             CLAIMED ✓
                                                         </span>
                                                     )}
-                                                    <span className={`font-heading font-black text-sm px-3 py-1 ${isClaimed ? 'bg-green-500/10 border border-green-500 text-green-400' : 'bg-gold/15 border border-gold text-gold gold-glow'} tracking-widest`}>
+                                                    {isManualClicked && (
+                                                        <span className="font-heading font-bold text-[9px] px-2 py-0.5 border border-gold/60 bg-gold/20 text-gold tracking-wider">
+                                                            DISCORD PROOF
+                                                        </span>
+                                                    )}
+                                                    <span className={`font-heading font-black text-sm px-3 py-1 ${
+                                                        isClaimed 
+                                                            ? 'bg-green-500/10 border border-green-500 text-green-400' 
+                                                            : 'bg-gold/15 border border-gold text-gold gold-glow'
+                                                    } tracking-widest`}>
                                                         +{task.xp}
                                                     </span>
                                                 </div>
                                             </div>
                                             <div className="mb-4">
-                                                <h4 className={`text-base lg:text-lg font-bold uppercase tracking-tight mb-1 ${isClaimed ? 'text-green-300' : 'text-white group-hover:text-gold'} transition-colors`}>
+                                                <h4 className={`text-base lg:text-lg font-bold uppercase tracking-tight mb-1 ${
+                                                    isClaimed ? 'text-green-300' : isManualClicked ? 'text-gold' : 'text-white group-hover:text-gold'
+                                                } transition-colors`}>
                                                     {task.title}
                                                 </h4>
                                                 <p className="text-xs text-lightgrey font-grotesk leading-relaxed">
@@ -427,17 +480,27 @@ const PreHackathonPage = () => {
                                                 </p>
                                             </div>
                                             <a
-                                                href={task.link}
+                                                href={isManualClicked ? 'https://discord.gg/BxkRwU6X5' : task.link}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 onClick={(e) => handleTaskClick(e, task)}
-                                                className={`text-xs uppercase font-heading font-bold py-2.5 px-4 border ${
+                                                className={`text-xs uppercase font-heading font-bold py-2.5 px-3 border ${
                                                     isClaimed 
                                                         ? 'border-green-500/40 text-green-300 hover:bg-green-500/20' 
+                                                        : isManualClicked
+                                                        ? 'border-gold bg-gold/15 text-gold hover:bg-gold hover:text-pitchblack'
                                                         : 'border-gold/40 hover:border-gold bg-gold/5 hover:bg-gold hover:text-pitchblack text-white'
-                                                } text-center tracking-wider transition-all duration-200 mt-auto flex items-center justify-center gap-2 cursor-pointer`}
+                                                } text-center tracking-wider transition-all duration-200 mt-auto flex items-center justify-center gap-2 cursor-pointer leading-tight`}
                                             >
-                                                <span>{isClaiming ? 'CREDITING...' : isClaimed ? 'VISITED ✓' : task.btnText}</span>
+                                                <span>
+                                                    {isClaiming 
+                                                        ? 'CREDITING...' 
+                                                        : isClaimed 
+                                                        ? 'VISITED ✓' 
+                                                        : isManualClicked 
+                                                        ? 'SHARE YOUR POST ON DISCORD TO GAIN XP' 
+                                                        : task.btnText}
+                                                </span>
                                                 <span>&rarr;</span>
                                             </a>
                                         </motion.div>
