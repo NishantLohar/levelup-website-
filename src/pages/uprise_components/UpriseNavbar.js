@@ -14,8 +14,8 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
             }}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-                {/* Left: Back Button to Home & Club Actions */}
-                <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                {/* Left: Back Button to Home */}
+                <div className="flex items-center gap-2 sm:gap-3">
                     <Link
                         to="/"
                         className="uprise-back-button"
@@ -51,7 +51,10 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                         <span style={{ fontSize: '14px', lineHeight: 1 }}>←</span>
                         <span className="hidden sm:inline">Back</span>
                     </Link>
+                </div>
 
+                {/* Right: Club Action Buttons & Authentication / User State */}
+                <div className="flex items-center gap-2 sm:gap-4 flex-wrap justify-end">
                     {/* Register as Club Button */}
                     <a
                         href="https://account.levelupevents.in/join-as-club/"
@@ -61,7 +64,7 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                         style={{
                             display: 'inline-flex',
                             alignItems: 'center',
-                            gap: '6px',
+                            justifyContent: 'center',
                             padding: '8px 14px',
                             backgroundColor: 'rgba(212, 175, 55, 0.12)',
                             border: '1px solid #D4AF37',
@@ -75,6 +78,7 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                             cursor: 'pointer',
                             transition: 'all 0.3s ease',
                             boxShadow: '0 0 10px rgba(212, 175, 55, 0.2)',
+                            whiteSpace: 'nowrap',
                         }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.backgroundColor = '#D4AF37';
@@ -88,7 +92,6 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                         }}
                         title="Register your college club on LevelUp SaaS"
                     >
-                        <span>🏛️</span>
                         <span>Register as Club</span>
                     </a>
 
@@ -99,7 +102,7 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                         style={{
                             display: 'inline-flex',
                             alignItems: 'center',
-                            gap: '6px',
+                            justifyContent: 'center',
                             padding: '8px 14px',
                             backgroundColor: 'rgba(255, 255, 255, 0.05)',
                             border: '1px solid rgba(255, 255, 255, 0.25)',
@@ -112,6 +115,7 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                             textDecoration: 'none',
                             cursor: 'pointer',
                             transition: 'all 0.3s ease',
+                            whiteSpace: 'nowrap',
                         }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
@@ -123,15 +127,11 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                             e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
                             e.currentTarget.style.boxShadow = 'none';
                         }}
-                        title="View Official Uprise Club Activities & Challenges"
+                        title="View Official Uprise Club Activities and Challenges"
                     >
-                        <span>⚡</span>
                         <span>See Club Activities</span>
                     </Link>
-                </div>
 
-                {/* Right: Authentication / User State */}
-                <div className="flex items-center gap-3 sm:gap-4">
                     {user ? (
                         <div className="flex items-center gap-3">
                             {/* XP Pill */}
@@ -246,6 +246,7 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                                 outline: 'none',
                                 transition: 'all 0.3s ease',
                                 boxShadow: '0 0 12px rgba(212, 175, 55, 0.2)',
+                                whiteSpace: 'nowrap',
                             }}
                             onMouseEnter={(e) => {
                                 e.currentTarget.style.backgroundColor = '#D4AF37';
