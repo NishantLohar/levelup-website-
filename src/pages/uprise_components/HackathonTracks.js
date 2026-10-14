@@ -54,11 +54,13 @@ const HackathonTracks = () => {
                 </div>
                 <div className="relative z-10 tilt-content">
                     <div className="w-16 h-16 border border-gold flex justify-center items-center mb-10 text-gold group-hover:bg-gold group-hover:text-pitchblack transition-colors duration-300 sharp">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="square" strokeLinejoin="miter" strokeWidth="1.5" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth="1.5" d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7C5 4 4 5 4 7zM9 12l2 2 4-4M4 9h16" />
+                        </svg>
                     </div>
-                    <h3 className="text-2xl font-bold font-heading text-white mb-6 pr-8 group-hover:text-gold transition-colors duration-300">EDGE AI DEVELOPMENT</h3>
+                    <h3 className="text-2xl font-bold font-heading text-white mb-6 pr-8 group-hover:text-gold transition-colors duration-300">DEVOPS</h3>
                     <p className="text-lightgrey font-grotesk text-sm leading-relaxed">
-                        On-device processing, IoT, TinyML. Push the boundaries of intelligence to the absolute edge of hardware constraints.
+                        CI/CD pipelines, Kubernetes, Cloud Native, Infrastructure as Code. Architect resilient systems, automate deployments, and scale mission-critical workloads.
                     </p>
                 </div>
             </div>
