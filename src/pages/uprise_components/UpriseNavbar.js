@@ -1,7 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
+    const [copied, setCopied] = useState(false);
+
+    const handleCopyCoupon = () => {
+        if (user?.coupon_code) {
+            navigator.clipboard.writeText(user.coupon_code);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        }
+    };
+
     return (
         <header 
             className="fixed top-0 left-0 w-full z-50 transition-all duration-300 uprise-header-bar"
@@ -54,7 +64,7 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                 </div>
 
                 {/* Right: Club Action Buttons & Authentication / User State */}
-                <div className="flex items-center gap-2 sm:gap-4 flex-wrap justify-end">
+                <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
                     {/* Register as Club Button */}
                     <a
                         href="https://account.levelupevents.in/join-as-club/"
@@ -133,49 +143,77 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                     </Link>
 
                     {user ? (
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                            {/* Always-Handy Coupon Code Card (Click to Copy) */}
+                            {user.coupon_code && (
+                                <button 
+                                    type="button"
+                                    onClick={handleCopyCoupon}
+                                    style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '8px',
+                                        padding: '7px 12px',
+                                        backgroundColor: '#0A0A0A',
+                                        border: '1px solid #D4AF37',
+                                        color: '#FFFFFF',
+                                        cursor: 'pointer',
+                                        outline: 'none',
+                                        transition: 'all 0.2s ease',
+                                        boxShadow: '0 0 12px rgba(212, 175, 55, 0.25)',
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.borderColor = '#FFFFFF';
+                                        e.currentTarget.style.boxShadow = '0 0 16px rgba(212, 175, 55, 0.5)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.borderColor = '#D4AF37';
+                                        e.currentTarget.style.boxShadow = '0 0 12px rgba(212, 175, 55, 0.25)';
+                                    }}
+                                    title="Click to copy your handy Uprise referral coupon code"
+                                >
+                                    <span style={{ color: '#888888', fontSize: '10px', fontWeight: '700', letterSpacing: '1px' }}>
+                                        COUPON:
+                                    </span>
+                                    <strong style={{ color: '#D4AF37', fontFamily: 'monospace', fontSize: '12px', letterSpacing: '1.5px' }}>
+                                        {user.coupon_code}
+                                    </strong>
+                                    <span 
+                                        style={{ 
+                                            color: copied ? '#4ADE80' : '#D4AF37', 
+                                            fontSize: '9px', 
+                                            fontWeight: '800',
+                                            padding: '2px 5px', 
+                                            backgroundColor: copied ? 'rgba(74, 222, 128, 0.15)' : 'rgba(212, 175, 55, 0.15)', 
+                                            border: copied ? '1px solid rgba(74, 222, 128, 0.5)' : '1px solid rgba(212, 175, 55, 0.4)',
+                                            letterSpacing: '1px',
+                                            textTransform: 'uppercase'
+                                        }}
+                                    >
+                                        {copied ? 'COPIED!' : 'COPY'}
+                                    </span>
+                                </button>
+                            )}
+
                             {/* XP Pill */}
                             <div 
                                 style={{
                                     display: 'inline-flex',
                                     alignItems: 'center',
                                     gap: '6px',
-                                    padding: '7px 14px',
+                                    padding: '7px 12px',
                                     backgroundColor: '#0A0A0A',
                                     border: '1px solid rgba(212, 175, 55, 0.5)',
                                     color: '#D4AF37',
                                     fontWeight: '700',
-                                    fontSize: '12px',
+                                    fontSize: '11px',
                                     letterSpacing: '1px',
                                     boxShadow: '0 0 10px rgba(212, 175, 55, 0.2)',
                                 }}
                             >
-                                <span style={{ fontSize: '13px' }}>🏆</span>
+                                <span style={{ fontSize: '12px' }}>🏆</span>
                                 <span>{user.total_xp || 0} XP</span>
                             </div>
-
-                            {/* Referral Code Pill */}
-                            {user.coupon_code && (
-                                <div 
-                                    className="hidden md:flex"
-                                    style={{
-                                        alignItems: 'center',
-                                        gap: '6px',
-                                        padding: '7px 12px',
-                                        backgroundColor: '#0A0A0A',
-                                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                                        color: '#FFFFFF',
-                                        fontFamily: 'monospace',
-                                        fontSize: '11px',
-                                    }}
-                                    title="Your Uprise Referral Code"
-                                >
-                                    <span style={{ color: '#888888', fontSize: '10px' }}>REF:</span>
-                                    <strong style={{ color: '#D4AF37', letterSpacing: '1px' }}>
-                                        {user.coupon_code}
-                                    </strong>
-                                </div>
-                            )}
 
                             {/* User Name & Logout */}
                             <div className="flex items-center gap-2 pl-2" style={{ borderLeft: '1px solid rgba(255, 255, 255, 0.15)' }}>
@@ -198,7 +236,7 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                                     type="button"
                                     onClick={onLogout}
                                     style={{
-                                        padding: '6px 14px',
+                                        padding: '6px 12px',
                                         backgroundColor: 'rgba(239, 68, 68, 0.1)',
                                         border: '1px solid rgba(239, 68, 68, 0.5)',
                                         color: '#F87171',
@@ -233,14 +271,14 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                                 display: 'inline-flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                padding: '9px 24px',
+                                padding: '8px 18px',
                                 backgroundColor: '#000000',
                                 border: '1px solid #D4AF37',
                                 color: '#D4AF37',
                                 fontFamily: "'Space Grotesk', 'Montserrat', sans-serif",
                                 fontWeight: '700',
-                                fontSize: '12px',
-                                letterSpacing: '2px',
+                                fontSize: '11px',
+                                letterSpacing: '1.5px',
                                 textTransform: 'uppercase',
                                 cursor: 'pointer',
                                 outline: 'none',
@@ -259,7 +297,7 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                                 e.currentTarget.style.boxShadow = '0 0 12px rgba(212, 175, 55, 0.2)';
                             }}
                         >
-                            SIGN IN
+                            SIGN IN TO REDEEM YOUR COUPON CODE
                         </button>
                     )}
                 </div>
