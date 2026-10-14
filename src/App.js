@@ -14,10 +14,11 @@ import ScrollToTop from "./components/ScrollToTop";
 import MentorProfile from "./pages/MentorProfile";
 import Uprise from "./pages/Uprise";
 import PreHackathonPage from "./pages/PreHackathonPage";
+import ClubActivities from "./pages/ClubActivities";
 
 const AppContent = () => {
   const location = useLocation();
-  const isUprise = location.pathname === '/uprise' || location.pathname === '/pre-hackathon';
+  const isUprise = location.pathname === '/uprise' || location.pathname === '/pre-hackathon' || location.pathname === '/club-activities';
 
   return (
     <>
@@ -36,6 +37,7 @@ const AppContent = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/uprise" element={<Uprise />} />
         <Route path="/pre-hackathon" element={<PreHackathonPage />} />
+        <Route path="/club-activities" element={<ClubActivities />} />
       </Routes>
       
       {!isUprise && <Footer />}

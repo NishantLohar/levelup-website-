@@ -14,23 +14,23 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
             }}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-                {/* Left: Back Button to Home */}
-                <div className="flex items-center">
+                {/* Left: Back Button to Home & Club Actions */}
+                <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                     <Link
                         to="/"
                         className="uprise-back-button"
                         style={{
                             display: 'inline-flex',
                             alignItems: 'center',
-                            gap: '8px',
-                            padding: '9px 20px',
+                            gap: '6px',
+                            padding: '8px 16px',
                             backgroundColor: '#000000',
                             border: '1px solid #D4AF37',
                             color: '#D4AF37',
                             fontFamily: "'Space Grotesk', 'Montserrat', sans-serif",
                             fontWeight: '700',
-                            fontSize: '12px',
-                            letterSpacing: '2px',
+                            fontSize: '11px',
+                            letterSpacing: '1.5px',
                             textTransform: 'uppercase',
                             textDecoration: 'none',
                             cursor: 'pointer',
@@ -48,8 +48,85 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                             e.currentTarget.style.boxShadow = '0 0 12px rgba(212, 175, 55, 0.2)';
                         }}
                     >
-                        <span style={{ fontSize: '15px', lineHeight: 1 }}>←</span>
-                        <span>Back</span>
+                        <span style={{ fontSize: '14px', lineHeight: 1 }}>←</span>
+                        <span className="hidden sm:inline">Back</span>
+                    </Link>
+
+                    {/* Register as Club Button */}
+                    <a
+                        href="https://account.levelupevents.in/join-as-club/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="uprise-club-btn"
+                        style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            padding: '8px 14px',
+                            backgroundColor: 'rgba(212, 175, 55, 0.12)',
+                            border: '1px solid #D4AF37',
+                            color: '#D4AF37',
+                            fontFamily: "'Space Grotesk', 'Montserrat', sans-serif",
+                            fontWeight: '700',
+                            fontSize: '11px',
+                            letterSpacing: '1.5px',
+                            textTransform: 'uppercase',
+                            textDecoration: 'none',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s ease',
+                            boxShadow: '0 0 10px rgba(212, 175, 55, 0.2)',
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = '#D4AF37';
+                            e.currentTarget.style.color = '#000000';
+                            e.currentTarget.style.boxShadow = '0 0 18px rgba(212, 175, 55, 0.6)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = 'rgba(212, 175, 55, 0.12)';
+                            e.currentTarget.style.color = '#D4AF37';
+                            e.currentTarget.style.boxShadow = '0 0 10px rgba(212, 175, 55, 0.2)';
+                        }}
+                        title="Register your college club on LevelUp SaaS"
+                    >
+                        <span>🏛️</span>
+                        <span>Register as Club</span>
+                    </a>
+
+                    {/* See Club Activities Button */}
+                    <Link
+                        to="/club-activities"
+                        className="uprise-activities-btn"
+                        style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            padding: '8px 14px',
+                            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                            border: '1px solid rgba(255, 255, 255, 0.25)',
+                            color: '#FFFFFF',
+                            fontFamily: "'Space Grotesk', 'Montserrat', sans-serif",
+                            fontWeight: '700',
+                            fontSize: '11px',
+                            letterSpacing: '1.5px',
+                            textTransform: 'uppercase',
+                            textDecoration: 'none',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+                            e.currentTarget.style.borderColor = '#FFFFFF';
+                            e.currentTarget.style.boxShadow = '0 0 14px rgba(255, 255, 255, 0.3)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
+                            e.currentTarget.style.boxShadow = 'none';
+                        }}
+                        title="View Official Uprise Club Activities & Challenges"
+                    >
+                        <span>⚡</span>
+                        <span>See Club Activities</span>
                     </Link>
                 </div>
 
