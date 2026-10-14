@@ -102,6 +102,7 @@ const PreHackathonPage = () => {
         }
     });
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+    const [isRevealingSoonOpen, setIsRevealingSoonOpen] = useState(false);
     const [claimingKey, setClaimingKey] = useState(null);
     const [toastMsg, setToastMsg] = useState(null);
 
@@ -355,9 +356,13 @@ const PreHackathonPage = () => {
                                 </p>
                             </div>
                             
-                            <a href="https://account.levelupevents.in/events/6/" target="_blank" rel="noopener noreferrer" className="magnetic-btn sharp bg-gold bright hover:bg-white text-pitchblack font-heading font-bold py-5 px-12 transition-all duration-300 text-center tracking-widest text-sm hover:shadow-[0_0_20px_#FFFFFF] shimmer-btn animate-pulse-gold inline-block">
+                            <button 
+                                type="button"
+                                onClick={() => setIsRevealingSoonOpen(true)}
+                                className="magnetic-btn sharp bg-gold bright hover:bg-white text-pitchblack font-heading font-bold py-5 px-12 transition-all duration-300 text-center tracking-widest text-sm hover:shadow-[0_0_20px_#FFFFFF] shimmer-btn animate-pulse-gold inline-block cursor-pointer"
+                            >
                                 REGISTER TO RECEIVE THE PROBLEM
-                            </a>
+                            </button>
                         </motion.div>
                     </div>
 
@@ -485,6 +490,50 @@ const PreHackathonPage = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Revealing Soon Modal Popup */}
+            <AnimatePresence>
+                {isRevealingSoonOpen && (
+                    <div className="fixed inset-0 z-[999999] bg-pitchblack/85 backdrop-blur-md flex items-center justify-center p-4 font-grotesk">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="glass-card border border-gold/40 p-8 sm:p-10 w-full max-w-md relative sharp gold-glow bg-obsidian text-white text-center"
+                        >
+                            <button
+                                type="button"
+                                className="absolute top-4 right-4 text-lightgrey hover:text-white text-xl cursor-pointer"
+                                onClick={() => setIsRevealingSoonOpen(false)}
+                            >
+                                ✕
+                            </button>
+
+                            <div className="w-16 h-16 border-2 border-gold flex items-center justify-center mx-auto mb-6 text-gold sharp shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+
+                            <h3 className="text-gold font-heading font-bold text-2xl mb-3 tracking-wide uppercase">
+                                REVEALING SOON
+                            </h3>
+
+                            <p className="text-lightgrey text-sm mb-6 font-grotesk leading-relaxed">
+                                The exclusive Pre-Hackathon problem statement is currently locked. It will be officially revealed to all registered hackers soon!
+                            </p>
+
+                            <button
+                                type="button"
+                                onClick={() => setIsRevealingSoonOpen(false)}
+                                className="bg-transparent border border-gold text-gold font-heading font-bold py-3 px-8 tracking-widest hover:bg-gold hover:text-pitchblack transition-colors sharp text-xs uppercase cursor-pointer shadow-[0_0_15px_rgba(212,175,55,0.2)]"
+                            >
+                                ACKNOWLEDGE
+                            </button>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
 
             <UpriseLoginModal
                 isOpen={isLoginModalOpen}
