@@ -1,3 +1,4 @@
+import '../Uprise.css';
 import React, { useState, useEffect } from 'react';
 
 const Leaderboard = () => {

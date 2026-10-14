@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Lenis from 'lenis';
 import PartnersCarousel from '../components/PartnersCarousel';
 import CommunityStats from '../components/CommunityStats';
+import Leaderboard from './uprise_components/Leaderboard';
 import './Home.css';
 
 const Home = () => {
@@ -277,6 +278,9 @@ const Home = () => {
           </motion.div>
         </motion.div>
       </section>
+
+      {/* Live Gauntlet & Community Leaderboard */}
+      <Leaderboard />
 
       <PartnersCarousel title="Trusted by Our Partners & Sponsor" />
       <CommunityStats /> 
