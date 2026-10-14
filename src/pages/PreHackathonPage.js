@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import UpriseNavbar from './uprise_components/UpriseNavbar';
 import UpriseLoginModal from './uprise_components/UpriseLoginModal';
 import './Uprise.css'; // Reuse the same CSS for consistent animations
 
 const PreHackathonPage = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const isRegisteredParam = new URLSearchParams(location.search).get('registered') === 'true';
 
     useEffect(() => {
@@ -148,6 +149,30 @@ const PreHackathonPage = () => {
         if (task.key === 'hirestop') {
             e.preventDefault();
             window.open(task.link, '_blank');
+            return;
+        }
+
+        if (task.key === 'squad_assembly') {
+            e.preventDefault();
+            if (!currentUser) {
+                setIsLoginModalOpen(true);
+                setToastMsg('Please sign in to view and copy your custom invite code!');
+                setTimeout(() => setToastMsg(null), 4000);
+                return;
+            }
+            const code = currentUser.coupon_code || 'UPRISE2027';
+            const inviteUrl = `${window.location.origin}/uprise?ref=${encodeURIComponent(code)}`;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(`Join Uprise 2027 with my invite code: ${code}\nRegister here: ${inviteUrl}`);
+            }
+            setToastMsg(`Invite code copied: ${code}! Share with developers to earn 50 XP (70 XP for Builders).`);
+            setTimeout(() => setToastMsg(null), 5000);
+            return;
+        }
+
+        if (task.key === 'club_referral') {
+            e.preventDefault();
+            navigate('/club-activities');
             return;
         }
 
@@ -328,14 +353,51 @@ const PreHackathonPage = () => {
             key: "hirestop",
             title: "Hirestop Eligibility",
             action: "Give at least 2 AI job interviews & 3 skill tests (avg 70) OR gain 2,000 XP",
-            xp: "ELIGIBLE",
-            link: "https://hirestop.in",
-            btnText: "Get Eligible",
+            xp: "ELIGIBILITY",
+            link: "https://account.levelupevents.in/skill-test/",
+            btnText: "Take Skill Test",
             isExternal: true,
             icon: (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
                     <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
                     <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                </svg>
+            )
+        },
+        {
+            key: "squad_assembly",
+            title: "Squad Assembly",
+            action: "Give your custom Uprise invite code to a developer. XP unlocks the moment they register.",
+            xp: "50 XP · 70 XP FOR BUILDERS",
+            link: "#",
+            btnText: "Copy Invite Code",
+            isAction: true,
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+            )
+        },
+        {
+            key: "club_referral",
+            title: "Organisation Referral",
+            action: "Refer a college club or partner organisation. Massive XP credited upon verification.",
+            xp: "2000 XP · 2200 XP FOR BUILDERS",
+            link: "/club-activities",
+            btnText: "Refer Organisation",
+            isAction: true,
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <path d="M3 21h18"></path>
+                    <path d="M5 21V7l8-4v18"></path>
+                    <path d="M19 21V11l-6-4"></path>
+                    <path d="M9 9v.01"></path>
+                    <path d="M9 12v.01"></path>
+                    <path d="M9 15v.01"></path>
+                    <path d="M9 18v.01"></path>
                 </svg>
             )
         }
@@ -451,15 +513,15 @@ const PreHackathonPage = () => {
                                         COMMUNITY GAUNTLET · INSTANT XP
                                     </span>
                                     <h3 className="text-4xl md:text-5xl text-white font-black mb-4 tracking-tighter uppercase">
-                                        FOLLOWING <span className="text-gold bright drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]">SOCIAL MEDIA</span>
+                                        COMPLETE TASKS <span className="text-gold bright drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]">TO GAIN XP</span>
                                     </h3>
                                     <p className="text-lightgrey tracking-[0.2em] font-heading uppercase text-xs md:text-sm max-w-2xl mx-auto">
-                                        CLICK TO COMPLETE SOCIAL TASKS — XP IS CREDITED DIRECTLY TO YOUR LEADERBOARD PROFILE
+                                        COMPLETE MISSIONS, INVITE DEVELOPERS &amp; EXPAND THE SQUAD — CLIMB THE LIVE LEADERBOARD
                                     </p>
                                 </motion.div>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                                 {socialTasks.map((task, index) => {
                                     const isManualTask = task.key === 'instagram_story' || task.key === 'linkedin_post';
                                     const isManualClicked = isManualTask && manualClickedTasks.includes(task.key);
