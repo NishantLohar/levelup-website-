@@ -14,8 +14,8 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
             }}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-                {/* Left: Back Button to Home + Brand */}
-                <div className="flex items-center gap-4 sm:gap-6">
+                {/* Left: Back Button to Home */}
+                <div className="flex items-center">
                     <Link
                         to="/"
                         className="uprise-back-button"
@@ -50,35 +50,6 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                     >
                         <span style={{ fontSize: '15px', lineHeight: 1 }}>←</span>
                         <span>Back</span>
-                    </Link>
-
-                    {/* Divider & Brand */}
-                    <div className="hidden sm:block" style={{ width: '1px', height: '24px', backgroundColor: 'rgba(212, 175, 55, 0.25)' }} />
-
-                    <Link to="/uprise" className="flex items-center gap-3 group" style={{ textDecoration: 'none' }}>
-                        <div 
-                            style={{
-                                width: '36px',
-                                height: '36px',
-                                border: '1px solid rgba(212, 175, 55, 0.4)',
-                                backgroundColor: 'rgba(212, 175, 55, 0.08)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}
-                        >
-                            <span style={{ color: '#D4AF37', fontWeight: '900', fontSize: '16px', letterSpacing: '-0.5px' }}>
-                                U
-                            </span>
-                        </div>
-                        <div className="flex flex-col">
-                            <span style={{ color: '#FFFFFF', fontWeight: '900', fontSize: '15px', letterSpacing: '2.5px', textTransform: 'uppercase' }}>
-                                UPRISE <span style={{ color: '#D4AF37' }}>2027</span>
-                            </span>
-                            <span style={{ color: 'rgba(160, 160, 160, 0.6)', fontSize: '9px', letterSpacing: '2px', textTransform: 'uppercase' }}>
-                                BY LEVELUP
-                            </span>
-                        </div>
                     </Link>
                 </div>
 
