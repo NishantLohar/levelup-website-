@@ -5,6 +5,101 @@ import UpriseNavbar from './uprise_components/UpriseNavbar';
 import UpriseLoginModal from './uprise_components/UpriseLoginModal';
 import './Uprise.css';
 
+// Sleek, clean SVG icons for each challenge
+const ActivityIcon = ({ id }) => {
+    switch (id) {
+        case 1: // 100 Spartan Challenge (Shield / Defense)
+            return (
+                <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    <path d="M12 8v8" />
+                    <path d="M8 12h8" />
+                </svg>
+            );
+        case 2: // Hack Initiation (Terminal / Code)
+            return (
+                <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="16 18 22 12 16 6" />
+                    <polyline points="8 6 2 12 8 18" />
+                    <line x1="10" y1="19" x2="14" y2="5" />
+                </svg>
+            );
+        case 3: // Survival Metric (Target / Crosshair / Precision)
+            return (
+                <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="22" y1="12" x2="18" y2="12" />
+                    <line x1="6" y1="12" x2="2" y2="12" />
+                    <line x1="12" y1="6" x2="12" y2="2" />
+                    <line x1="12" y1="22" x2="12" y2="18" />
+                    <circle cx="12" cy="12" r="3" />
+                </svg>
+            );
+        case 4: // Cross-Campus Event (Network / Global Hub)
+            return (
+                <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="2" y1="12" x2="22" y2="12" />
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
+            );
+        case 5: // Pitch Simulation (Rocket / Founder Velocity)
+            return (
+                <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+                    <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+                    <path d="M9 12H4s.55-3.03 2-4.5c1.45-1.47 4.5-2 4.5-2" />
+                    <path d="M12 15v5s3.03-.55 4.5-2c1.47-1.45 2-4.5 2-4.5" />
+                </svg>
+            );
+        case 6: // Golden Ticket Reveal (Perforated Pass / Gold Access)
+            return (
+                <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="6" width="20" height="12" rx="2" />
+                    <circle cx="2" cy="12" r="2" />
+                    <circle cx="22" cy="12" r="2" />
+                    <line x1="12" y1="7" x2="12" y2="17" strokeDasharray="2 2" />
+                </svg>
+            );
+        case 7: // Instagram & LinkedIn Drop (Broadcast / Announce)
+            return (
+                <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 11V9a2 2 0 0 1 2-2h4l6-4v18l-6-4H5a2 2 0 0 1-2-2v-2z" />
+                    <path d="M19 8c1.5 2 1.5 6 0 8" />
+                    <path d="M22 6c3 3.5 3 8.5 0 12" />
+                </svg>
+            );
+        case 8: // Guerilla Tag (Flag / Campus Claim)
+            return (
+                <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+                    <line x1="4" y1="22" x2="4" y2="15" />
+                </svg>
+            );
+        case 9: // The Problem Solver (Chip / Processor / Architecture)
+            return (
+                <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="4" y="4" width="16" height="16" rx="2" />
+                    <rect x="9" y="9" width="6" height="6" />
+                    <line x1="9" y1="1" x2="9" y2="4" />
+                    <line x1="15" y1="1" x2="15" y2="4" />
+                    <line x1="9" y1="20" x2="9" y2="23" />
+                    <line x1="15" y1="20" x2="15" y2="23" />
+                    <line x1="20" y1="9" x2="23" y2="9" />
+                    <line x1="20" y1="14" x2="23" y2="14" />
+                    <line x1="1" y1="9" x2="4" y2="9" />
+                    <line x1="1" y1="14" x2="4" y2="14" />
+                </svg>
+            );
+        default:
+            return (
+                <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                </svg>
+            );
+    }
+};
+
 const ClubActivities = () => {
     const [currentUser, setCurrentUser] = useState(() => {
         try {
@@ -47,90 +142,81 @@ const ClubActivities = () => {
             num: "01",
             title: "100 Spartan Challenge",
             category: "COMMUNITY ONBOARDING",
-            icon: "🛡️",
             description: "Colleges to get 100 registrations and complete hirestop profiles.",
             details: "Mobilize your campus builders! Every verified registration with a completed Hirestop profile counts toward your institution's Spartan quota.",
-            xpBadge: "⚡ XP: TO BE ALLOCATED"
+            xpBadge: "XP: TO BE ALLOCATED"
         },
         {
             id: 2,
             num: "02",
             title: "Hack Initiation",
             category: "LOCAL HACKATHON",
-            icon: "💻",
             description: "Host 2 hours collaborated offline hackathon with Uprise's easy problem statement.",
             details: "Organize an on-campus mini sprint using standard Uprise problem tracks to ignite competitive coding in your institution.",
-            xpBadge: "⚡ XP: TO BE ALLOCATED"
+            xpBadge: "XP: TO BE ALLOCATED"
         },
         {
             id: 3,
             num: "03",
             title: "Survival Metric",
             category: "ENGAGEMENT INTEGRITY",
-            icon: "🎯",
             description: "Negative marking for inactive users.",
             details: "Keep your registered cohort active. Inactive participants deduct vitality points from the community's overall leaderboard standing.",
-            xpBadge: "⚡ XP: TO BE ALLOCATED"
+            xpBadge: "XP: TO BE ALLOCATED"
         },
         {
             id: 4,
             num: "04",
             title: "Cross-Campus Event",
             category: "INTER-COLLEGE NETWORKING",
-            icon: "🌐",
             description: "Host a Discord event on Uprise server for networking with co-communities and participants.",
             details: "Co-host an interactive community session, AMA, or workshop on the official Uprise Discord to bridge collegiate networks.",
-            xpBadge: "⚡ XP: TO BE ALLOCATED"
+            xpBadge: "XP: TO BE ALLOCATED"
         },
         {
             id: 5,
             num: "05",
             title: "Pitch Simulation",
             category: "STARTUP SIMULATION",
-            icon: "🚀",
             description: "Host an inter-college collaborated startup pitch online.",
             details: "Simulate a high-stakes founder showcase with peer institutions. Showcase student prototypes to judges and prospective builders.",
-            xpBadge: "⚡ XP: TO BE ALLOCATED"
+            xpBadge: "XP: TO BE ALLOCATED"
         },
         {
             id: 6,
             num: "06",
             title: "Golden Ticket Reveal",
             category: "VIRAL CAMPAIGN",
-            icon: "🎫",
             description: "Capture reaction of the members getting golden ticket for uprise and post on all social media handles.",
             details: "Document the celebration! Film high-energy unboxing and reaction clips as members receive their official Uprise Golden Pass.",
-            xpBadge: "⚡ XP: TO BE ALLOCATED"
+            xpBadge: "XP: TO BE ALLOCATED"
         },
         {
             id: 7,
             num: "07",
             title: "Instagram & LinkedIn Drop",
             category: "MEDIA BROADCAST",
-            icon: "📢",
             description: "Post a banner informing your participation for Uprise.",
             details: "Broadcast your club's official alliance with Uprise across Instagram and LinkedIn with verified tags and alliance banners.",
-            xpBadge: "⚡ XP: TO BE ALLOCATED"
+            xpBadge: "XP: TO BE ALLOCATED"
         },
         {
             id: 8,
             num: "08",
             title: "Guerilla Tag",
             category: "CAMPUS TAKEOVER",
-            icon: "📌",
             description: "Poster on department's notice board and capture it to post on social media handles.",
             details: "Physical presence meets digital reach. Put up official posters on college noticeboards and tag @levelupofficial.in.",
-            xpBadge: "⚡ XP: TO BE ALLOCATED"
+            xpBadge: "XP: TO BE ALLOCATED"
         },
         {
             id: 9,
             num: "09",
             title: "The Problem Solver",
             category: "INDIVIDUAL EXECUTION",
-            icon: "🧠",
             description: "High rate XPs on delivering project on individual basis during pre hackathon.",
             details: "Individual members delivering standalone prototypes during the pre-hackathon grant massive multiplier XP to their parent club.",
-            xpBadge: "⚡ XP: TO BE ALLOCATED"
+            xpBadge: "XP: TO BE ALLOCATED"
         }
     ];
 
@@ -157,9 +243,8 @@ const ClubActivities = () => {
                         initial={{ opacity: 0, y: -15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs font-bold tracking-[0.25em] uppercase"
+                        className="inline-flex items-center px-4 py-2 mb-6 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs font-bold tracking-[0.25em] uppercase"
                     >
-                        <span>🏛️</span>
                         <span>UPRISE 2027 • CAMPUS & COMMUNITY ALLIANCE</span>
                     </motion.div>
 
@@ -196,7 +281,6 @@ const ClubActivities = () => {
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-3 px-8 py-4 bg-gold hover:bg-gold/90 text-black font-heading font-black text-sm tracking-widest uppercase transition-all shadow-[0_0_25px_rgba(212,175,55,0.4)] hover:shadow-[0_0_35px_rgba(212,175,55,0.7)]"
                         >
-                            <span>🏛️</span>
                             <span>Register Your Club Now</span>
                             <span>→</span>
                         </a>
@@ -205,14 +289,13 @@ const ClubActivities = () => {
                             to="/uprise#arena"
                             className="inline-flex items-center gap-3 px-8 py-4 bg-pitchblack hover:bg-gold/10 text-gold border border-gold/40 hover:border-gold font-heading font-bold text-sm tracking-widest uppercase transition-all"
                         >
-                            <span>🏆</span>
                             <span>View Club Leaderboard</span>
                         </Link>
                     </motion.div>
 
                     {/* Notice Banner */}
                     <div className="mt-8 inline-block bg-gold/10 border border-gold/30 rounded-lg px-6 py-3 text-xs sm:text-sm text-gold/90 font-medium">
-                        ⚡ <strong>XP Allocation Note:</strong> Official point multipliers and community XP rewards for each activity will be assigned and updated live soon!
+                        <strong>XP Allocation Note:</strong> Official point multipliers and community XP rewards for each activity will be assigned and updated live soon!
                     </div>
                 </div>
 
@@ -234,11 +317,11 @@ const ClubActivities = () => {
                             <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                             <div>
-                                {/* Header: Icon + Number */}
+                                {/* Header: Clean SVG Icon + Number */}
                                 <div className="flex items-center justify-between mb-5">
-                                    <span className="text-3xl p-3 bg-pitchblack border border-gold/30 shadow-[0_0_12px_rgba(212,175,55,0.15)] inline-block">
-                                        {act.icon}
-                                    </span>
+                                    <div className="w-12 h-12 flex items-center justify-center bg-black border border-gold/30 shadow-[0_0_12px_rgba(212,175,55,0.15)] group-hover:border-gold group-hover:shadow-[0_0_18px_rgba(212,175,55,0.4)] transition-all">
+                                        <ActivityIcon id={act.id} />
+                                    </div>
                                     <span className="font-heading text-3xl font-black text-white/20 group-hover:text-gold/40 transition-colors">
                                         {act.num}
                                     </span>
@@ -267,7 +350,7 @@ const ClubActivities = () => {
 
                             {/* Bottom XP Badge */}
                             <div className="mt-6 pt-4 border-t border-gold/20 flex items-center justify-between">
-                                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-gold tracking-wider uppercase bg-gold/10 px-3 py-1.5 border border-gold/30">
+                                <span className="inline-flex items-center text-xs font-bold text-gold tracking-wider uppercase bg-gold/10 px-3 py-1.5 border border-gold/30">
                                     {act.xpBadge}
                                 </span>
                                 <span className="text-xs text-lightgrey font-mono group-hover:text-white transition-colors">
@@ -293,7 +376,6 @@ const ClubActivities = () => {
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-2 px-8 py-3.5 bg-gold hover:bg-gold/90 text-black font-heading font-black text-xs tracking-widest uppercase transition-all shadow-[0_0_20px_rgba(212,175,55,0.4)]"
                         >
-                            <span>🏛️</span>
                             <span>Register as Club</span>
                         </a>
                         <Link
