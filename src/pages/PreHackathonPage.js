@@ -103,6 +103,7 @@ const PreHackathonPage = () => {
         }
     });
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+    const [shareModalData, setShareModalData] = useState(null);
     const [isRevealingSoonOpen, setIsRevealingSoonOpen] = useState(false);
     const [manualClickedTasks, setManualClickedTasks] = useState(() => {
         try {
@@ -145,6 +146,33 @@ const PreHackathonPage = () => {
         setCurrentUser(null);
     };
 
+    const handleDownloadAsset = async (imageSrc, fileName) => {
+        try {
+            const response = await fetch(imageSrc);
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(blobUrl);
+            setToastMsg('Image downloaded successfully! Post it and share proof on Discord.');
+            setTimeout(() => setToastMsg(null), 4000);
+        } catch (err) {
+            const link = document.createElement('a');
+            link.href = imageSrc;
+            link.download = fileName;
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setToastMsg('Download started! Post it and share proof on Discord.');
+            setTimeout(() => setToastMsg(null), 4000);
+        }
+    };
+
     const handleTaskClick = async (e, task) => {
         if (task.key === 'hirestop') {
             e.preventDefault();
@@ -184,23 +212,36 @@ const PreHackathonPage = () => {
             return;
         }
 
-        // Manual verification tasks (Instagram Story & LinkedIn Post) - NO automated XP
-        if (task.key === 'instagram_story' || task.key === 'linkedin_post') {
-            if (manualClickedTasks.includes(task.key)) {
-                // If clicked again, take user directly to Discord to post their proof
-                e.preventDefault();
-                window.open('https://discord.gg/BxkRwU6X5', '_blank');
-                return;
-            }
+        // Manual verification tasks (Instagram Story & LinkedIn Post) - Show download popup
+        if (task.key === 'instagram_story') {
+            e.preventDefault();
+            setShareModalData({
+                type: 'instagram_story',
+                title: 'SHARE ON INSTAGRAM STORY',
+                badge: '+20 XP MISSION',
+                imageSrc: '/Instagram story.png',
+                downloadName: 'Instagram-Story-Uprise.png',
+                platformUrl: 'https://www.instagram.com/levelupofficial.in/',
+                platformName: 'OPEN INSTAGRAM',
+                tagText: '@levelupofficial.in',
+                taskKey: 'instagram_story'
+            });
+            return;
+        }
 
-            // First click: record task as clicked, open social link, do NOT call automated claim API
-            const updated = [...manualClickedTasks, task.key];
-            setManualClickedTasks(updated);
-            try {
-                localStorage.setItem('manual_tasks_clicked', JSON.stringify(updated));
-            } catch (err) {}
-            setToastMsg('Post and tag LevelUp, then share your post link on Discord to gain XP!');
-            setTimeout(() => setToastMsg(null), 5000);
+        if (task.key === 'linkedin_post') {
+            e.preventDefault();
+            setShareModalData({
+                type: 'linkedin_post',
+                title: 'SHARE LINKEDIN POST',
+                badge: '+30 XP MISSION',
+                imageSrc: '/LinkedIn Banner (1).png',
+                downloadName: 'LinkedIn-Banner-Uprise.png',
+                platformUrl: 'https://linkedin.com/company/levelupevents',
+                platformName: 'OPEN LINKEDIN',
+                tagText: 'LevelUp Events',
+                taskKey: 'linkedin_post'
+            });
             return;
         }
 
@@ -697,6 +738,99 @@ const PreHackathonPage = () => {
                             >
                                 ACKNOWLEDGE
                             </button>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Share Asset Download Modal Popup */}
+            <AnimatePresence>
+                {shareModalData && (
+                    <div className="fixed inset-0 z-[999999] bg-pitchblack/85 backdrop-blur-md flex items-center justify-center p-4 font-grotesk">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="glass-card border border-gold/40 p-6 sm:p-8 w-full max-w-md sm:max-w-lg relative sharp gold-glow bg-obsidian text-white"
+                        >
+                            <button
+                                type="button"
+                                className="absolute top-4 right-4 text-lightgrey hover:text-white text-xl cursor-pointer"
+                                onClick={() => setShareModalData(null)}
+                            >
+                                ✕
+                            </button>
+
+                            <div className="text-center mb-4">
+                                <span className="font-heading font-black text-xs px-3 py-1 bg-gold/15 border border-gold text-gold gold-glow tracking-widest uppercase inline-block mb-2">
+                                    {shareModalData.badge}
+                                </span>
+                                <h3 className="text-xl sm:text-2xl font-black font-heading tracking-wide uppercase text-white">
+                                    {shareModalData.title}
+                                </h3>
+                                <p className="text-xs text-lightgrey mt-1">
+                                    Download the official promotional asset to share on your feed or story.
+                                </p>
+                            </div>
+
+                            {/* Image Preview Box */}
+                            <div className="p-3 bg-pitchblack/90 border border-gold/30 mb-4 relative sharp flex items-center justify-center overflow-hidden max-h-64 sm:max-h-72">
+                                <img
+                                    src={shareModalData.imageSrc}
+                                    alt={shareModalData.title}
+                                    className="max-h-56 sm:max-h-60 w-auto object-contain shadow-md"
+                                />
+                            </div>
+
+                            {/* Download Button */}
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    handleDownloadAsset(shareModalData.imageSrc, shareModalData.downloadName);
+                                    if (!manualClickedTasks.includes(shareModalData.taskKey)) {
+                                        const updated = [...manualClickedTasks, shareModalData.taskKey];
+                                        setManualClickedTasks(updated);
+                                        try {
+                                            localStorage.setItem('manual_tasks_clicked', JSON.stringify(updated));
+                                        } catch (err) {}
+                                    }
+                                }}
+                                className="w-full magnetic-btn sharp bg-gold bright hover:bg-white text-pitchblack font-heading font-bold py-3.5 px-6 transition-all duration-300 text-center tracking-widest text-xs sm:text-sm hover:shadow-[0_0_20px_#FFFFFF] shimmer-btn animate-pulse-gold flex items-center justify-center gap-2 cursor-pointer uppercase mb-4"
+                            >
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                <span>DOWNLOAD IMAGE TO SHARE</span>
+                            </button>
+
+                            {/* Next Step Guidance */}
+                            <div className="p-3 bg-gold/5 border border-gold/20 mb-4 text-[11px] text-lightgrey space-y-1 font-grotesk">
+                                <div><strong className="text-gold">Step 1:</strong> Click above to download the official graphic.</div>
+                                <div><strong className="text-gold">Step 2:</strong> Post it and tag <strong className="text-white">{shareModalData.tagText}</strong>.</div>
+                                <div><strong className="text-gold">Step 3:</strong> Share your post link or screenshot on Discord to gain XP!</div>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="grid grid-cols-2 gap-3">
+                                <a
+                                    href={shareModalData.platformUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="py-2.5 px-3 border border-lightgrey/30 hover:border-white text-lightgrey hover:text-white font-heading font-bold text-center text-xs tracking-wider uppercase transition-colors"
+                                >
+                                    {shareModalData.platformName} &rarr;
+                                </a>
+                                <a
+                                    href="https://discord.gg/BxkRwU6X5"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="py-2.5 px-3 border border-gold/50 bg-gold/10 hover:bg-gold hover:text-pitchblack text-gold font-heading font-bold text-center text-xs tracking-wider uppercase transition-colors"
+                                >
+                                    DISCORD &rarr;
+                                </a>
+                            </div>
                         </motion.div>
                     </div>
                 )}
