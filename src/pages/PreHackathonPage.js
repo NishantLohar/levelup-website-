@@ -529,13 +529,27 @@ const PreHackathonPage = () => {
                                 </p>
                             </div>
                             
-                            <button 
-                                type="button"
-                                onClick={() => setIsRevealingSoonOpen(true)}
-                                className="magnetic-btn sharp bg-gold bright hover:bg-white text-pitchblack font-heading font-bold py-5 px-12 transition-all duration-300 text-center tracking-widest text-sm hover:shadow-[0_0_20px_#FFFFFF] shimmer-btn animate-pulse-gold inline-block cursor-pointer"
-                            >
-                                REGISTER TO RECEIVE THE PROBLEM
-                            </button>
+                            {/* Action Buttons: Register & More About Pre Hackathon */}
+                            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 flex-wrap">
+                                <button 
+                                    type="button"
+                                    onClick={() => setIsRevealingSoonOpen(true)}
+                                    className="magnetic-btn sharp bg-gold bright hover:bg-white text-pitchblack font-heading font-bold py-5 px-10 transition-all duration-300 text-center tracking-widest text-sm hover:shadow-[0_0_20px_#FFFFFF] shimmer-btn animate-pulse-gold cursor-pointer inline-flex items-center justify-center"
+                                >
+                                    REGISTER TO RECEIVE THE PROBLEM
+                                </button>
+                                
+                                <a 
+                                    href={`${process.env.PUBLIC_URL || ''}/Pre Hackathon detail.pdf`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="sharp bg-pitchblack hover:bg-gold/15 text-gold hover:text-white border border-gold/60 hover:border-gold font-heading font-bold py-5 px-10 transition-all duration-300 text-center tracking-widest text-sm shadow-[0_0_15px_rgba(212,175,55,0.2)] hover:shadow-[0_0_25px_rgba(212,175,55,0.5)] cursor-pointer inline-flex items-center justify-center gap-2 no-underline"
+                                    title="View Pre-Hackathon Details PDF"
+                                >
+                                    <span>MORE ABOUT PRE HACKATHON</span>
+                                    <span className="text-base leading-none">↗</span>
+                                </a>
+                            </div>
                         </motion.div>
                     </div>
 
