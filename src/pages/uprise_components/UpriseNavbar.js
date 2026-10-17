@@ -61,6 +61,45 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                         <span style={{ fontSize: '14px', lineHeight: 1 }}>←</span>
                         <span className="hidden sm:inline">Back</span>
                     </Link>
+                
+                    {/* About Button - Opens UPRISE Master Deck */}
+                    <a
+                        href={`${process.env.PUBLIC_URL || ''}/UPRISE Master deck.pdf`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="uprise-about-button"
+                        style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '8px 16px',
+                            backgroundColor: '#000000',
+                            border: '1px solid #D4AF37',
+                            color: '#D4AF37',
+                            fontFamily: "'Space Grotesk', 'Montserrat', sans-serif",
+                            fontWeight: '700',
+                            fontSize: '11px',
+                            letterSpacing: '1.5px',
+                            textTransform: 'uppercase',
+                            textDecoration: 'none',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s ease',
+                            boxShadow: '0 0 12px rgba(212, 175, 55, 0.2)',
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = '#D4AF37';
+                            e.currentTarget.style.color = '#000000';
+                            e.currentTarget.style.boxShadow = '0 0 20px rgba(212, 175, 55, 0.5)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = '#000000';
+                            e.currentTarget.style.color = '#D4AF37';
+                            e.currentTarget.style.boxShadow = '0 0 12px rgba(212, 175, 55, 0.2)';
+                        }}
+                        title="Open Uprise Master Deck PDF"
+                    >
+                        <span>About</span>
+                    </a>
                 </div>
 
                 {/* Right: Club Action Buttons & Authentication / User State */}

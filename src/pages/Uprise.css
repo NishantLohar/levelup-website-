@@ -1,14 +1,16 @@
 .uprise-header-bar button,
 .uprise-header-bar a,
 button.uprise-signin-button,
-a.uprise-back-button {
+a.uprise-back-button,
+a.uprise-about-button {
   background: transparent;
   outline: none;
   font-family: inherit;
   box-sizing: border-box;
 }
 
-.uprise-back-button:hover {
+.uprise-back-button:hover,
+.uprise-about-button:hover {
   background-color: #D4AF37 !important;
   color: #000000 !important;
   box-shadow: 0 0 20px rgba(212, 175, 55, 0.5) !important;
