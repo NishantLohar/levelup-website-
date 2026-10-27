@@ -115,6 +115,13 @@ const PreHackathonPage = () => {
     const [claimingKey, setClaimingKey] = useState(null);
     const [toastMsg, setToastMsg] = useState(null);
 
+    // Carousel and Quiz Modal State
+    const [currentPage, setCurrentPage] = useState(0);
+    const [quizModalData, setQuizModalData] = useState(null);
+    const [quizAnswer, setQuizAnswer] = useState('');
+    const [quizResult, setQuizResult] = useState(null);
+    const [touchStartX, setTouchStartX] = useState(null);
+
     // Sync status from SaaS API on mount if user is logged in
     useEffect(() => {
         if (currentUser?.email) {
@@ -173,14 +180,50 @@ const PreHackathonPage = () => {
         }
     };
 
+    const handleQuizSubmit = (e) => {
+        e.preventDefault();
+        if (!quizModalData) return;
+        const cleanInput = quizAnswer.trim().toLowerCase();
+        
+        let isCorrect = false;
+        if (quizModalData.quizAccepted) {
+            if (quizModalData.key === 'the_css_center') {
+                isCorrect = cleanInput.includes('justify-content') && cleanInput.includes('align-items');
+            } else {
+                isCorrect = quizModalData.quizAccepted.some(ans => cleanInput.includes(ans.toLowerCase()));
+            }
+        }
+        
+        if (isCorrect) {
+            setQuizResult({
+                success: true,
+                msg: `🎉 Correct answer! Share your screenshot or answer on the Discord #showcase channel to claim +${quizModalData.xp}!`
+            });
+            if (!manualClickedTasks.includes(quizModalData.key)) {
+                const updated = [...manualClickedTasks, quizModalData.key];
+                setManualClickedTasks(updated);
+                try {
+                    localStorage.setItem('manual_tasks_clicked', JSON.stringify(updated));
+                } catch (err) {}
+            }
+        } else {
+            setQuizResult({
+                success: false,
+                msg: `❌ Not quite! ${quizModalData.quizHint || 'Try again or ask for clues in the Discord community.'}`
+            });
+        }
+    };
+
     const handleTaskClick = async (e, task) => {
-        if (task.key === 'hirestop') {
+        // External links (Hirestop, Skill Test, AI Interview)
+        if (task.key === 'hirestop' || task.key === 'skill_test_mission' || task.key === 'ai_interview_mission') {
             e.preventDefault();
             window.open(task.link, '_blank');
             return;
         }
 
-        if (task.key === 'squad_assembly') {
+        // Referral tasks (Squad Assembly & The Bounty Hunter)
+        if (task.key === 'squad_assembly' || task.key === 'bounty_hunter') {
             e.preventDefault();
             if (!currentUser) {
                 setIsLoginModalOpen(true);
@@ -193,7 +236,11 @@ const PreHackathonPage = () => {
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(`Join Uprise 2027 with my invite code: ${code}\nRegister here: ${inviteUrl}`);
             }
-            setToastMsg(`Invite code copied: ${code}! Share with developers to earn 50 XP (70 XP for Builders).`);
+            if (task.key === 'bounty_hunter') {
+                setToastMsg(`Invite code copied: ${code}! Complete 50 successful referrals to unlock +500 XP Bounty Hunter reward!`);
+            } else {
+                setToastMsg(`Invite code copied: ${code}! Share with developers to earn 50 XP (70 XP for Builders).`);
+            }
             setTimeout(() => setToastMsg(null), 5000);
             return;
         }
@@ -201,6 +248,47 @@ const PreHackathonPage = () => {
         if (task.key === 'club_referral') {
             e.preventDefault();
             navigate('/club-activities');
+            return;
+        }
+
+        // 404 Hunt mission briefing
+        if (task.key === 'hunt_404') {
+            e.preventDefault();
+            setQuizModalData({
+                key: 'hunt_404',
+                title: '404 HUNT MISSION',
+                badge: '+70 XP MISSION',
+                question: '6 Digit code on a broken link.',
+                hint: 'Hunt down the hidden 6-digit key across LevelUp pages! Complete details and clues will be announced soon on Discord.',
+                isInfoOnly: true,
+                actionBtnText: 'JOIN DISCORD FOR ANNOUNCEMENTS',
+                actionLink: 'https://discord.gg/BxkRwU6X5'
+            });
+            return;
+        }
+
+        // Interactive Quiz Tasks
+        if (task.isQuiz) {
+            e.preventDefault();
+            setQuizAnswer('');
+            setQuizResult(null);
+            setQuizModalData(task);
+            return;
+        }
+
+        // DOM Manipulation briefing
+        if (task.key === 'dom_manipulation') {
+            e.preventDefault();
+            setQuizModalData({
+                key: 'dom_manipulation',
+                title: 'DOM MANIPULATION MISSION',
+                badge: '+35 XP MISSION',
+                question: "Open Uprise page and right click -> Inspect (DevTools), edit the DOM HTML to change the main header text to say '{Your name} owns this system', and upload screenshot on showcase channel.",
+                hint: "Take a clear screenshot of your modified DOM header showing your name, and upload it in the Discord #showcase channel to claim +35 XP!",
+                isInfoOnly: true,
+                actionBtnText: 'GO TO DISCORD SHOWCASE',
+                actionLink: 'https://discord.gg/BxkRwU6X5'
+            });
             return;
         }
 
@@ -245,6 +333,21 @@ const PreHackathonPage = () => {
             return;
         }
 
+        // Showcase & Discord proof tasks (The Veteran, Architect's Review, GitHub Audit, Post Meme, Discord Roll-call)
+        const proofTasks = ['the_veteran', 'architects_review', 'github_audit', 'post_meme_mission', 'discord_rollcall'];
+        if (proofTasks.includes(task.key)) {
+            if (!manualClickedTasks.includes(task.key)) {
+                const updated = [...manualClickedTasks, task.key];
+                setManualClickedTasks(updated);
+                try {
+                    localStorage.setItem('manual_tasks_clicked', JSON.stringify(updated));
+                } catch (err) {}
+            }
+            setToastMsg(`Mission opened! Complete it and share proof on Discord #showcase to claim +${task.xp}!`);
+            setTimeout(() => setToastMsg(null), 4500);
+            return;
+        }
+
         // Automated tasks (Instagram follow, YouTube, LinkedIn follow, WhatsApp, Discord)
         const isAlreadyClaimed = currentUser.claimed_tasks?.includes(task.key);
         if (!isAlreadyClaimed) {
@@ -282,6 +385,7 @@ const PreHackathonPage = () => {
     };
 
     const socialTasks = [
+        // --- PAGE 1 MISSIONS (1 to 12) ---
         {
             key: "instagram",
             title: "Instagram",
@@ -441,8 +545,309 @@ const PreHackathonPage = () => {
                     <path d="M9 18v.01"></path>
                 </svg>
             )
+        },
+        {
+            key: "hunt_404",
+            title: "404 Hunt",
+            action: "6 Digit code on a broken link. Find the hidden key across LevelUp pages.",
+            xp: "70 XP",
+            link: "#",
+            btnText: "Start 404 Hunt",
+            isAction: true,
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    <path d="M9 9l4 4m0-4l-4 4"></path>
+                </svg>
+            )
+        },
+
+        // --- PAGE 2 MISSIONS (13 to 24) ---
+        {
+            key: "discord_rollcall",
+            title: "Discord Roll-Call",
+            action: "Introduce yourself on the #introduction channel in the LevelUp Discord server.",
+            xp: "100 XP",
+            link: "https://discord.gg/BxkRwU6X5",
+            btnText: "Introduce Yourself",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                </svg>
+            )
+        },
+        {
+            key: "bounty_hunter",
+            title: "The Bounty Hunter",
+            action: "Complete 50 referrals successfully to unlock this legendary badge.",
+            xp: "500 XP",
+            link: "#",
+            btnText: "Copy Referral Link",
+            isAction: true,
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <circle cx="12" cy="12" r="6"></circle>
+                    <circle cx="12" cy="12" r="2"></circle>
+                </svg>
+            )
+        },
+        {
+            key: "the_veteran",
+            title: "The Veteran",
+            action: "Post a valid certificate from a recognized national level Hackathon on Showcase channel.",
+            xp: "50 XP",
+            link: "https://discord.gg/BxkRwU6X5",
+            btnText: "Post Certificate",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <circle cx="12" cy="8" r="7"></circle>
+                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                </svg>
+            )
+        },
+        {
+            key: "architects_review",
+            title: "The Architect's Review",
+            action: "Post 1 page technical architecture proposal on the project you want to build in Uprise Hackathon on LinkedIn.",
+            xp: "50 XP",
+            link: "https://linkedin.com/company/levelupevents",
+            btnText: "Post Proposal",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    <polyline points="2 17 12 22 22 17"></polyline>
+                    <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+            )
+        },
+        {
+            key: "github_audit",
+            title: "GitHub Audit",
+            action: "Submit Profile URL and ensure you have a profile picture and a bio.",
+            xp: "30 XP",
+            link: "https://discord.gg/BxkRwU6X5",
+            btnText: "Submit Profile",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+            )
+        },
+        {
+            key: "package_manager_quiz",
+            title: "Package Manager Quiz",
+            action: "What is the exact terminal command to initialize a new node js project?",
+            xp: "25 XP",
+            link: "#",
+            btnText: "Take Quiz",
+            isQuiz: true,
+            quizQuestion: "What is the exact terminal command to initialize a new node js project?",
+            quizAccepted: ["npm init", "npm init -y", "npm init --yes", "yarn init", "pnpm init"],
+            quizHint: "Think of the standard Node Package Manager initialization command.",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+            )
+        },
+        {
+            key: "terminal_navigator_quiz",
+            title: "Terminal Navigator Quiz",
+            action: "What is the exact Linux terminal command used to list all files in a directory, including the new ones?",
+            xp: "25 XP",
+            link: "#",
+            btnText: "Take Quiz",
+            isQuiz: true,
+            quizQuestion: "What is the exact Linux terminal command used to list all files in a directory, including hidden & new ones?",
+            quizAccepted: ["ls -la", "ls -a", "ls -al", "ls -lart", "ls -lat", "ls -ltr", "ls -lt"],
+            quizHint: "Starts with 'ls' combined with flags for all files and detailed listing.",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                    <path d="M6 8l4 4-4 4"></path>
+                    <line x1="12" y1="16" x2="18" y2="16"></line>
+                </svg>
+            )
+        },
+        {
+            key: "the_css_center",
+            title: "The CSS Center",
+            action: "Using CSS flexbox, what are the two exact properties and values required on a parent container to perfectly center a child DIV both vertically and horizontally?",
+            xp: "25 XP",
+            link: "#",
+            btnText: "Take Quiz",
+            isQuiz: true,
+            quizQuestion: "Using CSS flexbox, what are the two exact properties and values required on a parent container to perfectly center a child DIV both vertically and horizontally?",
+            quizAccepted: ["justify-content: center; align-items: center;", "align-items: center; justify-content: center;", "justify-content: center", "align-items: center"],
+            quizHint: "One property centers along the main axis, and the other along the cross axis.",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <line x1="12" y1="3" x2="12" y2="9"></line>
+                    <line x1="12" y1="15" x2="12" y2="21"></line>
+                    <line x1="3" y1="12" x2="9" y2="12"></line>
+                    <line x1="15" y1="12" x2="21" y2="12"></line>
+                </svg>
+            )
+        },
+        {
+            key: "dom_manipulation",
+            title: "DOM Manipulation",
+            action: "Open Uprise page and right click and select inspect to open DevTools, edit the DOM HTML to change the main header text to say '{Your name} owns this system', upload the screenshot on showcase channel",
+            xp: "35 XP",
+            link: "https://discord.gg/BxkRwU6X5",
+            btnText: "Upload Screenshot",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+            )
+        },
+        {
+            key: "skill_test_mission",
+            title: "Skill Test",
+            action: "Complete a skill test with 70+ score and upload on showcase channel",
+            xp: "40 XP",
+            link: "https://account.levelupevents.in/skill-test/",
+            btnText: "Take Skill Test",
+            isExternal: true,
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            )
+        },
+        {
+            key: "ai_interview_mission",
+            title: "AI Job Interview",
+            action: "Take an interview and upload the report's screenshot on showcase channel",
+            xp: "50 XP",
+            link: "https://account.levelupevents.in/ai-interview/",
+            btnText: "Take Interview",
+            isExternal: true,
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    <circle cx="12" cy="16" r="1"></circle>
+                </svg>
+            )
+        },
+        {
+            key: "post_meme_mission",
+            title: "Post A Meme",
+            action: "Create a meme yourself and post on Uprise Discord server",
+            xp: "20 XP",
+            link: "https://discord.gg/BxkRwU6X5",
+            btnText: "Post On Discord",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                </svg>
+            )
         }
     ];
+
+    const renderTaskCard = (task, index) => {
+        const isManualTask = task.key === 'instagram_story' || task.key === 'linkedin_post' || task.key === 'the_veteran' || task.key === 'architects_review' || task.key === 'github_audit' || task.key === 'dom_manipulation' || task.key === 'post_meme_mission' || task.key === 'discord_rollcall';
+        const isManualClicked = isManualTask && manualClickedTasks.includes(task.key);
+        const isClaimed = !isManualTask && currentUser?.claimed_tasks?.includes(task.key);
+        const isClaiming = claimingKey === task.key;
+
+        return (
+            <motion.div
+                key={task.key || index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.35, delay: (index % 12) * 0.03 }}
+                className={`glass-card border ${
+                    isClaimed 
+                        ? 'border-green-500/50 bg-green-500/5' 
+                        : isManualClicked
+                        ? 'border-gold/60 bg-gold/10 shadow-[0_0_20px_rgba(212,175,55,0.15)]'
+                        : 'border-gold/25 hover:border-gold bg-obsidian/90 hover:bg-gold/10'
+                } p-5 sm:p-6 sharp transition-all duration-300 flex flex-col justify-between group relative overflow-hidden min-h-[225px]`}
+            >
+                <div className="flex items-start justify-between mb-3">
+                    <div className={`w-10 h-10 border ${
+                        isClaimed 
+                            ? 'border-green-400 text-green-400' 
+                            : isManualClicked
+                            ? 'border-gold text-gold'
+                            : 'border-gold/30 text-gold group-hover:text-white group-hover:border-gold'
+                    } bg-pitchblack flex items-center justify-center transition-colors flex-shrink-0`}>
+                        {task.icon}
+                    </div>
+                    <div className="flex items-center gap-1.5 flex-wrap justify-end">
+                        {isClaimed && (
+                            <span className="font-heading font-bold text-[10px] px-2 py-0.5 border border-green-500 bg-green-500/20 text-green-400 tracking-wider">
+                                CLAIMED ✓
+                            </span>
+                        )}
+                        {isManualClicked && (
+                            <span className="font-heading font-bold text-[9px] px-2 py-0.5 border border-gold/60 bg-gold/20 text-gold tracking-wider">
+                                DISCORD PROOF
+                            </span>
+                        )}
+                        <span className={`font-heading font-black text-xs px-2.5 py-1 ${
+                            isClaimed 
+                                ? 'bg-green-500/10 border border-green-500 text-green-400' 
+                                : 'bg-gold/15 border border-gold text-gold gold-glow'
+                        } tracking-wider uppercase`}>
+                            {task.xp.includes('XP') ? `+${task.xp}` : task.xp}
+                        </span>
+                    </div>
+                </div>
+                <div className="mb-3">
+                    <h4 className={`text-base font-bold uppercase tracking-tight mb-1.5 line-clamp-1 ${
+                        isClaimed ? 'text-green-300' : isManualClicked ? 'text-gold' : 'text-white group-hover:text-gold'
+                    } transition-colors`} title={task.title}>
+                        {task.title}
+                    </h4>
+                    <p className="text-xs text-lightgrey font-grotesk leading-relaxed line-clamp-2" title={task.action}>
+                        {task.action}
+                    </p>
+                </div>
+                <a
+                    href={isManualClicked ? 'https://discord.gg/BxkRwU6X5' : task.link}
+                    target={task.link?.startsWith('http') ? '_blank' : '_self'}
+                    rel="noopener noreferrer"
+                    onClick={(e) => handleTaskClick(e, task)}
+                    className={`text-xs uppercase font-heading font-bold py-2.5 px-3 border ${
+                        isClaimed 
+                            ? 'border-green-500/40 text-green-300 hover:bg-green-500/20' 
+                            : isManualClicked
+                            ? 'border-gold bg-gold/15 text-gold hover:bg-gold hover:text-pitchblack'
+                            : 'border-gold/40 hover:border-gold bg-gold/5 hover:bg-gold hover:text-pitchblack text-white'
+                    } text-center tracking-wider transition-all duration-200 mt-auto flex items-center justify-center gap-1.5 cursor-pointer leading-tight`}
+                >
+                    <span className="truncate">
+                        {isClaiming 
+                            ? 'CREDITING...' 
+                            : isClaimed 
+                            ? 'VISITED ✓' 
+                            : isManualClicked 
+                            ? 'DISCORD PROOF' 
+                            : task.btnText}
+                    </span>
+                    <span className="flex-shrink-0">&rarr;</span>
+                </a>
+            </motion.div>
+        );
+    };
 
     return (
         <div className="bg-obsidian min-h-screen text-white font-grotesk overflow-x-hidden relative selection:bg-gold/30 selection:text-gold">
@@ -576,95 +981,123 @@ const PreHackathonPage = () => {
                                 </motion.div>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                                {socialTasks.map((task, index) => {
-                                    const isManualTask = task.key === 'instagram_story' || task.key === 'linkedin_post';
-                                    const isManualClicked = isManualTask && manualClickedTasks.includes(task.key);
-                                    const isClaimed = !isManualTask && currentUser?.claimed_tasks?.includes(task.key);
-                                    const isClaiming = claimingKey === task.key;
-
-                                    return (
-                                        <motion.div
-                                            key={task.key || index}
-                                            initial={{ opacity: 0, y: 20 }}
-                                            whileInView={{ opacity: 1, y: 0 }}
-                                            viewport={{ once: true }}
-                                            transition={{ duration: 0.4, delay: index * 0.05 }}
-                                            className={`glass-card border ${
-                                                isClaimed 
-                                                    ? 'border-green-500/50 bg-green-500/5' 
-                                                    : isManualClicked
-                                                    ? 'border-gold/60 bg-gold/10 shadow-[0_0_20px_rgba(212,175,55,0.15)]'
-                                                    : 'border-gold/25 hover:border-gold bg-obsidian/90 hover:bg-gold/10'
-                                            } p-6 sharp transition-all duration-300 flex flex-col justify-between group relative overflow-hidden`}
+                            {/* Carousel Top Navigation Bar */}
+                            <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-xs font-mono uppercase tracking-[0.2em] text-lightgrey">
+                                        MISSIONS: <strong className="text-white">{currentPage === 0 ? '1 – 12' : '13 – 24'}</strong> OF <strong className="text-gold">24</strong>
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                                    <button
+                                        type="button"
+                                        onClick={() => setCurrentPage(0)}
+                                        className={`px-3 sm:px-4 py-1.5 text-xs font-heading font-bold uppercase tracking-wider border transition-all cursor-pointer sharp ${
+                                            currentPage === 0
+                                                ? 'bg-gold text-pitchblack border-gold shadow-[0_0_15px_rgba(212,175,55,0.4)]'
+                                                : 'bg-pitchblack/60 text-lightgrey border-gold/30 hover:border-gold hover:text-white'
+                                        }`}
+                                    >
+                                        PAGE 1 (MISSIONS 1–12)
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setCurrentPage(1)}
+                                        className={`px-3 sm:px-4 py-1.5 text-xs font-heading font-bold uppercase tracking-wider border transition-all cursor-pointer sharp flex items-center gap-1.5 ${
+                                            currentPage === 1
+                                                ? 'bg-gold text-pitchblack border-gold shadow-[0_0_15px_rgba(212,175,55,0.4)]'
+                                                : 'bg-pitchblack/60 text-lightgrey border-gold/30 hover:border-gold hover:text-white'
+                                        }`}
+                                    >
+                                        <span>PAGE 2 (MISSIONS 13–24)</span>
+                                        <span className="text-gold font-bold">&gt;</span>
+                                    </button>
+                                    <div className="flex items-center gap-1.5 ml-1">
+                                        <button
+                                            type="button"
+                                            onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
+                                            disabled={currentPage === 0}
+                                            className="w-8 h-8 border border-gold/40 bg-pitchblack text-gold hover:bg-gold hover:text-pitchblack disabled:opacity-25 disabled:pointer-events-none flex items-center justify-center font-black transition-all cursor-pointer sharp"
+                                            title="Previous Missions"
                                         >
-                                            <div className="flex items-start justify-between mb-4">
-                                                <div className={`w-10 h-10 border ${
-                                                    isClaimed 
-                                                        ? 'border-green-400 text-green-400' 
-                                                        : isManualClicked
-                                                        ? 'border-gold text-gold'
-                                                        : 'border-gold/30 text-gold group-hover:text-white group-hover:border-gold'
-                                                } bg-pitchblack flex items-center justify-center transition-colors`}>
-                                                    {task.icon}
-                                                </div>
-                                                <div className="flex items-center gap-1.5">
-                                                    {isClaimed && (
-                                                        <span className="font-heading font-bold text-[10px] px-2 py-0.5 border border-green-500 bg-green-500/20 text-green-400 tracking-wider">
-                                                            CLAIMED ✓
-                                                        </span>
-                                                    )}
-                                                    {isManualClicked && (
-                                                        <span className="font-heading font-bold text-[9px] px-2 py-0.5 border border-gold/60 bg-gold/20 text-gold tracking-wider">
-                                                            DISCORD PROOF
-                                                        </span>
-                                                    )}
-                                                    <span className={`font-heading font-black text-xs px-2.5 py-1 ${
-                                                        isClaimed 
-                                                            ? 'bg-green-500/10 border border-green-500 text-green-400' 
-                                                            : 'bg-gold/15 border border-gold text-gold gold-glow'
-                                                    } tracking-wider uppercase`}>
-                                                        {task.xp.includes('XP') ? `+${task.xp}` : task.xp}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div className="mb-4">
-                                                <h4 className={`text-base lg:text-lg font-bold uppercase tracking-tight mb-1 ${
-                                                    isClaimed ? 'text-green-300' : isManualClicked ? 'text-gold' : 'text-white group-hover:text-gold'
-                                                } transition-colors`}>
-                                                    {task.title}
-                                                </h4>
-                                                <p className="text-xs text-lightgrey font-grotesk leading-relaxed">
-                                                    {task.action}
-                                                </p>
-                                            </div>
-                                            <a
-                                                href={isManualClicked ? 'https://discord.gg/BxkRwU6X5' : task.link}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                onClick={(e) => handleTaskClick(e, task)}
-                                                className={`text-xs uppercase font-heading font-bold py-2.5 px-3 border ${
-                                                    isClaimed 
-                                                        ? 'border-green-500/40 text-green-300 hover:bg-green-500/20' 
-                                                        : isManualClicked
-                                                        ? 'border-gold bg-gold/15 text-gold hover:bg-gold hover:text-pitchblack'
-                                                        : 'border-gold/40 hover:border-gold bg-gold/5 hover:bg-gold hover:text-pitchblack text-white'
-                                                } text-center tracking-wider transition-all duration-200 mt-auto flex items-center justify-center gap-2 cursor-pointer leading-tight`}
-                                            >
-                                                <span>
-                                                    {isClaiming 
-                                                        ? 'CREDITING...' 
-                                                        : isClaimed 
-                                                        ? 'VISITED ✓' 
-                                                        : isManualClicked 
-                                                        ? 'SHARE YOUR POST ON DISCORD TO GAIN XP' 
-                                                        : task.btnText}
-                                                </span>
-                                                <span>&rarr;</span>
-                                            </a>
-                                        </motion.div>
-                                    );
-                                })}
+                                            &lt;
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setCurrentPage(p => Math.min(1, p + 1))}
+                                            disabled={currentPage === 1}
+                                            className="w-8 h-8 border border-gold/40 bg-pitchblack text-gold hover:bg-gold hover:text-pitchblack disabled:opacity-25 disabled:pointer-events-none flex items-center justify-center font-black transition-all cursor-pointer sharp"
+                                            title="More Missions"
+                                        >
+                                            &gt;
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Carousel Body with Floating Arrows */}
+                            <div 
+                                className="relative w-full"
+                                onTouchStart={(e) => setTouchStartX(e.touches[0].clientX)}
+                                onTouchEnd={(e) => {
+                                    if (touchStartX === null) return;
+                                    const diff = touchStartX - e.changedTouches[0].clientX;
+                                    if (diff > 50 && currentPage < 1) setCurrentPage(1);
+                                    else if (diff < -50 && currentPage > 0) setCurrentPage(0);
+                                    setTouchStartX(null);
+                                }}
+                            >
+                                {/* Floating Right Arrow (points to Page 2 where more tasks are) */}
+                                {currentPage < 1 && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setCurrentPage(1)}
+                                        className="absolute -right-3 sm:-right-5 lg:-right-7 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-14 sm:h-14 bg-pitchblack/95 border-2 border-gold text-gold hover:bg-gold hover:text-pitchblack rounded-full flex items-center justify-center shadow-[0_0_25px_rgba(212,175,55,0.7)] hover:shadow-[0_0_40px_rgba(212,175,55,1)] transition-all duration-300 group cursor-pointer animate-pulse-gold"
+                                        aria-label="View More Tasks"
+                                        title="View More Tasks (Page 2)"
+                                    >
+                                        <span className="text-xl sm:text-2xl font-black font-heading group-hover:translate-x-0.5 transition-transform">&gt;</span>
+                                        <div className="hidden lg:flex items-center gap-1 absolute -bottom-7 right-0 text-[10px] font-mono uppercase tracking-widest text-gold whitespace-nowrap bg-pitchblack/95 px-2 py-0.5 border border-gold/40 pointer-events-none shadow-md">
+                                            <span>MORE MISSIONS</span>
+                                            <span>&gt;</span>
+                                        </div>
+                                    </button>
+                                )}
+
+                                {/* Floating Left Arrow (points back to Page 1) */}
+                                {currentPage > 0 && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setCurrentPage(0)}
+                                        className="absolute -left-3 sm:-left-5 lg:-left-7 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-14 sm:h-14 bg-pitchblack/95 border-2 border-gold text-gold hover:bg-gold hover:text-pitchblack rounded-full flex items-center justify-center shadow-[0_0_25px_rgba(212,175,55,0.7)] hover:shadow-[0_0_40px_rgba(212,175,55,1)] transition-all duration-300 group cursor-pointer"
+                                        aria-label="View Previous Tasks"
+                                        title="View Previous Tasks (Page 1)"
+                                    >
+                                        <span className="text-xl sm:text-2xl font-black font-heading group-hover:-translate-x-0.5 transition-transform">&lt;</span>
+                                        <div className="hidden lg:flex items-center gap-1 absolute -bottom-7 left-0 text-[10px] font-mono uppercase tracking-widest text-gold whitespace-nowrap bg-pitchblack/95 px-2 py-0.5 border border-gold/40 pointer-events-none shadow-md">
+                                            <span>&lt;</span>
+                                            <span>PREV MISSIONS</span>
+                                        </div>
+                                    </button>
+                                )}
+
+                                {/* Sliding Viewport */}
+                                <div className="overflow-hidden w-full pb-2">
+                                    <div 
+                                        className="flex transition-transform duration-500 ease-out w-full"
+                                        style={{ transform: `translateX(-${currentPage * 100}%)` }}
+                                    >
+                                        {/* Page 1 (Tasks 1 to 12 in 4 columns x 3 rows) */}
+                                        <div className="w-full flex-shrink-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                            {socialTasks.slice(0, 12).map((task, index) => renderTaskCard(task, index))}
+                                        </div>
+
+                                        {/* Page 2 (Tasks 13 to 24 in 4 columns x 3 rows) */}
+                                        <div className="w-full flex-shrink-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                            {socialTasks.slice(12, 24).map((task, index) => renderTaskCard(task, index + 12))}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -845,6 +1278,111 @@ const PreHackathonPage = () => {
                                     DISCORD &rarr;
                                 </a>
                             </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+
+            {/* Interactive Quiz / Mission Briefing Modal */}
+            <AnimatePresence>
+                {quizModalData && (
+                    <div className="fixed inset-0 z-[999999] bg-pitchblack/85 backdrop-blur-md flex items-center justify-center p-4 font-grotesk">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="glass-card border border-gold/40 p-6 sm:p-8 w-full max-w-md sm:max-w-lg relative sharp gold-glow bg-obsidian text-white"
+                        >
+                            <button
+                                type="button"
+                                className="absolute top-4 right-4 text-lightgrey hover:text-white text-xl cursor-pointer"
+                                onClick={() => {
+                                    setQuizModalData(null);
+                                    setQuizAnswer('');
+                                    setQuizResult(null);
+                                }}
+                            >
+                                ✕
+                            </button>
+
+                            <div className="text-center mb-5">
+                                <span className="font-heading font-black text-xs px-3 py-1 bg-gold/15 border border-gold text-gold gold-glow tracking-widest uppercase inline-block mb-2">
+                                    {quizModalData.badge || `+${quizModalData.xp} MISSION`}
+                                </span>
+                                <h3 className="text-xl sm:text-2xl font-black font-heading tracking-wide uppercase text-white">
+                                    {quizModalData.title}
+                                </h3>
+                            </div>
+
+                            <div className="p-4 bg-pitchblack/90 border border-gold/30 mb-5 text-sm text-lightgrey leading-relaxed">
+                                <p className="text-white font-medium mb-1">
+                                    {quizModalData.question || quizModalData.quizQuestion || quizModalData.action}
+                                </p>
+                                {quizModalData.hint && (
+                                    <p className="text-xs text-gold/80 mt-2 font-mono">
+                                        ⚡ Hint: {quizModalData.hint}
+                                    </p>
+                                )}
+                            </div>
+
+                            {quizModalData.isQuiz ? (
+                                <form onSubmit={handleQuizSubmit} className="space-y-4">
+                                    <div>
+                                        <label className="block text-xs uppercase font-heading tracking-wider text-lightgrey mb-2">
+                                            Your Command / Code Answer:
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={quizAnswer}
+                                            onChange={(e) => setQuizAnswer(e.target.value)}
+                                            placeholder="Type exact command or code here..."
+                                            className="w-full bg-pitchblack border border-gold/40 focus:border-gold text-white p-3 font-mono text-sm outline-none transition-colors sharp"
+                                            required
+                                            autoFocus
+                                        />
+                                    </div>
+
+                                    {quizResult && (
+                                        <div className={`p-3 border text-xs leading-relaxed font-mono ${
+                                            quizResult.success 
+                                                ? 'bg-green-500/10 border-green-500 text-green-400' 
+                                                : 'bg-red-500/10 border-red-500 text-red-400'
+                                        }`}>
+                                            {quizResult.msg}
+                                        </div>
+                                    )}
+
+                                    <div className="flex gap-3 pt-2">
+                                        <button
+                                            type="submit"
+                                            className="flex-1 py-3 px-4 bg-gold text-pitchblack hover:bg-white font-heading font-bold text-xs uppercase tracking-widest transition-all cursor-pointer sharp"
+                                        >
+                                            SUBMIT ANSWER
+                                        </button>
+                                        <a
+                                            href="https://discord.gg/BxkRwU6X5"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="py-3 px-4 border border-gold/40 hover:border-gold text-gold hover:text-white font-heading font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center sharp"
+                                        >
+                                            DISCORD →
+                                        </a>
+                                    </div>
+                                </form>
+                            ) : (
+                                <div className="space-y-4">
+                                    <a
+                                        href={quizModalData.actionLink || "https://discord.gg/BxkRwU6X5"}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-full py-3.5 px-6 bg-gold text-pitchblack hover:bg-white font-heading font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 cursor-pointer sharp text-center"
+                                    >
+                                        <span>{quizModalData.actionBtnText || "GO TO DISCORD SHOWCASE"}</span>
+                                        <span>→</span>
+                                    </a>
+                                </div>
+                            )}
                         </motion.div>
                     </div>
                 )}
