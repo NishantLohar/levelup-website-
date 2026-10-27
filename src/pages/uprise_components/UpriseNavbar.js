@@ -343,7 +343,7 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                                     e.currentTarget.style.boxShadow = '0 0 12px rgba(212, 175, 55, 0.2)';
                                 }}
                             >
-                                SIGN IN TO REDEEM YOUR COUPON CODE
+                                SIGN IN TO REDEEM YOUR REFERRAL CODE
                             </button>
                         )}
                     </div>
@@ -508,7 +508,7 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                                         <div className="flex items-center justify-between p-2.5 bg-[#050505] border border-[#D4AF37]/40">
                                             <div className="flex flex-col">
                                                 <span className="text-[9px] uppercase font-mono tracking-wider text-gray-400">
-                                                    Referral Coupon
+                                                    Referral Code
                                                 </span>
                                                 <strong className="text-[#D4AF37] font-mono text-xs tracking-wider">
                                                     {user.coupon_code}
@@ -549,7 +549,7 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                                     }}
                                     className="w-full py-3.5 px-4 bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#D4AF37] text-black font-heading font-black text-xs uppercase tracking-widest shadow-[0_0_20px_rgba(212,175,55,0.4)] text-center transition-all cursor-pointer"
                                 >
-                                    SIGN IN TO REDEEM YOUR COUPON CODE →
+                                    SIGN IN TO REDEEM YOUR REFERRAL CODE →
                                 </button>
                             )}
 

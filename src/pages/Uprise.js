@@ -445,7 +445,7 @@ const Uprise = () => {
                     
                     <input className="bg-transparent border border-lightgrey/30 text-white p-3 font-grotesk focus:border-gold outline-none" type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleInputChange} required />
                     <input className="bg-transparent border border-lightgrey/30 text-white p-3 font-grotesk focus:border-gold outline-none" type="tel" name="contact" placeholder="Contact Number" value={formData.contact} onChange={handleInputChange} required />
-                    <input className="bg-transparent border border-lightgrey/30 text-white p-3 font-grotesk focus:border-gold outline-none" type="text" name="coupon" placeholder="Referral Coupon Code (Optional)" value={formData.coupon} onChange={handleInputChange} />
+                    <input className="bg-transparent border border-lightgrey/30 text-white p-3 font-grotesk focus:border-gold outline-none" type="text" name="coupon" placeholder="Referral Code (Optional)" value={formData.coupon} onChange={handleInputChange} />
                     
                     <button type="submit" className="bg-gold text-pitchblack font-heading font-bold py-3 tracking-widest mt-4 hover:bg-white transition-colors">Register</button>
                   </form>
