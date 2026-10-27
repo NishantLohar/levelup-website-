@@ -122,6 +122,24 @@ const PreHackathonPage = () => {
     const [quizResult, setQuizResult] = useState(null);
     const [touchStartX, setTouchStartX] = useState(null);
 
+    // 404 Hunt State
+    const [hunt404ModalOpen, setHunt404ModalOpen] = useState(false);
+    const [hunt404Input, setHunt404Input] = useState('');
+    const [hunt404Result, setHunt404Result] = useState(null);
+    const [hunt404Submitting, setHunt404Submitting] = useState(false);
+
+    // Auto-open 404 hunt modal if ?code= is passed in URL
+    useEffect(() => {
+        try {
+            const params = new URLSearchParams(location.search);
+            const codeParam = params.get('code');
+            if (codeParam) {
+                setHunt404Input(codeParam.trim());
+                setHunt404ModalOpen(true);
+            }
+        } catch (e) {}
+    }, [location.search]);
+
     // Sync status from SaaS API on mount if user is logged in
     useEffect(() => {
         if (currentUser?.email) {
@@ -177,6 +195,85 @@ const PreHackathonPage = () => {
             document.body.removeChild(link);
             setToastMsg('Download started! Post it and share proof on Discord.');
             setTimeout(() => setToastMsg(null), 4000);
+        }
+    };
+
+    const handleHunt404Submit = async (e) => {
+        e.preventDefault();
+        const cleanCode = hunt404Input.trim();
+        if (!cleanCode) return;
+
+        const VALID_404_CODES = ['404826', '404917', '404538'];
+        if (!VALID_404_CODES.includes(cleanCode)) {
+            setHunt404Result({
+                success: false,
+                msg: '❌ Invalid 404 code! Look for the 6-digit code on the 404 page (check About team links or Footer).'
+            });
+            return;
+        }
+
+        if (!currentUser) {
+            setIsLoginModalOpen(true);
+            setToastMsg('Please sign in to claim your +70 XP!');
+            return;
+        }
+
+        const isAlreadyClaimed = currentUser.claimed_tasks?.includes('hunt_404');
+        if (isAlreadyClaimed) {
+            setHunt404Result({
+                success: true,
+                msg: '✓ You have already claimed the +70 XP for 404 Hunt!'
+            });
+            return;
+        }
+
+        setHunt404Submitting(true);
+        setHunt404Result(null);
+
+        const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/v1/uprise/claim-task-xp`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: currentUser.email,
+                    task_key: 'hunt_404',
+                }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                setCurrentUser(prev => {
+                    const updated = {
+                        ...prev,
+                        total_xp: data.total_xp,
+                        claimed_tasks: data.claimed_tasks || [...(prev?.claimed_tasks || []), 'hunt_404'],
+                    };
+                    localStorage.setItem('uprise_user', JSON.stringify(updated));
+                    return updated;
+                });
+                setHunt404Result({
+                    success: true,
+                    msg: '🎉 404 HUNT SOLVED! +70 XP HAS BEEN CREDITED TO YOUR ACCOUNT!'
+                });
+                setToastMsg('🎉 +70 XP CREDITED FOR 404 HUNT!');
+                setTimeout(() => {
+                    setHunt404ModalOpen(false);
+                    setToastMsg(null);
+                }, 3000);
+            } else {
+                setHunt404Result({
+                    success: false,
+                    msg: `❌ ${data.message || 'Failed to claim XP. Please try again.'}`
+                });
+            }
+        } catch (err) {
+            console.error('Claim 404 XP error:', err);
+            setHunt404Result({
+                success: false,
+                msg: '❌ Network or server error while claiming XP.'
+            });
+        } finally {
+            setHunt404Submitting(false);
         }
     };
 
@@ -251,19 +348,11 @@ const PreHackathonPage = () => {
             return;
         }
 
-        // 404 Hunt mission briefing
+        // 404 Hunt mission
         if (task.key === 'hunt_404') {
             e.preventDefault();
-            setQuizModalData({
-                key: 'hunt_404',
-                title: '404 HUNT MISSION',
-                badge: '+70 XP MISSION',
-                question: '6 Digit code on a broken link.',
-                hint: 'Hunt down the hidden 6-digit key across LevelUp pages! Complete details and clues will be announced soon on Discord.',
-                isInfoOnly: true,
-                actionBtnText: 'JOIN DISCORD FOR ANNOUNCEMENTS',
-                actionLink: 'https://discord.gg/BxkRwU6X5'
-            });
+            setHunt404Result(null);
+            setHunt404ModalOpen(true);
             return;
         }
 
@@ -761,6 +850,89 @@ const PreHackathonPage = () => {
     ];
 
     const renderTaskCard = (task, index) => {
+        // Custom 404 Hunt card with dual buttons (Start 404 Hunt & Write The Number)
+        if (task.key === 'hunt_404') {
+            const isClaimed404 = currentUser?.claimed_tasks?.includes('hunt_404');
+            return (
+                <motion.div
+                    key={task.key || index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.35, delay: (index % 12) * 0.03 }}
+                    className={`glass-card border ${
+                        isClaimed404 
+                            ? 'border-green-500/50 bg-green-500/5' 
+                            : 'border-gold/30 hover:border-gold bg-obsidian/90 hover:bg-gold/10'
+                    } p-5 sm:p-6 sharp transition-all duration-300 flex flex-col justify-between group relative overflow-hidden min-h-[225px]`}
+                >
+                    <div className="flex items-start justify-between mb-3">
+                        <div className={`w-10 h-10 border ${
+                            isClaimed404 
+                                ? 'border-green-400 text-green-400' 
+                                : 'border-gold/30 text-gold group-hover:text-white group-hover:border-gold'
+                        } bg-pitchblack flex items-center justify-center transition-colors flex-shrink-0`}>
+                            {task.icon}
+                        </div>
+                        <div className="flex items-center gap-1.5 flex-wrap justify-end">
+                            {isClaimed404 && (
+                                <span className="font-heading font-bold text-[10px] px-2 py-0.5 border border-green-500 bg-green-500/20 text-green-400 tracking-wider">
+                                    CLAIMED ✓
+                                </span>
+                            )}
+                            <span className={`font-heading font-black text-xs px-2.5 py-1 ${
+                                isClaimed404 
+                                    ? 'bg-green-500/10 border border-green-500 text-green-400' 
+                                    : 'bg-gold/15 border border-gold text-gold gold-glow'
+                            } tracking-wider uppercase`}>
+                                +70 XP
+                            </span>
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <h4 className={`text-base font-bold uppercase tracking-tight mb-1.5 line-clamp-1 ${
+                            isClaimed404 ? 'text-green-300' : 'text-white group-hover:text-gold'
+                        } transition-colors`} title={task.title}>
+                            {task.title}
+                        </h4>
+                        <p className="text-xs text-lightgrey font-grotesk leading-relaxed line-clamp-2" title={task.action}>
+                            {task.action}
+                        </p>
+                    </div>
+
+                    {isClaimed404 ? (
+                        <div className="text-xs uppercase font-heading font-bold py-2.5 px-3 border border-green-500/40 text-green-300 bg-green-500/10 text-center tracking-wider mt-auto flex items-center justify-center gap-1.5 sharp">
+                            <span>CLAIMED ✓ (+70 XP)</span>
+                        </div>
+                    ) : (
+                        <div className="flex gap-2 mt-auto">
+                            <button
+                                type="button"
+                                onClick={() => window.open('/about', '_blank')}
+                                className="flex-1 text-[10px] sm:text-[11px] uppercase font-heading font-bold py-2.5 px-1 border border-gold/40 hover:border-gold bg-gold/5 hover:bg-gold hover:text-pitchblack text-white text-center tracking-wider transition-all cursor-pointer flex items-center justify-center gap-1 sharp"
+                                title="Open website to find broken link"
+                            >
+                                <span>Start 404 Hunt</span>
+                                <span>↗</span>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setHunt404Result(null);
+                                    setHunt404ModalOpen(true);
+                                }}
+                                className="flex-1 text-[10px] sm:text-[11px] uppercase font-heading font-bold py-2.5 px-1 border border-gold bg-gold/25 hover:bg-gold text-gold hover:text-pitchblack text-center tracking-wider transition-all cursor-pointer flex items-center justify-center gap-1 sharp font-black shadow-[0_0_10px_rgba(212,175,55,0.2)]"
+                                title="Enter found 6-digit code"
+                            >
+                                <span>Write The Number</span>
+                                <span>✍️</span>
+                            </button>
+                        </div>
+                    )}
+                </motion.div>
+            );
+        }
+
         const isManualTask = task.key === 'instagram_story' || task.key === 'linkedin_post' || task.key === 'the_veteran' || task.key === 'architects_review' || task.key === 'github_audit' || task.key === 'dom_manipulation' || task.key === 'post_meme_mission' || task.key === 'discord_rollcall';
         const isManualClicked = isManualTask && manualClickedTasks.includes(task.key);
         const isClaimed = !isManualTask && currentUser?.claimed_tasks?.includes(task.key);
@@ -1383,6 +1555,93 @@ const PreHackathonPage = () => {
                                     </a>
                                 </div>
                             )}
+                        </motion.div>
+                    </div>
+                )}
+
+                {hunt404ModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-pitchblack/85 backdrop-blur-md">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="glass-card border border-gold/50 p-6 md:p-8 max-w-lg w-full relative bg-obsidian/95 shadow-[0_0_50px_rgba(212,175,55,0.15)] sharp"
+                        >
+                            <button
+                                onClick={() => setHunt404ModalOpen(false)}
+                                className="absolute top-4 right-4 text-lightgrey hover:text-gold text-xl font-mono cursor-pointer transition-colors"
+                            >
+                                ✕
+                            </button>
+
+                            <div className="flex items-center gap-2 mb-3">
+                                <span className="font-heading font-black text-xs px-2.5 py-1 bg-gold/15 border border-gold text-gold gold-glow uppercase tracking-wider">
+                                    +70 XP MISSION
+                                </span>
+                                <span className="text-xs font-mono text-lightgrey uppercase tracking-widest">
+                                    404 HUNT
+                                </span>
+                            </div>
+
+                            <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-tight mb-2">
+                                ENTER THE <span className="text-gold">404 WINNER NUMBER</span>
+                            </h3>
+
+                            <p className="text-xs text-lightgrey font-grotesk leading-relaxed mb-4">
+                                Found the broken 404 page across the LevelUp website? Enter the unique 6-digit code shown on the page to unlock your <strong className="text-gold">+70 XP</strong>.
+                            </p>
+
+                            <div className="p-3 bg-pitchblack/80 border border-gold/20 mb-5 text-[11px] text-lightgrey space-y-1">
+                                <p className="text-gold font-bold uppercase tracking-wider">🔍 Clues where to find broken links:</p>
+                                <p>• About Page &rarr; Team Members &rarr; Pratik's LinkedIn link</p>
+                                <p>• Website Footer &rarr; Twitter (X) link</p>
+                                <p>• Website Footer &rarr; Quick Links &rarr; Login link</p>
+                            </div>
+
+                            <form onSubmit={handleHunt404Submit} className="space-y-4">
+                                <div>
+                                    <label className="block text-xs uppercase font-heading tracking-wider text-lightgrey mb-2">
+                                        6-Digit Winner Code:
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={hunt404Input}
+                                        onChange={(e) => setHunt404Input(e.target.value)}
+                                        placeholder="e.g. 404826"
+                                        maxLength={6}
+                                        className="w-full bg-pitchblack border border-gold/40 focus:border-gold text-gold text-center font-mono text-xl font-bold tracking-[0.3em] p-3 outline-none transition-colors sharp"
+                                        required
+                                        autoFocus
+                                    />
+                                </div>
+
+                                {hunt404Result && (
+                                    <div className={`p-3 border text-xs leading-relaxed font-mono ${
+                                        hunt404Result.success 
+                                            ? 'bg-green-500/10 border-green-500 text-green-400' 
+                                            : 'bg-red-500/10 border-red-500 text-red-400'
+                                    }`}>
+                                        {hunt404Result.msg}
+                                    </div>
+                                )}
+
+                                <div className="flex gap-3 pt-2">
+                                    <button
+                                        type="submit"
+                                        disabled={hunt404Submitting}
+                                        className="flex-1 py-3 px-4 bg-gold text-pitchblack hover:bg-white font-heading font-bold text-xs uppercase tracking-widest transition-all cursor-pointer sharp disabled:opacity-50"
+                                    >
+                                        {hunt404Submitting ? 'VERIFYING...' : 'CLAIM +70 XP'}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => window.open('/about', '_blank')}
+                                        className="py-3 px-4 border border-gold/40 hover:border-gold text-gold hover:text-white font-heading font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center sharp"
+                                    >
+                                        SEARCH SITE ↗
+                                    </button>
+                                </div>
+                            </form>
                         </motion.div>
                     </div>
                 )}

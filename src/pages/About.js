@@ -394,7 +394,7 @@ const About = () => {
           </motion.a>
 
           <motion.a
-            href="https://www.linkedin.com/in/pratik-palande-48553b253/"
+            href="/team/pratik-linkedin"
             target="_blank"
             rel="noopener noreferrer"
             className="team-card"
