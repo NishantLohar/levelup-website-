@@ -516,10 +516,23 @@ const PreHackathonPage = () => {
         },
         {
             key: "whatsapp",
-            title: "WhatsApp Group",
+            title: "Community WhatsApp Group",
             action: "Join LevelUp Official WhatsApp Community",
             xp: "40 XP",
             link: "https://chat.whatsapp.com/HgtgSww0doQFh6Tq0IJf4v?s=cl&p=a&mlu=4&ilr=4",
+            btnText: "Join Group",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                </svg>
+            )
+        },
+        {
+            key: "uprise_whatsapp",
+            title: "Uprise WhatsApp Group",
+            action: "Join Official Uprise WhatsApp Group",
+            xp: "40 XP",
+            link: "https://chat.whatsapp.com/BWRaFrpD9bkGPpi0vWS2M9",
             btnText: "Join Group",
             icon: (
                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
@@ -849,6 +862,8 @@ const PreHackathonPage = () => {
         }
     ];
 
+    const totalTaskPages = Math.ceil(socialTasks.length / 12);
+
     const renderTaskCard = (task, index) => {
         // Custom 404 Hunt card with dual buttons (Start 404 Hunt & Write The Number)
         if (task.key === 'hunt_404') {
@@ -1157,33 +1172,30 @@ const PreHackathonPage = () => {
                             <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
                                 <div className="flex items-center gap-2">
                                     <span className="text-xs font-mono uppercase tracking-[0.2em] text-lightgrey">
-                                        MISSIONS: <strong className="text-white">{currentPage === 0 ? '1 – 12' : '13 – 24'}</strong> OF <strong className="text-gold">24</strong>
+                                        MISSIONS: <strong className="text-white">{`${currentPage * 12 + 1} – ${Math.min((currentPage + 1) * 12, socialTasks.length)}`}</strong> OF <strong className="text-gold">{socialTasks.length}</strong>
                                     </span>
                                 </div>
                                 <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-                                    <button
-                                        type="button"
-                                        onClick={() => setCurrentPage(0)}
-                                        className={`px-3 sm:px-4 py-1.5 text-xs font-heading font-bold uppercase tracking-wider border transition-all cursor-pointer sharp ${
-                                            currentPage === 0
-                                                ? 'bg-gold text-pitchblack border-gold shadow-[0_0_15px_rgba(212,175,55,0.4)]'
-                                                : 'bg-pitchblack/60 text-lightgrey border-gold/30 hover:border-gold hover:text-white'
-                                        }`}
-                                    >
-                                        PAGE 1 (MISSIONS 1–12)
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => setCurrentPage(1)}
-                                        className={`px-3 sm:px-4 py-1.5 text-xs font-heading font-bold uppercase tracking-wider border transition-all cursor-pointer sharp flex items-center gap-1.5 ${
-                                            currentPage === 1
-                                                ? 'bg-gold text-pitchblack border-gold shadow-[0_0_15px_rgba(212,175,55,0.4)]'
-                                                : 'bg-pitchblack/60 text-lightgrey border-gold/30 hover:border-gold hover:text-white'
-                                        }`}
-                                    >
-                                        <span>PAGE 2 (MISSIONS 13–24)</span>
-                                        <span className="text-gold font-bold">&gt;</span>
-                                    </button>
+                                    {Array.from({ length: totalTaskPages }, (_, pageIdx) => {
+                                        const startNum = pageIdx * 12 + 1;
+                                        const endNum = Math.min((pageIdx + 1) * 12, socialTasks.length);
+                                        const isActive = currentPage === pageIdx;
+                                        return (
+                                            <button
+                                                key={pageIdx}
+                                                type="button"
+                                                onClick={() => setCurrentPage(pageIdx)}
+                                                className={`px-3 sm:px-4 py-1.5 text-xs font-heading font-bold uppercase tracking-wider border transition-all cursor-pointer sharp flex items-center gap-1.5 ${
+                                                    isActive
+                                                        ? 'bg-gold text-pitchblack border-gold shadow-[0_0_15px_rgba(212,175,55,0.4)]'
+                                                        : 'bg-pitchblack/60 text-lightgrey border-gold/30 hover:border-gold hover:text-white'
+                                                }`}
+                                            >
+                                                <span>PAGE {pageIdx + 1} (MISSIONS {startNum}–{endNum})</span>
+                                                {pageIdx < totalTaskPages - 1 && !isActive && <span className="text-gold font-bold">&gt;</span>}
+                                            </button>
+                                        );
+                                    })}
                                     <div className="flex items-center gap-1.5 ml-1">
                                         <button
                                             type="button"
@@ -1196,8 +1208,8 @@ const PreHackathonPage = () => {
                                         </button>
                                         <button
                                             type="button"
-                                            onClick={() => setCurrentPage(p => Math.min(1, p + 1))}
-                                            disabled={currentPage === 1}
+                                            onClick={() => setCurrentPage(p => Math.min(totalTaskPages - 1, p + 1))}
+                                            disabled={currentPage >= totalTaskPages - 1}
                                             className="w-8 h-8 border border-gold/40 bg-pitchblack text-gold hover:bg-gold hover:text-pitchblack disabled:opacity-25 disabled:pointer-events-none flex items-center justify-center font-black transition-all cursor-pointer sharp"
                                             title="More Missions"
                                         >
@@ -1214,19 +1226,19 @@ const PreHackathonPage = () => {
                                 onTouchEnd={(e) => {
                                     if (touchStartX === null) return;
                                     const diff = touchStartX - e.changedTouches[0].clientX;
-                                    if (diff > 50 && currentPage < 1) setCurrentPage(1);
-                                    else if (diff < -50 && currentPage > 0) setCurrentPage(0);
+                                    if (diff > 50 && currentPage < totalTaskPages - 1) setCurrentPage(p => p + 1);
+                                    else if (diff < -50 && currentPage > 0) setCurrentPage(p => p - 1);
                                     setTouchStartX(null);
                                 }}
                             >
-                                {/* Floating Right Arrow (points to Page 2 where more tasks are) */}
-                                {currentPage < 1 && (
+                                {/* Floating Right Arrow (points to next page where more tasks are) */}
+                                {currentPage < totalTaskPages - 1 && (
                                     <button
                                         type="button"
-                                        onClick={() => setCurrentPage(1)}
+                                        onClick={() => setCurrentPage(p => Math.min(totalTaskPages - 1, p + 1))}
                                         className="absolute -right-3 sm:-right-5 lg:-right-7 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-14 sm:h-14 bg-pitchblack/95 border-2 border-gold text-gold hover:bg-gold hover:text-pitchblack rounded-full flex items-center justify-center shadow-[0_0_25px_rgba(212,175,55,0.7)] hover:shadow-[0_0_40px_rgba(212,175,55,1)] transition-all duration-300 group cursor-pointer animate-pulse-gold"
                                         aria-label="View More Tasks"
-                                        title="View More Tasks (Page 2)"
+                                        title={`View More Tasks (Page ${currentPage + 2})`}
                                     >
                                         <span className="text-xl sm:text-2xl font-black font-heading group-hover:translate-x-0.5 transition-transform">&gt;</span>
                                         <div className="hidden lg:flex items-center gap-1 absolute -bottom-7 right-0 text-[10px] font-mono uppercase tracking-widest text-gold whitespace-nowrap bg-pitchblack/95 px-2 py-0.5 border border-gold/40 pointer-events-none shadow-md">
@@ -1236,14 +1248,14 @@ const PreHackathonPage = () => {
                                     </button>
                                 )}
 
-                                {/* Floating Left Arrow (points back to Page 1) */}
+                                {/* Floating Left Arrow (points back to previous page) */}
                                 {currentPage > 0 && (
                                     <button
                                         type="button"
-                                        onClick={() => setCurrentPage(0)}
+                                        onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
                                         className="absolute -left-3 sm:-left-5 lg:-left-7 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-14 sm:h-14 bg-pitchblack/95 border-2 border-gold text-gold hover:bg-gold hover:text-pitchblack rounded-full flex items-center justify-center shadow-[0_0_25px_rgba(212,175,55,0.7)] hover:shadow-[0_0_40px_rgba(212,175,55,1)] transition-all duration-300 group cursor-pointer"
                                         aria-label="View Previous Tasks"
-                                        title="View Previous Tasks (Page 1)"
+                                        title={`View Previous Tasks (Page ${currentPage})`}
                                     >
                                         <span className="text-xl sm:text-2xl font-black font-heading group-hover:-translate-x-0.5 transition-transform">&lt;</span>
                                         <div className="hidden lg:flex items-center gap-1 absolute -bottom-7 left-0 text-[10px] font-mono uppercase tracking-widest text-gold whitespace-nowrap bg-pitchblack/95 px-2 py-0.5 border border-gold/40 pointer-events-none shadow-md">
@@ -1259,15 +1271,11 @@ const PreHackathonPage = () => {
                                         className="flex transition-transform duration-500 ease-out w-full"
                                         style={{ transform: `translateX(-${currentPage * 100}%)` }}
                                     >
-                                        {/* Page 1 (Tasks 1 to 12 in 4 columns x 3 rows) */}
-                                        <div className="w-full flex-shrink-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                                            {socialTasks.slice(0, 12).map((task, index) => renderTaskCard(task, index))}
-                                        </div>
-
-                                        {/* Page 2 (Tasks 13 to 24 in 4 columns x 3 rows) */}
-                                        <div className="w-full flex-shrink-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                                            {socialTasks.slice(12, 24).map((task, index) => renderTaskCard(task, index + 12))}
-                                        </div>
+                                        {Array.from({ length: totalTaskPages }, (_, pageIdx) => (
+                                            <div key={pageIdx} className="w-full flex-shrink-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                                {socialTasks.slice(pageIdx * 12, (pageIdx + 1) * 12).map((task, index) => renderTaskCard(task, pageIdx * 12 + index))}
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
