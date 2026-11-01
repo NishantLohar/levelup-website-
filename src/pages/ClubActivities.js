@@ -80,7 +80,41 @@ const ActivityIcon = ({ id }) => {
                     <line x1="1" y1="14" x2="4" y2="14" />
                 </svg>
             );
-        case 9: // Survival Metric (Target / Crosshair / Precision)
+        case 9: // Strength Share (Community Message / Share Network)
+            return (
+                <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <polyline points="22,6 12,13 2,6" />
+                </svg>
+            );
+        case 10: // The 48 Hour Infiltration (Clock / Fast Blitz)
+            return (
+                <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                    <path d="M12 2v2" />
+                    <path d="M12 20v2" />
+                </svg>
+            );
+        case 11: // The Startup Teardown (Dissection / Solution)
+            return (
+                <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="9" y1="15" x2="15" y2="15" />
+                    <line x1="12" y1="12" x2="12" y2="18" />
+                </svg>
+            );
+        case 12: // Plan an Event (Calendar / Community Collaboration)
+            return (
+                <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+            );
+        case 13: // Survival Metric (Target / Crosshair / Precision)
             return (
                 <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10" />
@@ -115,6 +149,7 @@ const ClubActivities = () => {
     const [problemCount, setProblemCount] = useState(1);
     const [manualEmail, setManualEmail] = useState('');
     const [claimSubmitting, setClaimSubmitting] = useState(false);
+    const [copiedMessage, setCopiedMessage] = useState(false);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -250,6 +285,61 @@ const ClubActivities = () => {
         {
             id: 9,
             num: "09",
+            key: "club_strength_share",
+            title: "Strength Share",
+            category: "COMMUNITY BROADCAST",
+            xp: 800,
+            xpBadge: "800 XP",
+            isDraftShare: true,
+            description: "Share the drafted message on all your community channels and share its screenshot with your POC.",
+            details: "Broadcast our official partnership message across your college WhatsApp groups, Discord servers, and Telegram channels. Share the screenshot with your Uprise POC to claim +800 XP.",
+            actionText: "View Drafted Message & Claim +800 XP",
+            instructions: "Copy the official message below, post it across all your student community channels, and share screenshot proof with your POC to claim +800 XP."
+        },
+        {
+            id: 10,
+            num: "10",
+            key: "club_48h_infiltration",
+            title: "The 48 Hour Infiltration",
+            category: "VELOCITY BOOST MULTIPLIER",
+            xp: 250,
+            xpBadge: "250 XP vs 50 XP",
+            isReferralBoost: true,
+            description: "After registering, for your first 48 hours into the online gauntlet you get 250 XPs rewarded instead of 50 XP.",
+            details: "Sprint window unlocked! For the first 48 hours after your club registers, every student registration with your referral code awards +250 XP (5x standard rate) instead of 50 XP.",
+            actionText: "Copy Referral Code & Activate 5x XP",
+            instructions: "Share your exclusive club invite code immediately upon registration! All successful student registrations within your first 48 hours automatically grant +250 XP each."
+        },
+        {
+            id: 11,
+            num: "11",
+            key: "club_startup_teardown",
+            title: "The Startup Teardown",
+            category: "CASE STUDY & TEARDOWN",
+            xp: 8000,
+            xpBadge: "8,000 XP",
+            description: "Host an event with listing famous but flawed startups and your members propose 1 page solution to its 3 major flaws.",
+            details: "Host a teardown session reviewing iconic but flawed tech startups (e.g. Quibi, Theranos, WeWork, Fast). Student teams propose a 1-page solution tackling its 3 major structural flaws.",
+            actionText: "Submit Teardown Proof & Claim +8,000 XP",
+            instructions: "Conduct the startup teardown workshop on campus or online. Document the student 1-page solutions and confirm completion to claim +8,000 XP."
+        },
+        {
+            id: 12,
+            num: "12",
+            key: "club_plan_event",
+            title: "Plan an Event",
+            category: "CAMPUS COLLABORATION",
+            xp: 5000,
+            xpBadge: "SPONSORED • BESPOKE XP",
+            isContactAdmin: true,
+            description: "Want to plan a custom campus hackathon or workshop? Contact admin to get sponsored prizes, mentors, and custom XP allocations.",
+            details: "Collaborate directly with the LevelUp / Uprise team to organize bespoke campus hackathons, technical bootcamps, or AI meetups on your premises with co-branding and exclusive sponsorship.",
+            actionText: "Contact Admin / Pitch Event",
+            instructions: "Get in touch with the core Uprise organising committee to co-host an official collegiate event. Direct Discord / WhatsApp / Email line available."
+        },
+        {
+            id: 13,
+            num: "13",
             key: "club_survival_metric",
             title: "Survival Metric",
             category: "ENGAGEMENT INTEGRITY",
@@ -278,10 +368,36 @@ const ClubActivities = () => {
             return;
         }
 
+        if (act.isReferralBoost) {
+            const code = currentUser?.coupon_code || 'YOUR_CLUB_CODE';
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(`Join Uprise 2027 with our club referral code: ${code}
+Register at https://account.levelupevents.in/join-as-club/`);
+            }
+            setToastMsg(`🔥 48H INFILTRATION: Referral code ${code} copied! Each registration earns +250 XP for your club!`);
+            setTimeout(() => setToastMsg(null), 5000);
+            return;
+        }
+
+        if (act.isContactAdmin) {
+            setClaimModalData(act);
+            return;
+        }
+
         // Open custom claim modal
         setProblemCount(1);
         setManualEmail(currentUser?.email || '');
         setClaimModalData(act);
+    };
+
+    const copyDraftedMessage = () => {
+        const code = currentUser?.coupon_code || 'YOUR_CLUB_CODE';
+        const msg = `🚀 Big announcement! Our campus club has officially partnered with Uprise 2027 — the ultimate pan-India hackathon and builder gauntlet! 🏆 Compete for cash prizes, developer bounties, and startup access.\n\nRegister your team now with our exclusive campus invite code: ${code}\nRegister here: https://uprise.levelupevents.in`;
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(msg);
+            setCopiedMessage(true);
+            setTimeout(() => setCopiedMessage(false), 2500);
+        }
     };
 
     const executeClaim = async (e) => {
@@ -401,7 +517,7 @@ const ClubActivities = () => {
                         transition={{ duration: 0.6, delay: 0.2 }}
                         className="text-lightgrey text-base sm:text-lg max-w-3xl mx-auto leading-relaxed mb-8"
                     >
-                        8 high-impact strategic milestones crafted for collegiate clubs, student chapters, and technical societies. 
+                        High-impact strategic milestones crafted for collegiate clubs, student chapters, and technical societies. 
                         Mobilize your campus, complete activities, and watch your club earn verified XP automatically on the <strong>College Communities Leaderboard</strong>.
                     </motion.p>
 
@@ -446,7 +562,7 @@ const ClubActivities = () => {
                                 initial={{ opacity: 0, y: 25 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                transition={{ duration: 0.4, delay: index * 0.05 }}
+                                transition={{ duration: 0.4, delay: index * 0.04 }}
                                 className="group relative bg-[#0D1017]/90 border border-gold/25 hover:border-gold/60 p-6 sm:p-8 rounded-none transition-all duration-300 flex flex-col justify-between hover:shadow-[0_0_30px_rgba(212,175,55,0.18)]"
                                 style={{
                                     backdropFilter: 'blur(10px)',
@@ -582,64 +698,112 @@ const ClubActivities = () => {
                                 {claimModalData.instructions}
                             </p>
 
-                            <form onSubmit={executeClaim} className="space-y-4">
-                                {/* Club Email */}
-                                <div>
-                                    <label className="block text-xs font-mono uppercase tracking-wider text-gold mb-1.5">
-                                        Registered Club Email Address
-                                    </label>
-                                    <input
-                                        type="email"
-                                        required
-                                        value={currentUser?.email || manualEmail}
-                                        onChange={(e) => setManualEmail(e.target.value)}
-                                        placeholder="e.g. acm@college.edu or club@gmail.com"
-                                        className="w-full px-4 py-3 bg-black/60 border border-gold/30 focus:border-gold text-white text-sm outline-none transition-colors font-mono"
-                                    />
-                                    <p className="text-[11px] text-white/50 mt-1">
-                                        Must match the email registered on "Join as Club" so XP credits to your leaderboard.
+                            {/* Strength Share Draft Box */}
+                            {claimModalData.isDraftShare && (
+                                <div className="mb-6 p-4 bg-black/80 border border-gold/30 rounded-none">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-[11px] font-mono text-gold uppercase tracking-wider">
+                                            Official Drafted Announcement Message:
+                                        </span>
+                                        <button
+                                            type="button"
+                                            onClick={copyDraftedMessage}
+                                            className="px-3 py-1 bg-gold/20 hover:bg-gold text-gold hover:text-black font-mono text-[11px] font-bold uppercase transition-all"
+                                        >
+                                            {copiedMessage ? '✓ COPIED!' : '📋 COPY MESSAGE'}
+                                        </button>
+                                    </div>
+                                    <p className="text-xs text-white/80 font-mono leading-relaxed bg-black/50 p-2.5 border border-white/10 select-all">
+                                        🚀 Big announcement! Our campus club has officially partnered with Uprise 2027 — the ultimate pan-India hackathon and builder gauntlet! 🏆 Compete for cash prizes, developer bounties, and startup access.<br /><br />
+                                        Register your team now with our exclusive campus invite code: <strong className="text-gold">{currentUser?.coupon_code || 'YOUR_CLUB_CODE'}</strong><br />
+                                        Register here: https://uprise.levelupevents.in
                                     </p>
                                 </div>
+                            )}
 
-                                {/* Problem Solver Count Field */}
-                                {claimModalData.isRepeatable && (
+                            {/* Plan an Event Admin Contact Actions */}
+                            {claimModalData.isContactAdmin ? (
+                                <div className="space-y-4">
+                                    <p className="text-xs text-lightgrey">
+                                        Choose your preferred contact channel to pitch your event proposal directly to the core Uprise management:
+                                    </p>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                                        <a
+                                            href="mailto:support@levelupevents.in?subject=Uprise%202027%20-%20Campus%20Event%20Collaboration%20Pitch"
+                                            className="py-3 px-4 bg-gold/15 hover:bg-gold text-gold hover:text-black border border-gold/40 text-center font-bold text-xs uppercase tracking-wider transition-all"
+                                        >
+                                            ✉️ Email Committee
+                                        </a>
+                                        <a
+                                            href="https://discord.gg/BxkRwU6X5"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="py-3 px-4 bg-[#5865F2]/20 hover:bg-[#5865F2] text-[#5865F2] hover:text-white border border-[#5865F2]/40 text-center font-bold text-xs uppercase tracking-wider transition-all"
+                                        >
+                                            💬 Discord Admin POC
+                                        </a>
+                                    </div>
+                                </div>
+                            ) : (
+                                <form onSubmit={executeClaim} className="space-y-4">
+                                    {/* Club Email */}
                                     <div>
                                         <label className="block text-xs font-mono uppercase tracking-wider text-gold mb-1.5">
-                                            Number of Delivered Problems (2,500 XP each)
+                                            Registered Club Email Address
                                         </label>
-                                        <div className="flex items-center gap-3">
-                                            <input
-                                                type="number"
-                                                min="1"
-                                                max="100"
-                                                value={problemCount}
-                                                onChange={(e) => setProblemCount(Math.max(1, parseInt(e.target.value) || 1))}
-                                                className="w-24 px-4 py-2.5 bg-black/60 border border-gold/30 focus:border-gold text-white text-sm outline-none font-mono font-bold"
-                                            />
-                                            <span className="text-sm font-bold text-emerald-400">
-                                                = +{(problemCount * 2500).toLocaleString()} XP Total
-                                            </span>
-                                        </div>
+                                        <input
+                                            type="email"
+                                            required
+                                            value={currentUser?.email || manualEmail}
+                                            onChange={(e) => setManualEmail(e.target.value)}
+                                            placeholder="e.g. acm@college.edu or club@gmail.com"
+                                            className="w-full px-4 py-3 bg-black/60 border border-gold/30 focus:border-gold text-white text-sm outline-none transition-colors font-mono"
+                                        />
+                                        <p className="text-[11px] text-white/50 mt-1">
+                                            Must match the email registered on "Join as Club" so XP credits to your leaderboard.
+                                        </p>
                                     </div>
-                                )}
 
-                                <div className="pt-4 flex items-center justify-end gap-3">
-                                    <button
-                                        type="button"
-                                        onClick={() => setClaimModalData(null)}
-                                        className="px-5 py-2.5 bg-transparent border border-white/20 text-white/80 hover:text-white text-xs font-bold uppercase tracking-wider"
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        disabled={claimSubmitting}
-                                        className="px-6 py-2.5 bg-gold hover:bg-gold/90 text-black font-heading font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(212,175,55,0.4)] disabled:opacity-50"
-                                    >
-                                        {claimSubmitting ? 'CREDITING XP...' : '✓ CONFIRM & CLAIM XP'}
-                                    </button>
-                                </div>
-                            </form>
+                                    {/* Problem Solver Count Field */}
+                                    {claimModalData.isRepeatable && (
+                                        <div>
+                                            <label className="block text-xs font-mono uppercase tracking-wider text-gold mb-1.5">
+                                                Number of Delivered Problems (2,500 XP each)
+                                            </label>
+                                            <div className="flex items-center gap-3">
+                                                <input
+                                                    type="number"
+                                                    min="1"
+                                                    max="100"
+                                                    value={problemCount}
+                                                    onChange={(e) => setProblemCount(Math.max(1, parseInt(e.target.value) || 1))}
+                                                    className="w-24 px-4 py-2.5 bg-black/60 border border-gold/30 focus:border-gold text-white text-sm outline-none font-mono font-bold"
+                                                />
+                                                <span className="text-sm font-bold text-emerald-400">
+                                                    = +{(problemCount * 2500).toLocaleString()} XP Total
+                                                </span>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="pt-4 flex items-center justify-end gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => setClaimModalData(null)}
+                                            className="px-5 py-2.5 bg-transparent border border-white/20 text-white/80 hover:text-white text-xs font-bold uppercase tracking-wider"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            disabled={claimSubmitting}
+                                            className="px-6 py-2.5 bg-gold hover:bg-gold/90 text-black font-heading font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(212,175,55,0.4)] disabled:opacity-50"
+                                        >
+                                            {claimSubmitting ? 'CREDITING XP...' : '✓ CONFIRM & CLAIM XP'}
+                                        </button>
+                                    </div>
+                                </form>
+                            )}
                         </motion.div>
                     </div>
                 )}
