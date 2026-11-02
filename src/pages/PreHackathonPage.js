@@ -344,7 +344,23 @@ const PreHackathonPage = () => {
 
         if (task.key === 'club_referral') {
             e.preventDefault();
-            navigate('/club-activities');
+            if (!currentUser) {
+                setIsLoginModalOpen(true);
+                setToastMsg('Please sign in to view and copy your invite code for organisations!');
+                setTimeout(() => setToastMsg(null), 4000);
+                return;
+            }
+            const code = currentUser.coupon_code || 'UPRISE2027';
+            const isBuilder = currentUser.role === 'builder';
+            const rewardXp = isBuilder ? 2200 : 2000;
+            const clubJoinUrl = `https://account.levelupevents.in/join-as-club/`;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(`Register your college club / organisation for Uprise with my referral code: ${code}\nRegistration Link: ${clubJoinUrl}`);
+            }
+            setToastMsg(`Invite code copied: ${code}! When a club registers with your code, you earn +${rewardXp} XP (${isBuilder ? '⚡ Builder rate: +2200 XP' : '+2000 XP'}). Opening Club Activities...`);
+            setTimeout(() => {
+                navigate('/club-activities');
+            }, 1500);
             return;
         }
 
