@@ -303,12 +303,12 @@ const ClubActivities = () => {
             title: "The 48 Hour Infiltration",
             category: "VELOCITY BOOST MULTIPLIER",
             xp: 250,
-            xpBadge: "250 XP vs 50 XP",
+            xpBadge: "250 XP vs 50 XP (5x Boost)",
             isReferralBoost: true,
-            description: "After registering, for your first 48 hours into the online gauntlet you get 250 XPs rewarded instead of 50 XP.",
-            details: "Sprint window unlocked! For the first 48 hours after your club registers, every student registration with your referral code awards +250 XP (5x standard rate) instead of 50 XP.",
+            description: "For new clubs: Active for your first 48 hours after registering. For existing clubs: 48-Hour Blitz goes LIVE at 7:00 PM today!",
+            details: "Sprint window unlocked! Every student registration with your club's referral code awards +250 XP (5x standard rate) instead of 50 XP. For all existing clubs, your 48-Hour Blitz starts today at 7:00 PM IST and runs until Nov 4, 7:00 PM IST!",
             actionText: "Copy Referral Code & Activate 5x XP",
-            instructions: "Share your exclusive club invite code immediately upon registration! All successful student registrations within your first 48 hours automatically grant +250 XP each."
+            instructions: "Share your exclusive club invite code! All successful student registrations within this 48-hour sprint automatically award +250 XP each directly to your club total."
         },
         {
             id: 11,
@@ -371,10 +371,39 @@ const ClubActivities = () => {
         if (act.isReferralBoost) {
             const code = currentUser?.coupon_code || 'YOUR_CLUB_CODE';
             if (navigator.clipboard) {
-                navigator.clipboard.writeText(`Join Uprise 2027 with our club referral code: ${code}
-Register at https://account.levelupevents.in/join-as-club/`);
+                navigator.clipboard.writeText(`Join Uprise 2027 with our club referral code: ${code}\nRegister at https://account.levelupevents.in/events/`);
             }
-            setToastMsg(`🔥 48H INFILTRATION: Referral code ${code} copied! Each registration earns +250 XP for your club!`);
+            setToastMsg(`🔥 48H INFILTRATION ACTIVE: Referral code ${code} copied! Each student registration awards +250 XP (5x Boost) for your club!`);
+
+            // If logged in as club, also claim the activity task completion if not already logged
+            if (currentUser?.email && !currentUser?.claimed_tasks?.includes(act.key)) {
+                const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
+                fetch(`${API_BASE_URL}/api/v1/uprise/claim-task-xp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: currentUser.email,
+                        task_key: act.key,
+                    }),
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && !data.already_claimed) {
+                        setCurrentUser(prev => {
+                            const updated = {
+                                ...prev,
+                                total_xp: data.total_xp,
+                                claimed_tasks: data.claimed_tasks || [...(prev?.claimed_tasks || []), act.key],
+                            };
+                            localStorage.setItem('uprise_user', JSON.stringify(updated));
+                            return updated;
+                        });
+                        setToastMsg(`🔥 48H INFILTRATION ACTIVATED! Referral code ${code} copied (+250 XP credited to club)!`);
+                    }
+                })
+                .catch(err => console.error('48h infiltration activation claim error:', err));
+            }
+
             setTimeout(() => setToastMsg(null), 5000);
             return;
         }
@@ -583,8 +612,13 @@ Register at https://account.levelupevents.in/join-as-club/`);
                                     </div>
 
                                     {/* Category Tag */}
-                                    <div className="text-[11px] font-mono tracking-widest text-gold uppercase mb-2">
-                                        {act.category}
+                                    <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-gold uppercase mb-2">
+                                        <span>{act.category}</span>
+                                        {act.id === 10 && (
+                                            <span className="text-[10px] font-bold px-2 py-0.5 border border-amber-500/60 bg-amber-500/15 text-amber-300 tracking-wider">
+                                                🔥 48H BLITZ (7PM TODAY → NOV 4)
+                                            </span>
+                                        )}
                                     </div>
 
                                     {/* Title */}
