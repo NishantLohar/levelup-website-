@@ -120,6 +120,8 @@ const PreHackathonPage = () => {
     const [quizModalData, setQuizModalData] = useState(null);
     const [quizAnswer, setQuizAnswer] = useState('');
     const [quizResult, setQuizResult] = useState(null);
+    const [quizSubmitting, setQuizSubmitting] = useState(false);
+    const [quizClaimEmail, setQuizClaimEmail] = useState('');
     const [touchStartX, setTouchStartX] = useState(null);
 
     // 404 Hunt State
@@ -277,36 +279,211 @@ const PreHackathonPage = () => {
         }
     };
 
+    const checkQuizAnswer = (taskKey, input) => {
+        const clean = (input || '').trim().toLowerCase().replace(/\s+/g, ' ').replace(/;+$/, '').replace(/["']/g, '');
+        if (!clean) return { isCorrect: false };
+
+        if (taskKey === 'package_manager_quiz') {
+            const isCorrect = (
+                clean === 'npm init' ||
+                clean === 'npm init -y' ||
+                clean === 'npm init --yes' ||
+                clean === 'npm init -yes' ||
+                clean === 'npm init --y' ||
+                clean === 'yarn init' ||
+                clean === 'yarn init -y' ||
+                clean === 'yarn init --yes' ||
+                clean === 'pnpm init' ||
+                clean === 'pnpm init -y' ||
+                clean === 'bun init' ||
+                clean === 'bun init -y' ||
+                clean.startsWith('npm init') ||
+                clean.startsWith('yarn init') ||
+                clean.startsWith('pnpm init') ||
+                clean.startsWith('bun init')
+            );
+            return {
+                isCorrect,
+                hint: isCorrect ? null : "Hint: Think of the standard Node Package Manager initialization command, like 'npm init' or 'npm init -y'."
+            };
+        }
+
+        if (taskKey === 'terminal_navigator_quiz') {
+            const noSpace = clean.replace(/\s+/g, '');
+            const isCorrect = (
+                clean === 'ls -la' ||
+                clean === 'ls -al' ||
+                clean === 'ls -a' ||
+                clean === 'ls -lart' ||
+                clean === 'ls -lat' ||
+                clean === 'ls -ltr' ||
+                clean === 'ls -lt' ||
+                clean === 'ls -lah' ||
+                clean === 'ls -hal' ||
+                clean === 'ls -l -a' ||
+                clean === 'ls -a -l' ||
+                clean === 'ls --all' ||
+                clean === 'ls -all' ||
+                clean === 'ls -a' ||
+                clean === 'ls -A' ||
+                clean === 'ls -Al' ||
+                clean === 'ls -lA' ||
+                clean === 'ls -ltra' ||
+                noSpace.includes('ls-la') ||
+                noSpace.includes('ls-al') ||
+                noSpace.includes('ls-a') ||
+                noSpace.includes('ls-lart') ||
+                noSpace.includes('ls-lah') ||
+                (clean.startsWith('ls') && (clean.includes('-a') || clean.includes('-l') || clean.includes('all')))
+            );
+            return {
+                isCorrect,
+                hint: isCorrect ? null : "Hint: Starts with 'ls' combined with flags for all files and detailed listing, like 'ls -la' or 'ls -a'."
+            };
+        }
+
+        if (taskKey === 'the_css_center') {
+            const hasJustify = clean.includes('justify-content') && clean.includes('center');
+            const hasAlign = clean.includes('align-items') && clean.includes('center');
+            const hasBothKeywords = clean.includes('justify-content') && clean.includes('align-items');
+            const hasPlaceItems = (clean.includes('place-items') || clean.includes('place-content')) && clean.includes('center');
+
+            if ((hasJustify && hasAlign) || hasBothKeywords || hasPlaceItems) {
+                return { isCorrect: true };
+            }
+            if (hasJustify && !hasAlign) {
+                return {
+                    isCorrect: false,
+                    hint: "You got horizontal centering (justify-content: center)! Now also include the vertical centering property: align-items: center."
+                };
+            }
+            if (hasAlign && !hasJustify) {
+                return {
+                    isCorrect: false,
+                    hint: "You got vertical centering (align-items: center)! Now also include the horizontal centering property: justify-content: center."
+                };
+            }
+            return {
+                isCorrect: false,
+                hint: "Hint: In CSS flexbox, use: justify-content: center; align-items: center; (or place-items: center)."
+            };
+        }
+
+        if (quizModalData?.quizAccepted) {
+            const isCorrect = quizModalData.quizAccepted.some(ans => clean.includes(ans.toLowerCase()));
+            return { isCorrect, hint: quizModalData.quizHint };
+        }
+
+        return { isCorrect: false };
+    };
+
+    const claimQuizXp = async (emailToCredit, taskData) => {
+        const cleanEmail = (emailToCredit || '').trim().toLowerCase();
+        if (!cleanEmail) {
+            setQuizResult({
+                success: false,
+                needsEmail: true,
+                msg: '⚠️ Please enter your registered email to receive your XP.'
+            });
+            return;
+        }
+
+        setQuizSubmitting(true);
+        const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/v1/uprise/claim-task-xp`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: cleanEmail,
+                    task_key: taskData.key,
+                }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                const awardedXp = data.xp_awarded || parseInt(taskData.xp) || 25;
+                setCurrentUser(prev => {
+                    const base = prev || { email: cleanEmail, name: cleanEmail.split('@')[0] };
+                    const updated = {
+                        ...base,
+                        total_xp: data.total_xp,
+                        claimed_tasks: data.claimed_tasks || [...(base.claimed_tasks || []), taskData.key],
+                    };
+                    localStorage.setItem('uprise_user', JSON.stringify(updated));
+                    return updated;
+                });
+
+                if (data.already_claimed) {
+                    setQuizResult({
+                        success: true,
+                        alreadyClaimed: true,
+                        msg: `✓ Correct! You had already claimed +${awardedXp} XP for ${taskData.title}. (Total Live XP: ${data.total_xp} XP)`
+                    });
+                } else {
+                    setQuizResult({
+                        success: true,
+                        alreadyClaimed: false,
+                        msg: `🎉 CORRECT ANSWER! +${awardedXp} XP HAS BEEN AUTOMATICALLY CREDITED TO YOUR ACCOUNT! (Total Live XP: ${data.total_xp} XP)`
+                    });
+                    setToastMsg(`⚡ +${awardedXp} XP CREDITED FOR ${taskData.title.toUpperCase()}!`);
+                }
+
+                setTimeout(() => {
+                    setQuizModalData(null);
+                    setQuizAnswer('');
+                    setQuizClaimEmail('');
+                    setQuizResult(null);
+                    setToastMsg(null);
+                }, 3000);
+            } else {
+                setQuizResult({
+                    success: false,
+                    needsEmail: !currentUser?.email,
+                    msg: `❌ ${data.error || data.message || 'Failed to credit XP. Please check your registered email.'}`
+                });
+            }
+        } catch (err) {
+            console.error('Quiz claim XP error:', err);
+            setQuizResult({
+                success: false,
+                msg: '❌ Server error while crediting XP. Please try again.'
+            });
+        } finally {
+            setQuizSubmitting(false);
+        }
+    };
+
     const handleQuizSubmit = (e) => {
         e.preventDefault();
         if (!quizModalData) return;
-        const cleanInput = quizAnswer.trim().toLowerCase();
-        
-        let isCorrect = false;
-        if (quizModalData.quizAccepted) {
-            if (quizModalData.key === 'the_css_center') {
-                isCorrect = cleanInput.includes('justify-content') && cleanInput.includes('align-items');
-            } else {
-                isCorrect = quizModalData.quizAccepted.some(ans => cleanInput.includes(ans.toLowerCase()));
-            }
-        }
-        
+
+        const { isCorrect, hint } = checkQuizAnswer(quizModalData.key, quizAnswer);
+
         if (isCorrect) {
-            setQuizResult({
-                success: true,
-                msg: `🎉 Correct answer! Share your screenshot or answer on the Discord #showcase channel to claim +${quizModalData.xp}!`
-            });
-            if (!manualClickedTasks.includes(quizModalData.key)) {
-                const updated = [...manualClickedTasks, quizModalData.key];
-                setManualClickedTasks(updated);
-                try {
-                    localStorage.setItem('manual_tasks_clicked', JSON.stringify(updated));
-                } catch (err) {}
+            const userEmail = currentUser?.email || quizClaimEmail;
+            if (!userEmail) {
+                setQuizResult({
+                    success: true,
+                    needsEmail: true,
+                    msg: `🎉 Correct answer! Enter your registered email below to receive your +${quizModalData.xp || 25} XP instantly:`
+                });
+                return;
             }
+
+            if (currentUser?.claimed_tasks?.includes(quizModalData.key)) {
+                setQuizResult({
+                    success: true,
+                    alreadyClaimed: true,
+                    msg: `✓ Correct answer! You have already claimed the +${quizModalData.xp || 25} XP for this mission.`
+                });
+                return;
+            }
+
+            claimQuizXp(userEmail, quizModalData);
         } else {
             setQuizResult({
                 success: false,
-                msg: `❌ Not quite! ${quizModalData.quizHint || 'Try again or ask for clues in the Discord community.'}`
+                msg: `❌ Not quite! ${hint || quizModalData.quizHint || 'Check your syntax and try again.'}`
             });
         }
     };
@@ -376,7 +553,13 @@ const PreHackathonPage = () => {
         if (task.isQuiz) {
             e.preventDefault();
             setQuizAnswer('');
-            setQuizResult(null);
+            setQuizClaimEmail(currentUser?.email || '');
+            const isAlreadyClaimed = currentUser?.claimed_tasks?.includes(task.key);
+            setQuizResult(isAlreadyClaimed ? {
+                success: true,
+                alreadyClaimed: true,
+                msg: `✓ You have already completed this quiz and claimed +${task.xp} XP!`
+            } : null);
             setQuizModalData(task);
             return;
         }
@@ -1496,6 +1679,7 @@ const PreHackathonPage = () => {
                                 onClick={() => {
                                     setQuizModalData(null);
                                     setQuizAnswer('');
+                                    setQuizClaimEmail('');
                                     setQuizResult(null);
                                 }}
                             >
@@ -1524,6 +1708,17 @@ const PreHackathonPage = () => {
 
                             {quizModalData.isQuiz ? (
                                 <form onSubmit={handleQuizSubmit} className="space-y-4">
+                                    {currentUser?.email ? (
+                                        <div className="flex items-center justify-between text-xs px-3 py-2 bg-gold/10 border border-gold/30 text-gold font-mono">
+                                            <span>⚡ Crediting to: <strong>{currentUser.email}</strong></span>
+                                            <span className="font-bold text-green-400">AUTO-GRANT ON</span>
+                                        </div>
+                                    ) : (
+                                        <div className="text-[11px] px-3 py-1.5 bg-pitchblack/60 border border-gold/20 text-lightgrey">
+                                            💡 Not signed in? Correct answer will allow instant email entry to grant XP automatically.
+                                        </div>
+                                    )}
+
                                     <div>
                                         <label className="block text-xs uppercase font-heading tracking-wider text-lightgrey mb-2">
                                             Your Command / Code Answer:
@@ -1549,12 +1744,39 @@ const PreHackathonPage = () => {
                                         </div>
                                     )}
 
+                                    {quizResult?.needsEmail && !currentUser && (
+                                        <div className="p-3 bg-gold/15 border border-gold/50 space-y-2">
+                                            <label className="block text-xs uppercase font-heading tracking-wider text-gold font-bold">
+                                                Enter Your Registered Email:
+                                            </label>
+                                            <div className="flex gap-2">
+                                                <input
+                                                    type="email"
+                                                    value={quizClaimEmail}
+                                                    onChange={(e) => setQuizClaimEmail(e.target.value)}
+                                                    placeholder="developer@example.com"
+                                                    className="flex-1 bg-pitchblack border border-gold/40 focus:border-gold text-white px-3 py-2 text-sm font-mono outline-none"
+                                                    required
+                                                />
+                                                <button
+                                                    type="button"
+                                                    disabled={quizSubmitting}
+                                                    onClick={() => claimQuizXp(quizClaimEmail, quizModalData)}
+                                                    className="px-4 py-2 bg-gold text-pitchblack hover:bg-white font-heading font-bold text-xs uppercase tracking-wider disabled:opacity-50 cursor-pointer"
+                                                >
+                                                    {quizSubmitting ? 'CLAIMING...' : 'CLAIM XP →'}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+
                                     <div className="flex gap-3 pt-2">
                                         <button
                                             type="submit"
-                                            className="flex-1 py-3 px-4 bg-gold text-pitchblack hover:bg-white font-heading font-bold text-xs uppercase tracking-widest transition-all cursor-pointer sharp"
+                                            disabled={quizSubmitting}
+                                            className="flex-1 py-3 px-4 bg-gold text-pitchblack hover:bg-white font-heading font-bold text-xs uppercase tracking-widest transition-all cursor-pointer sharp disabled:opacity-50"
                                         >
-                                            SUBMIT ANSWER
+                                            {quizSubmitting ? 'VERIFYING & CLAIMING XP...' : 'SUBMIT ANSWER'}
                                         </button>
                                         <a
                                             href="https://discord.gg/BxkRwU6X5"
