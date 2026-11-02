@@ -150,12 +150,18 @@ const ClubActivities = () => {
     const [manualEmail, setManualEmail] = useState('');
     const [claimSubmitting, setClaimSubmitting] = useState(false);
     const [copiedMessage, setCopiedMessage] = useState(false);
+    const [registeredClubs, setRegisteredClubs] = useState([]);
+    const [quickClubInput, setQuickClubInput] = useState('');
+    const [quickClubLoading, setQuickClubLoading] = useState(false);
+    const [submittingActKey, setSubmittingActKey] = useState(null);
 
     useEffect(() => {
         window.scrollTo(0, 0);
 
+        const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
+
+        // Sync active user status
         if (currentUser?.email) {
-            const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
             fetch(`${API_BASE_URL}/api/v1/uprise/user-status?email=${encodeURIComponent(currentUser.email)}`)
                 .then(res => res.json())
                 .then(data => {
@@ -169,11 +175,23 @@ const ClubActivities = () => {
                 })
                 .catch(err => console.log('Sync user status error:', err));
         }
+
+        // Fetch registered clubs for quick dropdown
+        fetch(`${API_BASE_URL}/api/v1/uprise/leaderboard?role=college&limit=100`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success' && Array.isArray(data.leaderboard)) {
+                    setRegisteredClubs(data.leaderboard);
+                }
+            })
+            .catch(err => console.log('Fetch clubs list error:', err));
     }, [currentUser?.email]);
 
     const handleLogout = () => {
         localStorage.removeItem('uprise_user');
         setCurrentUser(null);
+        setToastMsg('Active club session cleared. Select or enter another club anytime!');
+        setTimeout(() => setToastMsg(null), 3000);
     };
 
     const activities = [
@@ -361,6 +379,100 @@ const ClubActivities = () => {
         return currentUser.claimed_tasks.includes(actKey);
     };
 
+    const executeDirectClaim = async (act, count = 1) => {
+        if (!currentUser?.email) {
+            setManualEmail('');
+            setClaimModalData(act);
+            return;
+        }
+
+        setSubmittingActKey(act.key);
+        const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
+
+        try {
+            const bodyPayload = {
+                email: currentUser.email,
+                task_key: act.key,
+            };
+            if (act.isRepeatable) {
+                bodyPayload.count = count;
+            }
+
+            const res = await fetch(`${API_BASE_URL}/api/v1/uprise/claim-task-xp`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bodyPayload),
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                const awarded = data.xp_awarded ?? act.xp;
+                setCurrentUser(prev => {
+                    const updated = {
+                        ...(prev || {}),
+                        total_xp: data.total_xp,
+                        claimed_tasks: data.claimed_tasks || [...(prev?.claimed_tasks || []), act.key],
+                    };
+                    localStorage.setItem('uprise_user', JSON.stringify(updated));
+                    return updated;
+                });
+
+                if (data.already_claimed) {
+                    setToastMsg(`ℹ️ Task already completed for ${data.club_name || currentUser.full_name || 'your club'}.`);
+                } else {
+                    setToastMsg(`🎉 +${awarded.toLocaleString()} XP CREDITED TO ${data.club_name || currentUser.full_name || 'YOUR CLUB'}! TASK MARKED AS COMPLETED!`);
+                }
+                setClaimModalData(null);
+                setTimeout(() => setToastMsg(null), 5000);
+            } else {
+                setToastMsg(`❌ ${data.message || data.error || 'Failed to claim task XP. Please try again.'}`);
+                setTimeout(() => setToastMsg(null), 5000);
+            }
+        } catch (err) {
+            console.error('Direct claim error:', err);
+            setToastMsg('❌ Network error while crediting XP. Please try again.');
+            setTimeout(() => setToastMsg(null), 4000);
+        } finally {
+            setSubmittingActKey(null);
+        }
+    };
+
+    const handleQuickClubActivate = async (customVal) => {
+        const val = (customVal || quickClubInput || '').trim();
+        if (!val) {
+            setToastMsg('❌ Please enter your club email or referral code.');
+            setTimeout(() => setToastMsg(null), 3000);
+            return;
+        }
+
+        setQuickClubLoading(true);
+        const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
+
+        try {
+            const isEmail = val.includes('@');
+            const param = isEmail ? `email=${encodeURIComponent(val.toLowerCase())}` : `coupon=${encodeURIComponent(val.toUpperCase())}`;
+            const res = await fetch(`${API_BASE_URL}/api/v1/uprise/user-status?${param}`);
+            const data = await res.json();
+
+            if (data.success && data.user) {
+                setCurrentUser(data.user);
+                localStorage.setItem('uprise_user', JSON.stringify(data.user));
+                setToastMsg(`✓ Active Club: ${data.user.club_name || data.user.full_name} (${(data.user.total_xp || 0).toLocaleString()} XP)`);
+                setQuickClubInput('');
+                setTimeout(() => setToastMsg(null), 4000);
+            } else {
+                setToastMsg('❌ Club not found with this email or code. Please check spelling or register.');
+                setTimeout(() => setToastMsg(null), 4000);
+            }
+        } catch (err) {
+            console.error('Quick club activate error:', err);
+            setToastMsg('❌ Connection error while activating club.');
+            setTimeout(() => setToastMsg(null), 4000);
+        } finally {
+            setQuickClubLoading(false);
+        }
+    };
+
     const handleActionClick = (act) => {
         if (act.isInfoOnly) {
             setToastMsg('ℹ️ Keep your registered members active across challenges to maintain vitality!');
@@ -368,55 +480,47 @@ const ClubActivities = () => {
             return;
         }
 
-        if (act.isReferralBoost) {
-            const code = currentUser?.coupon_code || 'YOUR_CLUB_CODE';
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(`Join Uprise 2027 with our club referral code: ${code}\nRegister at https://account.levelupevents.in/events/`);
-            }
-            setToastMsg(`🔥 48H INFILTRATION ACTIVE: Referral code ${code} copied! Each student registration awards +250 XP (5x Boost) for your club!`);
-
-            // If logged in as club, also claim the activity task completion if not already logged
-            if (currentUser?.email && !currentUser?.claimed_tasks?.includes(act.key)) {
-                const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
-                fetch(`${API_BASE_URL}/api/v1/uprise/claim-task-xp`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        email: currentUser.email,
-                        task_key: act.key,
-                    }),
-                })
-                .then(r => r.json())
-                .then(data => {
-                    if (data.success && !data.already_claimed) {
-                        setCurrentUser(prev => {
-                            const updated = {
-                                ...prev,
-                                total_xp: data.total_xp,
-                                claimed_tasks: data.claimed_tasks || [...(prev?.claimed_tasks || []), act.key],
-                            };
-                            localStorage.setItem('uprise_user', JSON.stringify(updated));
-                            return updated;
-                        });
-                        setToastMsg(`🔥 48H INFILTRATION ACTIVATED! Referral code ${code} copied (+250 XP credited to club)!`);
-                    }
-                })
-                .catch(err => console.error('48h infiltration activation claim error:', err));
-            }
-
-            setTimeout(() => setToastMsg(null), 5000);
+        // If no club identified yet, open identification modal to select or enter club
+        if (!currentUser?.email) {
+            setManualEmail('');
+            setProblemCount(1);
+            setClaimModalData(act);
             return;
         }
 
+        // If repeatable (The Problem Solver), open modal to specify problem count
+        if (act.isRepeatable) {
+            setProblemCount(1);
+            setClaimModalData(act);
+            return;
+        }
+
+        // If draft message share (Strength Share), open modal to view/copy draft and claim
+        if (act.isDraftShare) {
+            setClaimModalData(act);
+            return;
+        }
+
+        // If contact admin (Plan an Event), open modal to view channels and claim
         if (act.isContactAdmin) {
             setClaimModalData(act);
             return;
         }
 
-        // Open custom claim modal
-        setProblemCount(1);
-        setManualEmail(currentUser?.email || '');
-        setClaimModalData(act);
+        // If 48-Hour Infiltration, copy referral code and directly complete task
+        if (act.isReferralBoost) {
+            const code = currentUser?.coupon_code || 'YOUR_CLUB_CODE';
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(`Join Uprise 2027 with our club referral code: ${code}\nRegister at https://account.levelupevents.in/events/`);
+            }
+            executeDirectClaim(act);
+            setToastMsg(`🔥 48H INFILTRATION ACTIVATED! Referral code ${code} copied (+250 XP credited to club)!`);
+            setTimeout(() => setToastMsg(null), 5000);
+            return;
+        }
+
+        // For all other activities: DIRECT 1-CLICK COMPLETION & XP AWARD!
+        executeDirectClaim(act);
     };
 
     const copyDraftedMessage = () => {
@@ -430,7 +534,7 @@ const ClubActivities = () => {
     };
 
     const executeClaim = async (e) => {
-        e.preventDefault();
+        if (e && e.preventDefault) e.preventDefault();
         if (!claimModalData) return;
 
         const emailToUse = (currentUser?.email || manualEmail || '').trim().toLowerCase();
@@ -460,19 +564,20 @@ const ClubActivities = () => {
 
             const data = await res.json();
             if (data.success) {
-                const awarded = data.xp_awarded || claimModalData.xp;
-                setCurrentUser(prev => {
-                    const updated = {
-                        ...(prev || {}),
-                        email: emailToUse,
-                        total_xp: data.total_xp,
-                        claimed_tasks: data.claimed_tasks || [...(prev?.claimed_tasks || []), claimModalData.key],
-                    };
-                    localStorage.setItem('uprise_user', JSON.stringify(updated));
-                    return updated;
-                });
+                const awarded = data.xp_awarded ?? (claimModalData.isRepeatable ? (problemCount * 2500) : claimModalData.xp);
+                const updatedUser = {
+                    ...(currentUser || {}),
+                    email: emailToUse,
+                    full_name: data.club_name || currentUser?.full_name || emailToUse,
+                    club_name: data.club_name || currentUser?.club_name || emailToUse,
+                    role: 'club',
+                    total_xp: data.total_xp,
+                    claimed_tasks: data.claimed_tasks || [...(currentUser?.claimed_tasks || []), claimModalData.key],
+                };
+                setCurrentUser(updatedUser);
+                localStorage.setItem('uprise_user', JSON.stringify(updatedUser));
 
-                setToastMsg(`🎉 +${awarded.toLocaleString()} XP CREDITED AUTOMATICALLY TO YOUR CLUB STANDING!`);
+                setToastMsg(`🎉 +${awarded.toLocaleString()} XP CREDITED TO ${data.club_name || 'YOUR CLUB'}! TASK MARKED AS COMPLETED!`);
                 setClaimModalData(null);
                 setTimeout(() => setToastMsg(null), 5000);
             } else {
@@ -581,6 +686,89 @@ const ClubActivities = () => {
                     </div>
                 </div>
 
+                {/* Active Participating Club Banner / Quick Club Activation Bar */}
+                {currentUser?.email ? (
+                    <motion.div
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mb-10 p-5 sm:p-6 bg-gradient-to-r from-gold/20 via-[#0D1017] to-gold/20 border-2 border-gold/60 shadow-[0_0_30px_rgba(212,175,55,0.25)] flex flex-wrap items-center justify-between gap-5 backdrop-blur-md"
+                    >
+                        <div className="flex items-center gap-4">
+                            <div className="w-14 h-14 bg-black border-2 border-gold flex items-center justify-center text-3xl shadow-[0_0_15px_rgba(212,175,55,0.4)]">
+                                🏛️
+                            </div>
+                            <div>
+                                <div className="flex items-center gap-2 mb-1">
+                                    <span className="text-[11px] font-mono tracking-widest text-gold uppercase font-bold bg-gold/15 px-2 py-0.5 border border-gold/30">
+                                        ACTIVE PARTICIPATING CLUB
+                                    </span>
+                                    <span className="text-[11px] font-mono text-emerald-400 font-bold">
+                                        ● VERIFIED FOR XP
+                                    </span>
+                                </div>
+                                <h2 className="text-xl sm:text-2xl font-black font-heading text-white tracking-wide">
+                                    {currentUser.club_name || currentUser.full_name || currentUser.email}
+                                </h2>
+                                <p className="text-xs text-lightgrey font-mono mt-1">
+                                    Registered Email: <span className="text-white font-bold">{currentUser.email}</span> • Club Invite Code: <span className="text-gold font-bold">{currentUser.coupon_code || 'UPRISE'}</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-5">
+                            <div className="text-right">
+                                <div className="text-[10px] font-mono tracking-widest text-gold uppercase">CURRENT CLUB XP</div>
+                                <div className="text-2xl sm:text-3xl font-black font-heading text-gold">
+                                    {(currentUser.total_xp || 0).toLocaleString()} XP
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={handleLogout}
+                                className="px-4 py-2 bg-black/80 border border-gold/40 hover:border-gold text-gold hover:text-white text-xs font-mono uppercase tracking-wider transition-all"
+                            >
+                                Switch Club ↻
+                            </button>
+                        </div>
+                    </motion.div>
+                ) : (
+                    <motion.div
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mb-10 p-5 sm:p-6 bg-black/80 border border-gold/40 shadow-[0_0_20px_rgba(212,175,55,0.15)] flex flex-wrap items-center justify-between gap-4 backdrop-blur-md"
+                    >
+                        <div className="flex items-center gap-3">
+                            <span className="text-3xl">🏛️</span>
+                            <div>
+                                <h4 className="text-sm sm:text-base font-bold font-heading text-white uppercase tracking-wider">
+                                    Identify Your Club To Gain Live XP & Complete Activities
+                                </h4>
+                                <p className="text-xs text-lightgrey">
+                                    Enter your registered club email to attribute XP directly to your college community standing.
+                                </p>
+                            </div>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                            <input
+                                type="text"
+                                placeholder="club@college.edu or referral code"
+                                value={quickClubInput}
+                                onChange={(e) => setQuickClubInput(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleQuickClubActivate()}
+                                className="px-4 py-2.5 bg-black border border-gold/40 focus:border-gold text-white text-xs font-mono flex-1 sm:w-72 outline-none"
+                            />
+                            <button
+                                type="button"
+                                disabled={quickClubLoading}
+                                onClick={() => handleQuickClubActivate()}
+                                className="px-5 py-2.5 bg-gold hover:bg-gold/90 text-black font-heading font-black text-xs uppercase tracking-wider shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all disabled:opacity-50"
+                            >
+                                {quickClubLoading ? 'Checking...' : 'Activate Club ⚡'}
+                            </button>
+                        </div>
+                    </motion.div>
+                )}
+
                 {/* Activities Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                     {activities.map((act, index) => {
@@ -644,17 +832,22 @@ const ClubActivities = () => {
                                             <button
                                                 type="button"
                                                 disabled
-                                                className="w-full py-2.5 px-4 bg-emerald-500/15 border border-emerald-500/50 text-emerald-400 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-default"
+                                                className="w-full py-2.5 px-4 bg-emerald-500/15 border border-emerald-500/50 text-emerald-400 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-default shadow-[0_0_12px_rgba(16,185,129,0.25)]"
                                             >
                                                 <span>✓ COMPLETED (+{act.xpBadge})</span>
                                             </button>
                                         ) : (
                                             <button
                                                 type="button"
+                                                disabled={submittingActKey === act.key}
                                                 onClick={() => handleActionClick(act)}
-                                                className="w-full py-2.5 px-4 bg-gold/15 hover:bg-gold text-gold hover:text-black border border-gold/40 hover:border-gold font-heading font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(212,175,55,0.15)] hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]"
+                                                className="w-full py-2.5 px-4 bg-gold/15 hover:bg-gold text-gold hover:text-black border border-gold/40 hover:border-gold font-heading font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(212,175,55,0.15)] hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] disabled:opacity-50"
                                             >
-                                                <span>⚡ {act.actionText}</span>
+                                                {submittingActKey === act.key ? (
+                                                    <span>⚡ CREDITING +{act.xpBadge}...</span>
+                                                ) : (
+                                                    <span>⚡ {act.actionText}</span>
+                                                )}
                                             </button>
                                         )}
                                     </div>
@@ -777,24 +970,61 @@ const ClubActivities = () => {
                                             💬 Discord Admin POC
                                         </a>
                                     </div>
+                                    <button
+                                        type="button"
+                                        disabled={claimSubmitting}
+                                        onClick={executeClaim}
+                                        className="w-full mt-4 py-3 bg-gold hover:bg-gold/90 text-black font-heading font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(212,175,55,0.4)] disabled:opacity-50"
+                                    >
+                                        {claimSubmitting ? 'CREDITING XP...' : '✓ CONFIRM EVENT PROPOSAL & COMPLETE TASK (+5,000 XP)'}
+                                    </button>
                                 </div>
                             ) : (
                                 <form onSubmit={executeClaim} className="space-y-4">
+                                    {/* Club Dropdown / Email */}
+                                    {!currentUser?.email && registeredClubs.length > 0 && (
+                                        <div>
+                                            <label className="block text-xs font-mono uppercase tracking-wider text-gold mb-1.5">
+                                                Select Registered Club
+                                            </label>
+                                            <select
+                                                onChange={(e) => {
+                                                    const selCode = e.target.value;
+                                                    if (selCode) {
+                                                        const match = registeredClubs.find(c => c.coupon_code === selCode || c.name === selCode);
+                                                        if (match) {
+                                                            setManualEmail(match.coupon_code || match.name);
+                                                        }
+                                                    }
+                                                }}
+                                                className="w-full px-3 py-2.5 bg-black/80 border border-gold/30 text-gold text-xs outline-none font-mono"
+                                            >
+                                                <option value="">-- Choose from registered college clubs --</option>
+                                                {registeredClubs.map((c, i) => (
+                                                    <option key={i} value={c.coupon_code}>
+                                                        {c.name} {c.organization ? `(${c.organization})` : ''} • Code: {c.coupon_code}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    )}
+
                                     {/* Club Email */}
                                     <div>
                                         <label className="block text-xs font-mono uppercase tracking-wider text-gold mb-1.5">
-                                            Registered Club Email Address
+                                            {currentUser?.email ? 'Active Club' : 'Registered Club Email or Referral Code'}
                                         </label>
                                         <input
-                                            type="email"
+                                            type="text"
                                             required
-                                            value={currentUser?.email || manualEmail}
+                                            value={currentUser?.email ? `${currentUser.club_name || currentUser.full_name} (${currentUser.email})` : manualEmail}
+                                            disabled={!!currentUser?.email}
                                             onChange={(e) => setManualEmail(e.target.value)}
-                                            placeholder="e.g. acm@college.edu or club@gmail.com"
-                                            className="w-full px-4 py-3 bg-black/60 border border-gold/30 focus:border-gold text-white text-sm outline-none transition-colors font-mono"
+                                            placeholder="e.g. acm@college.edu or UPRISEGDSC"
+                                            className="w-full px-4 py-3 bg-black/60 border border-gold/30 focus:border-gold text-white text-sm outline-none transition-colors font-mono disabled:opacity-75 disabled:border-emerald-500/50"
                                         />
                                         <p className="text-[11px] text-white/50 mt-1">
-                                            Must match the email registered on "Join as Club" so XP credits to your leaderboard.
+                                            {currentUser?.email ? 'XP will be credited directly to your active club.' : 'Enter the email registered on Join as Club or club referral code.'}
                                         </p>
                                     </div>
 
