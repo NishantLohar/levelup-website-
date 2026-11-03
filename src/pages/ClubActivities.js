@@ -652,7 +652,7 @@ const ClubActivities = () => {
                         className="text-lightgrey text-base sm:text-lg max-w-3xl mx-auto leading-relaxed mb-8"
                     >
                         High-impact strategic milestones crafted for collegiate clubs, student chapters, and technical societies. 
-                        Mobilize your campus, complete activities, and watch your club earn verified XP automatically on the <strong>College Communities Leaderboard</strong>.
+                        Mobilize your campus, complete activities, and watch your club earn verified XP automatically on the <strong>Student Communities Leaderboard</strong>.
                     </motion.p>
 
                     {/* CTAs */}
@@ -888,7 +888,7 @@ const ClubActivities = () => {
                             to="/uprise#arena"
                             className="inline-flex items-center gap-2 px-8 py-3.5 bg-black hover:bg-gold/10 text-gold border border-gold/40 font-heading font-bold text-xs tracking-widest uppercase transition-all"
                         >
-                            <span>COLLEGE COMMUNITIES LEADERBOARD →</span>
+                            <span>STUDENT COMMUNITIES LEADERBOARD →</span>
                         </Link>
                     </div>
                 </div>

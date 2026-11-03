@@ -85,7 +85,7 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
     ? 'Uprise Hackers' 
     : activeBoard === 'levelup' 
     ? 'LevelUp Builders' 
-    : 'College Communities';
+    : 'Student Communities';
 
   const shareText = `Check out the live Gauntlet Leaderboard rankings for ${boardTitle} on LevelUp Uprise!`;
 
@@ -275,7 +275,7 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
                               : 'border-transparent text-lightgrey hover:text-white'
                       }`}
                   >
-                      COLLEGE COMMUNITIES
+                      STUDENT COMMUNITIES
                   </button>
               </div>
 
