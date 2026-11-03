@@ -5,6 +5,7 @@ const Leaderboard = () => {
   const [activeBoard, setActiveBoard] = useState('hackers');
   const [boardData, setBoardData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showAll, setShowAll] = useState(false);
 
   const cutoffs = {
     hackers: { cutoff: 1200, cutoffText: "DANGER ZONE CUTOFF" },
@@ -15,6 +16,7 @@ const Leaderboard = () => {
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
+    setShowAll(false);
 
     const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
 
@@ -85,6 +87,8 @@ const Leaderboard = () => {
     );
   };
 
+  const displayedData = showAll ? boardData : boardData.slice(0, 10);
+
   return (
     <section id="arena" className="py-32 px-6 bg-obsidian relative border-b border-gold/20">
       <div className="max-w-6xl mx-auto relative z-10">
@@ -137,7 +141,7 @@ const Leaderboard = () => {
                               </td>
                             </tr>
                           ) : (
-                            boardData.map(row => {
+                            displayedData.map(row => {
                               let html = [];
                               if (row.rank === cutoffs[activeBoard].cutoff + 1) {
                                 html.push(
@@ -160,6 +164,33 @@ const Leaderboard = () => {
                       </tbody>
                   </table>
               </div>
+
+              {!loading && boardData.length > 10 && (
+                  <div className="p-6 text-center border-t border-gold/20 bg-pitchblack/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+                      <span className="text-lightgrey font-grotesk text-xs tracking-widest uppercase">
+                          {showAll 
+                              ? `SHOWING ALL ${boardData.length} CONTENDERS` 
+                              : `SHOWING TOP 10 OF ${boardData.length} CONTENDERS`
+                          }
+                      </span>
+                      <button 
+                          onClick={() => setShowAll(prev => !prev)}
+                          className="cursor-pointer px-8 py-3 bg-transparent border border-gold text-gold hover:bg-gold hover:text-pitchblack font-heading text-xs font-bold tracking-[0.2em] uppercase transition-all duration-300 shadow-[0_0_15px_rgba(212,175,55,0.15)] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex items-center gap-2"
+                      >
+                          {showAll ? (
+                              <>
+                                  <span>SHOW LESS</span>
+                                  <span className="text-xs">▲</span>
+                              </>
+                          ) : (
+                              <>
+                                  <span>SEE MORE</span>
+                                  <span className="text-xs">▼</span>
+                              </>
+                          )}
+                      </button>
+                  </div>
+              )}
           </div>
       </div>
     </section>
