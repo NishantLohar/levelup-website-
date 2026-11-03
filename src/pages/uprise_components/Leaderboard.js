@@ -189,37 +189,67 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
               <p className="text-lightgrey font-grotesk tracking-[0.3em] text-sm uppercase">THE GAUNTLET LEADERBOARDS (LIVE)</p>
           </div>
 
-          {/* Category Tabs and Share Button */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-12 border-b border-lightgrey/20 pb-4">
-              <div className="flex flex-wrap justify-center sm:justify-start">
-                  <button onClick={() => handleBoardChange('hackers')} className={`bg-transparent px-4 md:px-8 py-4 font-heading text-xs md:text-sm font-bold border-b-2 transition-colors tracking-widest uppercase ${activeBoard === 'hackers' ? 'border-gold text-gold' : 'border-transparent text-lightgrey hover:text-white'}`}>UPRISE HACKERS</button>
-                  <button onClick={() => handleBoardChange('levelup')} className={`bg-transparent px-4 md:px-8 py-4 font-heading text-xs md:text-sm font-bold border-b-2 transition-colors tracking-widest uppercase ${activeBoard === 'levelup' ? 'border-gold text-gold' : 'border-transparent text-lightgrey hover:text-white'}`}>LEVELUP BUILDERS</button>
-                  <button onClick={() => handleBoardChange('college')} className={`bg-transparent px-4 md:px-8 py-4 font-heading text-xs md:text-sm font-bold border-b-2 transition-colors tracking-widest uppercase ${activeBoard === 'college' ? 'border-gold text-gold' : 'border-transparent text-lightgrey hover:text-white'}`}>COLLEGE COMMUNITIES</button>
+          {/* Category Tabs and Share Button: Tabs left-aligned in 1 line, Share right-aligned */}
+          <div className="w-full flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 border-b border-lightgrey/20 pb-0">
+              {/* All three tabs in one single line, left-aligned */}
+              <div className="flex items-center overflow-x-auto whitespace-nowrap scrollbar-none flex-nowrap -mb-[1px]">
+                  <button 
+                      onClick={() => handleBoardChange('hackers')} 
+                      className={`bg-transparent px-3 sm:px-5 md:px-6 py-4 font-heading text-xs md:text-sm font-bold border-b-2 transition-colors tracking-widest uppercase whitespace-nowrap focus:outline-none ${
+                          activeBoard === 'hackers' 
+                              ? 'border-gold text-gold' 
+                              : 'border-transparent text-lightgrey hover:text-white'
+                      }`}
+                  >
+                      UPRISE HACKERS
+                  </button>
+                  <button 
+                      onClick={() => handleBoardChange('levelup')} 
+                      className={`bg-transparent px-3 sm:px-5 md:px-6 py-4 font-heading text-xs md:text-sm font-bold border-b-2 transition-colors tracking-widest uppercase whitespace-nowrap focus:outline-none ${
+                          activeBoard === 'levelup' 
+                              ? 'border-gold text-gold' 
+                              : 'border-transparent text-lightgrey hover:text-white'
+                      }`}
+                  >
+                      LEVELUP BUILDERS
+                  </button>
+                  <button 
+                      onClick={() => handleBoardChange('college')} 
+                      className={`bg-transparent px-3 sm:px-5 md:px-6 py-4 font-heading text-xs md:text-sm font-bold border-b-2 transition-colors tracking-widest uppercase whitespace-nowrap focus:outline-none ${
+                          activeBoard === 'college' 
+                              ? 'border-gold text-gold' 
+                              : 'border-transparent text-lightgrey hover:text-white'
+                      }`}
+                  >
+                      COLLEGE COMMUNITIES
+                  </button>
               </div>
 
-              {/* Share Leaderboard Button */}
-              <button
-                  onClick={handleShare}
-                  className="cursor-pointer px-5 py-3 bg-gold/10 hover:bg-gold text-gold hover:text-pitchblack border border-gold font-heading text-xs font-bold tracking-[0.2em] uppercase transition-all duration-300 shadow-[0_0_15px_rgba(212,175,55,0.2)] hover:shadow-[0_0_25px_rgba(212,175,55,0.5)] flex items-center gap-2 group whitespace-nowrap self-center sm:self-auto"
-                  title="Share Live Leaderboard Link"
-              >
-                  <svg 
-                      className="w-4 h-4 transition-transform group-hover:scale-110" 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      strokeWidth="2" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round"
+              {/* Right-aligned: Share Leaderboard Button */}
+              <div className="flex items-center justify-end flex-shrink-0 pb-3 md:pb-2.5">
+                  <button
+                      onClick={handleShare}
+                      className="cursor-pointer px-4 sm:px-5 py-2.5 sm:py-3 bg-gold/10 hover:bg-gold text-gold hover:text-pitchblack border border-gold font-heading text-xs font-bold tracking-[0.2em] uppercase transition-all duration-300 shadow-[0_0_15px_rgba(212,175,55,0.2)] hover:shadow-[0_0_25px_rgba(212,175,55,0.5)] flex items-center gap-2 group whitespace-nowrap focus:outline-none"
+                      title="Share Live Leaderboard Link"
                   >
-                      <circle cx="18" cy="5" r="3"></circle>
-                      <circle cx="6" cy="12" r="3"></circle>
-                      <circle cx="18" cy="19" r="3"></circle>
-                      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-                  </svg>
-                  <span>{copiedToast ? 'LINK COPIED! ✓' : 'SHARE LEADERBOARD'}</span>
-              </button>
+                      <svg 
+                          className="w-4 h-4 transition-transform group-hover:scale-110 flex-shrink-0" 
+                          viewBox="0 0 24 24" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          strokeWidth="2" 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round"
+                      >
+                          <circle cx="18" cy="5" r="3"></circle>
+                          <circle cx="6" cy="12" r="3"></circle>
+                          <circle cx="18" cy="19" r="3"></circle>
+                          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                      </svg>
+                      <span>{copiedToast ? 'LINK COPIED! ✓' : 'SHARE LEADERBOARD'}</span>
+                  </button>
+              </div>
           </div>
 
           <div className="glass-card sharp overflow-hidden border border-gold/30 shadow-[0_0_30px_rgba(0,0,0,0.8)] board-content">
@@ -292,7 +322,7 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
                       <div className="flex items-center gap-3 flex-wrap justify-center">
                           <button 
                               onClick={handleShare}
-                              className="cursor-pointer px-5 py-3 bg-transparent border border-gold/40 text-gold hover:bg-gold hover:text-pitchblack font-heading text-xs font-bold tracking-[0.2em] uppercase transition-all duration-300 flex items-center gap-2"
+                              className="cursor-pointer px-5 py-3 bg-transparent border border-gold/40 text-gold hover:bg-gold hover:text-pitchblack font-heading text-xs font-bold tracking-[0.2em] uppercase transition-all duration-300 flex items-center gap-2 focus:outline-none"
                               title="Share this Leaderboard"
                           >
                               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -306,7 +336,7 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
                           </button>
                           <button 
                               onClick={() => setShowAll(prev => !prev)}
-                              className="cursor-pointer px-8 py-3 bg-transparent border border-gold text-gold hover:bg-gold hover:text-pitchblack font-heading text-xs font-bold tracking-[0.2em] uppercase transition-all duration-300 shadow-[0_0_15px_rgba(212,175,55,0.15)] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex items-center gap-2"
+                              className="cursor-pointer px-8 py-3 bg-transparent border border-gold text-gold hover:bg-gold hover:text-pitchblack font-heading text-xs font-bold tracking-[0.2em] uppercase transition-all duration-300 shadow-[0_0_15px_rgba(212,175,55,0.15)] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] flex items-center gap-2 focus:outline-none"
                           >
                               {showAll ? (
                                   <>
