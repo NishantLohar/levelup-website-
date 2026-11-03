@@ -17,6 +17,7 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
   const [loading, setLoading] = useState(true);
   const [showAll, setShowAll] = useState(false);
   const [copiedToast, setCopiedToast] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const cutoffs = {
     hackers: { cutoff: 1200, cutoffText: "DANGER ZONE CUTOFF" },
@@ -75,36 +76,21 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
     }
   };
 
-  const handleShare = async () => {
-    const origin = window.location.origin;
-    const shareUrl = `${origin}/leaderboard?board=${activeBoard}`;
-    const boardTitle = activeBoard === 'hackers' 
-      ? 'Uprise Hackers' 
-      : activeBoard === 'levelup' 
-      ? 'LevelUp Builders' 
-      : 'College Communities';
-    const shareTitle = `LevelUp Uprise Leaderboard - ${boardTitle}`;
-    const shareText = `Check out the live Gauntlet Leaderboard rankings for ${boardTitle} on LevelUp Uprise!`;
+  const getShareUrl = () => {
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://levelupevents.in';
+    return `${origin}/leaderboard?board=${activeBoard}`;
+  };
 
-    // Try Web Share API (mobile native sharing)
-    if (navigator.share && window.isSecureContext) {
-      try {
-        await navigator.share({
-          title: shareTitle,
-          text: shareText,
-          url: shareUrl,
-        });
-        return;
-      } catch (err) {
-        if (err.name !== 'AbortError') {
-          console.log('Share fallback to clipboard:', err);
-        } else {
-          return; // User canceled share sheet
-        }
-      }
-    }
+  const boardTitle = activeBoard === 'hackers' 
+    ? 'Uprise Hackers' 
+    : activeBoard === 'levelup' 
+    ? 'LevelUp Builders' 
+    : 'College Communities';
 
-    // Fallback: Copy to clipboard
+  const shareText = `Check out the live Gauntlet Leaderboard rankings for ${boardTitle} on LevelUp Uprise!`;
+
+  const handleCopyLink = async () => {
+    const shareUrl = getShareUrl();
     try {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         await navigator.clipboard.writeText(shareUrl);
@@ -169,14 +155,82 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
   };
 
   const displayedData = showAll ? boardData : boardData.slice(0, 10);
+  const shareUrl = getShareUrl();
 
   return (
     <section id="arena" className="py-24 md:py-32 px-6 bg-obsidian relative border-b border-gold/20">
-      {/* Toast Notification for Share Link Copy */}
+      {/* Toast Notification for Link Copied */}
       {copiedToast && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[99999] px-6 py-3.5 bg-pitchblack border-2 border-gold text-gold font-heading font-black tracking-widest text-xs uppercase gold-glow shadow-[0_0_30px_rgba(212,175,55,0.6)] flex items-center gap-3">
           <span className="text-base">📋</span>
           <span>LEADERBOARD LINK COPIED TO CLIPBOARD!</span>
+        </div>
+      )}
+
+      {/* Share Modal Dialog */}
+      {isShareModalOpen && (
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-pitchblack/85 backdrop-blur-md">
+          <div className="glass-card sharp border-2 border-gold p-6 sm:p-8 max-w-lg w-full bg-obsidian relative shadow-[0_0_50px_rgba(212,175,55,0.35)]">
+            <button 
+              onClick={() => setIsShareModalOpen(false)}
+              className="absolute top-4 right-4 text-lightgrey hover:text-white font-heading text-xl font-bold px-2 cursor-pointer"
+            >
+              ✕
+            </button>
+
+            <div className="text-center mb-6">
+              <h3 className="text-xl sm:text-2xl font-black font-heading text-white tracking-wider mb-2">
+                SHARE <span className="text-gold bright">{boardTitle.toUpperCase()}</span>
+              </h3>
+              <p className="text-xs text-lightgrey font-grotesk tracking-widest uppercase">
+                Direct Standalone Leaderboard Link
+              </p>
+            </div>
+
+            {/* Link Preview & Copy Button */}
+            <div className="flex items-center gap-2 mb-6 bg-pitchblack border border-gold/50 p-2">
+              <input 
+                type="text" 
+                readOnly 
+                value={shareUrl}
+                className="bg-transparent text-white font-mono text-xs px-2 w-full focus:outline-none"
+              />
+              <button
+                onClick={handleCopyLink}
+                className="px-4 py-2 bg-gold text-pitchblack font-heading font-bold text-xs tracking-wider uppercase hover:bg-white transition-colors flex-shrink-0 cursor-pointer"
+              >
+                {copiedToast ? 'COPIED!' : 'COPY'}
+              </button>
+            </div>
+
+            {/* Quick Share to Social Apps */}
+            <div className="grid grid-cols-3 gap-3">
+              <a 
+                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 border border-green-500/40 bg-green-500/10 hover:bg-green-500 text-green-400 hover:text-black font-heading text-xs font-bold text-center tracking-wider uppercase transition-colors"
+              >
+                WhatsApp
+              </a>
+              <a 
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 border border-blue-400/40 bg-blue-400/10 hover:bg-blue-400 text-blue-300 hover:text-black font-heading text-xs font-bold text-center tracking-wider uppercase transition-colors"
+              >
+                Twitter / X
+              </a>
+              <a 
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 border border-blue-600/40 bg-blue-600/10 hover:bg-blue-600 text-blue-400 hover:text-white font-heading text-xs font-bold text-center tracking-wider uppercase transition-colors"
+              >
+                LinkedIn
+              </a>
+            </div>
+          </div>
         </div>
       )}
 
@@ -189,13 +243,13 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
               <p className="text-lightgrey font-grotesk tracking-[0.3em] text-sm uppercase">THE GAUNTLET LEADERBOARDS (LIVE)</p>
           </div>
 
-          {/* Category Tabs and Share Button: Tabs left-aligned in 1 line, Share right-aligned */}
+          {/* Category Tabs and Actions: Tabs left-aligned in 1 line, Copy & Share right-aligned */}
           <div className="w-full flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 border-b border-lightgrey/20 pb-0">
               {/* All three tabs in one single line, left-aligned */}
               <div className="flex items-center overflow-x-auto whitespace-nowrap scrollbar-none flex-nowrap -mb-[1px]">
                   <button 
                       onClick={() => handleBoardChange('hackers')} 
-                      className={`bg-transparent px-3 sm:px-5 md:px-6 py-4 font-heading text-xs md:text-sm font-bold border-b-2 transition-colors tracking-widest uppercase whitespace-nowrap focus:outline-none ${
+                      className={`bg-transparent px-3 sm:px-5 md:px-6 py-4 font-heading text-xs md:text-sm font-bold border-b-2 transition-colors tracking-widest uppercase whitespace-nowrap focus:outline-none cursor-pointer ${
                           activeBoard === 'hackers' 
                               ? 'border-gold text-gold' 
                               : 'border-transparent text-lightgrey hover:text-white'
@@ -205,7 +259,7 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
                   </button>
                   <button 
                       onClick={() => handleBoardChange('levelup')} 
-                      className={`bg-transparent px-3 sm:px-5 md:px-6 py-4 font-heading text-xs md:text-sm font-bold border-b-2 transition-colors tracking-widest uppercase whitespace-nowrap focus:outline-none ${
+                      className={`bg-transparent px-3 sm:px-5 md:px-6 py-4 font-heading text-xs md:text-sm font-bold border-b-2 transition-colors tracking-widest uppercase whitespace-nowrap focus:outline-none cursor-pointer ${
                           activeBoard === 'levelup' 
                               ? 'border-gold text-gold' 
                               : 'border-transparent text-lightgrey hover:text-white'
@@ -215,7 +269,7 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
                   </button>
                   <button 
                       onClick={() => handleBoardChange('college')} 
-                      className={`bg-transparent px-3 sm:px-5 md:px-6 py-4 font-heading text-xs md:text-sm font-bold border-b-2 transition-colors tracking-widest uppercase whitespace-nowrap focus:outline-none ${
+                      className={`bg-transparent px-3 sm:px-5 md:px-6 py-4 font-heading text-xs md:text-sm font-bold border-b-2 transition-colors tracking-widest uppercase whitespace-nowrap focus:outline-none cursor-pointer ${
                           activeBoard === 'college' 
                               ? 'border-gold text-gold' 
                               : 'border-transparent text-lightgrey hover:text-white'
@@ -225,12 +279,34 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
                   </button>
               </div>
 
-              {/* Right-aligned: Share Leaderboard Button */}
-              <div className="flex items-center justify-end flex-shrink-0 pb-3 md:pb-2.5">
+              {/* Right-aligned: COPY TO CLIPBOARD and SHARE Buttons */}
+              <div className="flex items-center gap-2.5 sm:gap-3 flex-shrink-0 pb-3 md:pb-2.5 flex-wrap justify-end">
+                  {/* COPY TO CLIPBOARD Button */}
                   <button
-                      onClick={handleShare}
-                      className="cursor-pointer px-4 sm:px-5 py-2.5 sm:py-3 bg-gold/10 hover:bg-gold text-gold hover:text-pitchblack border border-gold font-heading text-xs font-bold tracking-[0.2em] uppercase transition-all duration-300 shadow-[0_0_15px_rgba(212,175,55,0.2)] hover:shadow-[0_0_25px_rgba(212,175,55,0.5)] flex items-center gap-2 group whitespace-nowrap focus:outline-none"
-                      title="Share Live Leaderboard Link"
+                      onClick={handleCopyLink}
+                      className="cursor-pointer px-4 sm:px-5 py-2.5 sm:py-3 bg-gold/15 hover:bg-gold text-gold hover:text-pitchblack border border-gold font-heading text-xs font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase transition-all duration-300 shadow-[0_0_15px_rgba(212,175,55,0.25)] hover:shadow-[0_0_25px_rgba(212,175,55,0.5)] flex items-center gap-2 group whitespace-nowrap focus:outline-none"
+                      title="Copy direct leaderboard link to clipboard"
+                  >
+                      <svg 
+                          className="w-4 h-4 transition-transform group-hover:scale-110 flex-shrink-0" 
+                          viewBox="0 0 24 24" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          strokeWidth="2" 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round"
+                      >
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                      </svg>
+                      <span>{copiedToast ? 'COPIED! ✓' : 'COPY TO CLIPBOARD'}</span>
+                  </button>
+
+                  {/* SHARE Button */}
+                  <button
+                      onClick={() => setIsShareModalOpen(true)}
+                      className="cursor-pointer px-3 sm:px-4 py-2.5 sm:py-3 bg-transparent hover:bg-gold/15 text-gold border border-gold/50 hover:border-gold font-heading text-xs font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase transition-all duration-300 flex items-center gap-2 group whitespace-nowrap focus:outline-none"
+                      title="Share to WhatsApp, Twitter, LinkedIn"
                   >
                       <svg 
                           className="w-4 h-4 transition-transform group-hover:scale-110 flex-shrink-0" 
@@ -247,7 +323,7 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
                           <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
                           <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
                       </svg>
-                      <span>{copiedToast ? 'LINK COPIED! ✓' : 'SHARE LEADERBOARD'}</span>
+                      <span>SHARE</span>
                   </button>
               </div>
           </div>
@@ -321,18 +397,15 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
                       </span>
                       <div className="flex items-center gap-3 flex-wrap justify-center">
                           <button 
-                              onClick={handleShare}
+                              onClick={handleCopyLink}
                               className="cursor-pointer px-5 py-3 bg-transparent border border-gold/40 text-gold hover:bg-gold hover:text-pitchblack font-heading text-xs font-bold tracking-[0.2em] uppercase transition-all duration-300 flex items-center gap-2 focus:outline-none"
-                              title="Share this Leaderboard"
+                              title="Copy Leaderboard Link to Clipboard"
                           >
                               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                  <circle cx="18" cy="5" r="3"></circle>
-                                  <circle cx="6" cy="12" r="3"></circle>
-                                  <circle cx="18" cy="19" r="3"></circle>
-                                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                               </svg>
-                              <span>{copiedToast ? 'COPIED! ✓' : 'SHARE'}</span>
+                              <span>{copiedToast ? 'COPIED TO CLIPBOARD! ✓' : 'COPY TO CLIPBOARD'}</span>
                           </button>
                           <button 
                               onClick={() => setShowAll(prev => !prev)}
