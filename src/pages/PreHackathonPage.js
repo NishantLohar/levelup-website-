@@ -128,6 +128,37 @@ const PreHackathonPage = () => {
     const [hunt404ModalOpen, setHunt404ModalOpen] = useState(false);
     const [hunt404Input, setHunt404Input] = useState('');
     const [hunt404Result, setHunt404Result] = useState(null);
+
+    // Pre-Hackathon Tasks Share Modal & Copy State
+    const [isTasksShareModalOpen, setIsTasksShareModalOpen] = useState(false);
+    const [tasksCopied, setTasksCopied] = useState(false);
+
+    const handleCopyTasksLink = async () => {
+        const url = typeof window !== 'undefined' ? `${window.location.origin}/pre-hackathon` : 'https://levelupevents.in/pre-hackathon';
+        try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(url);
+            } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = url;
+                textArea.style.position = "fixed";
+                textArea.style.opacity = "0";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+            }
+            setTasksCopied(true);
+            setToastMsg('📋 PRE-HACKATHON LINK COPIED TO CLIPBOARD!');
+            setTimeout(() => {
+                setTasksCopied(false);
+                setToastMsg(null);
+            }, 3000);
+        } catch (e) {
+            console.error("Clipboard copy failed:", e);
+        }
+    };
     const [hunt404Submitting, setHunt404Submitting] = useState(false);
 
     // Auto-open 404 hunt modal if ?code= is passed in URL
@@ -1374,7 +1405,7 @@ const PreHackathonPage = () => {
                                         MISSIONS: <strong className="text-white">{`${currentPage * 12 + 1} – ${Math.min((currentPage + 1) * 12, socialTasks.length)}`}</strong> OF <strong className="text-gold">{socialTasks.length}</strong>
                                     </span>
                                 </div>
-                                <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                                <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
                                     {Array.from({ length: totalTaskPages }, (_, pageIdx) => {
                                         const startNum = pageIdx * 12 + 1;
                                         const endNum = Math.min((pageIdx + 1) * 12, socialTasks.length);
@@ -1384,23 +1415,23 @@ const PreHackathonPage = () => {
                                                 key={pageIdx}
                                                 type="button"
                                                 onClick={() => setCurrentPage(pageIdx)}
-                                                className={`px-3 sm:px-4 py-1.5 text-xs font-heading font-bold uppercase tracking-wider border transition-all cursor-pointer sharp flex items-center gap-1.5 ${
+                                                className={`px-2.5 sm:px-3 py-1 text-[10.5px] sm:text-[11px] font-heading font-bold uppercase tracking-wider border transition-all cursor-pointer sharp flex items-center gap-1 ${
                                                     isActive
-                                                        ? 'bg-gold text-pitchblack border-gold shadow-[0_0_15px_rgba(212,175,55,0.4)]'
+                                                        ? 'bg-gold text-pitchblack border-gold shadow-[0_0_12px_rgba(212,175,55,0.4)]'
                                                         : 'bg-pitchblack/60 text-lightgrey border-gold/30 hover:border-gold hover:text-white'
                                                 }`}
                                             >
-                                                <span>PAGE {pageIdx + 1} (MISSIONS {startNum}–{endNum})</span>
-                                                {pageIdx < totalTaskPages - 1 && !isActive && <span className="text-gold font-bold">&gt;</span>}
+                                                <span>PAGE {pageIdx + 1} ({startNum}–{endNum})</span>
+                                                {pageIdx < totalTaskPages - 1 && !isActive && <span className="text-gold font-bold text-[10px]">&gt;</span>}
                                             </button>
                                         );
                                     })}
-                                    <div className="flex items-center gap-1.5 ml-1">
+                                    <div className="flex items-center gap-1 ml-0.5">
                                         <button
                                             type="button"
                                             onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
                                             disabled={currentPage === 0}
-                                            className="w-8 h-8 border border-gold/40 bg-pitchblack text-gold hover:bg-gold hover:text-pitchblack disabled:opacity-25 disabled:pointer-events-none flex items-center justify-center font-black transition-all cursor-pointer sharp"
+                                            className="w-7 h-7 text-xs border border-gold/40 bg-pitchblack text-gold hover:bg-gold hover:text-pitchblack disabled:opacity-25 disabled:pointer-events-none flex items-center justify-center font-black transition-all cursor-pointer sharp"
                                             title="Previous Missions"
                                         >
                                             &lt;
@@ -1409,10 +1440,57 @@ const PreHackathonPage = () => {
                                             type="button"
                                             onClick={() => setCurrentPage(p => Math.min(totalTaskPages - 1, p + 1))}
                                             disabled={currentPage >= totalTaskPages - 1}
-                                            className="w-8 h-8 border border-gold/40 bg-pitchblack text-gold hover:bg-gold hover:text-pitchblack disabled:opacity-25 disabled:pointer-events-none flex items-center justify-center font-black transition-all cursor-pointer sharp"
+                                            className="w-7 h-7 text-xs border border-gold/40 bg-pitchblack text-gold hover:bg-gold hover:text-pitchblack disabled:opacity-25 disabled:pointer-events-none flex items-center justify-center font-black transition-all cursor-pointer sharp"
                                             title="More Missions"
                                         >
                                             &gt;
+                                        </button>
+                                    </div>
+
+                                    {/* Share Button & Copy Button */}
+                                    <div className="flex items-center gap-1.5 ml-1">
+                                        <button
+                                            type="button"
+                                            onClick={handleCopyTasksLink}
+                                            className="cursor-pointer px-2.5 sm:px-3 py-1 text-[11px] bg-gold/15 hover:bg-gold text-gold hover:text-pitchblack border border-gold font-heading font-bold tracking-wider uppercase transition-all duration-300 shadow-[0_0_12px_rgba(212,175,55,0.2)] flex items-center gap-1.5 sharp focus:outline-none"
+                                            title="Copy direct tasks link to clipboard"
+                                        >
+                                            <svg 
+                                                className="w-3.5 h-3.5 flex-shrink-0" 
+                                                viewBox="0 0 24 24" 
+                                                fill="none" 
+                                                stroke="currentColor" 
+                                                strokeWidth="2" 
+                                                strokeLinecap="round" 
+                                                strokeLinejoin="round"
+                                            >
+                                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                            </svg>
+                                            <span>{tasksCopied ? 'COPIED! ✓' : 'COPY'}</span>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setIsTasksShareModalOpen(true)}
+                                            className="cursor-pointer px-2.5 sm:px-3 py-1 text-[11px] bg-transparent hover:bg-gold/15 text-gold border border-gold/50 hover:border-gold font-heading font-bold tracking-wider uppercase transition-all duration-300 flex items-center gap-1.5 sharp focus:outline-none"
+                                            title="Share Pre-Hackathon Tasks"
+                                        >
+                                            <svg 
+                                                className="w-3.5 h-3.5 flex-shrink-0" 
+                                                viewBox="0 0 24 24" 
+                                                fill="none" 
+                                                stroke="currentColor" 
+                                                strokeWidth="2" 
+                                                strokeLinecap="round" 
+                                                strokeLinejoin="round"
+                                            >
+                                                <circle cx="18" cy="5" r="3"></circle>
+                                                <circle cx="6" cy="12" r="3"></circle>
+                                                <circle cx="18" cy="19" r="3"></circle>
+                                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                                            </svg>
+                                            <span>SHARE</span>
                                         </button>
                                     </div>
                                 </div>
@@ -1889,6 +1967,76 @@ const PreHackathonPage = () => {
                                 </div>
                             </form>
                         </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            
+            {/* Pre-Hackathon Tasks Share Modal Dialog */}
+            <AnimatePresence>
+                {isTasksShareModalOpen && (
+                    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-pitchblack/85 backdrop-blur-md">
+                        <div className="glass-card sharp border-2 border-gold p-6 sm:p-8 max-w-lg w-full bg-obsidian relative shadow-[0_0_50px_rgba(212,175,55,0.35)]">
+                            <button 
+                                onClick={() => setIsTasksShareModalOpen(false)}
+                                className="absolute top-4 right-4 text-lightgrey hover:text-white font-heading text-xl font-bold px-2 cursor-pointer"
+                            >
+                                ✕
+                            </button>
+
+                            <div className="text-center mb-6">
+                                <h3 className="text-xl sm:text-2xl font-black font-heading text-white tracking-wider mb-2">
+                                    SHARE <span className="text-gold bright">PRE-HACKATHON TASKS</span>
+                                </h3>
+                                <p className="text-xs text-lightgrey font-grotesk tracking-widest uppercase">
+                                    Invite developers, complete missions & climb the leaderboard!
+                                </p>
+                            </div>
+
+                            {/* Link Preview & Copy Button */}
+                            <div className="flex items-center gap-2 mb-6 bg-pitchblack border border-gold/50 p-2">
+                                <input 
+                                    type="text" 
+                                    readOnly 
+                                    value={typeof window !== 'undefined' ? `${window.location.origin}/pre-hackathon` : 'https://levelupevents.in/pre-hackathon'}
+                                    className="bg-transparent text-white font-mono text-xs px-2 w-full focus:outline-none"
+                                />
+                                <button
+                                    onClick={handleCopyTasksLink}
+                                    className="px-4 py-2 bg-gold text-pitchblack font-heading font-bold text-xs tracking-wider uppercase hover:bg-white transition-colors flex-shrink-0 cursor-pointer"
+                                >
+                                    {tasksCopied ? 'COPIED!' : 'COPY'}
+                                </button>
+                            </div>
+
+                            {/* Quick Share to Social Apps */}
+                            <div className="grid grid-cols-3 gap-3">
+                                <a 
+                                    href={`https://api.whatsapp.com/send?text=${encodeURIComponent('Join the Pre-Hackathon Community Gauntlet on LevelUp Uprise! Complete missions, earn XP, and climb the leaderboard: ' + (typeof window !== 'undefined' ? `${window.location.origin}/pre-hackathon` : 'https://levelupevents.in/pre-hackathon'))}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-3 border border-green-500/40 bg-green-500/10 hover:bg-green-500 text-green-400 hover:text-black font-heading text-xs font-bold text-center tracking-wider uppercase transition-colors"
+                                >
+                                    WhatsApp
+                                </a>
+                                <a 
+                                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('Join the Pre-Hackathon Community Gauntlet on LevelUp Uprise! Complete missions, earn XP, and climb the leaderboard:')}&url=${encodeURIComponent(typeof window !== 'undefined' ? `${window.location.origin}/pre-hackathon` : 'https://levelupevents.in/pre-hackathon')}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-3 border border-blue-400/40 bg-blue-400/10 hover:bg-blue-400 text-blue-300 hover:text-black font-heading text-xs font-bold text-center tracking-wider uppercase transition-colors"
+                                >
+                                    Twitter / X
+                                </a>
+                                <a 
+                                    href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof window !== 'undefined' ? `${window.location.origin}/pre-hackathon` : 'https://levelupevents.in/pre-hackathon')}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-3 border border-blue-600/40 bg-blue-600/10 hover:bg-blue-600 text-blue-400 hover:text-white font-heading text-xs font-bold text-center tracking-wider uppercase transition-colors"
+                                >
+                                    LinkedIn
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 )}
             </AnimatePresence>
