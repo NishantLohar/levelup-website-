@@ -85,7 +85,7 @@ const Navbar = () => {
               className={location.pathname === '/uprise' ? 'active' : ''}
               style={{ color: 'var(--color-primary)', fontWeight: 'bold' }}
             >
-              Uprise 2026
+              Uprise 2027
             </Link>
           </li>
           <li className="nav-dropdown">
