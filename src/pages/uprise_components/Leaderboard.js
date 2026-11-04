@@ -244,12 +244,12 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
           </div>
 
           {/* Category Tabs and Actions: Tabs left-aligned in 1 line, Copy & Share right-aligned */}
-          <div className="w-full flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 border-b border-lightgrey/20 pb-0">
-              {/* All three tabs in one single line, left-aligned */}
-              <div className="flex items-center overflow-x-auto whitespace-nowrap scrollbar-none flex-nowrap -mb-[1px]">
+          <div className="w-full flex flex-col lg:flex-row lg:items-end justify-between gap-3 mb-10 border-b border-lightgrey/20 pb-0">
+              {/* All three tabs in one single line, left-aligned with compact sizing so they never cut off */}
+              <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto whitespace-nowrap scrollbar-none flex-nowrap -mb-[1px]">
                   <button 
                       onClick={() => handleBoardChange('hackers')} 
-                      className={`bg-transparent px-3 sm:px-5 md:px-6 py-4 font-heading text-xs md:text-sm font-bold border-b-2 transition-colors tracking-widest uppercase whitespace-nowrap focus:outline-none cursor-pointer ${
+                      className={`bg-transparent px-2.5 sm:px-3.5 md:px-4 py-3 sm:py-3.5 font-heading text-xs md:text-[13px] font-bold border-b-2 transition-colors tracking-wider uppercase whitespace-nowrap focus:outline-none cursor-pointer ${
                           activeBoard === 'hackers' 
                               ? 'border-gold text-gold' 
                               : 'border-transparent text-lightgrey hover:text-white'
@@ -259,7 +259,7 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
                   </button>
                   <button 
                       onClick={() => handleBoardChange('levelup')} 
-                      className={`bg-transparent px-3 sm:px-5 md:px-6 py-4 font-heading text-xs md:text-sm font-bold border-b-2 transition-colors tracking-widest uppercase whitespace-nowrap focus:outline-none cursor-pointer ${
+                      className={`bg-transparent px-2.5 sm:px-3.5 md:px-4 py-3 sm:py-3.5 font-heading text-xs md:text-[13px] font-bold border-b-2 transition-colors tracking-wider uppercase whitespace-nowrap focus:outline-none cursor-pointer ${
                           activeBoard === 'levelup' 
                               ? 'border-gold text-gold' 
                               : 'border-transparent text-lightgrey hover:text-white'
@@ -269,7 +269,7 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
                   </button>
                   <button 
                       onClick={() => handleBoardChange('college')} 
-                      className={`bg-transparent px-3 sm:px-5 md:px-6 py-4 font-heading text-xs md:text-sm font-bold border-b-2 transition-colors tracking-widest uppercase whitespace-nowrap focus:outline-none cursor-pointer ${
+                      className={`bg-transparent px-2.5 sm:px-3.5 md:px-4 py-3 sm:py-3.5 font-heading text-xs md:text-[13px] font-bold border-b-2 transition-colors tracking-wider uppercase whitespace-nowrap focus:outline-none cursor-pointer ${
                           activeBoard === 'college' 
                               ? 'border-gold text-gold' 
                               : 'border-transparent text-lightgrey hover:text-white'
@@ -280,15 +280,15 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
               </div>
 
               {/* Right-aligned: COPY TO CLIPBOARD and SHARE Buttons */}
-              <div className="flex items-center gap-2.5 sm:gap-3 flex-shrink-0 pb-3 md:pb-2.5 flex-wrap justify-end">
+              <div className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0 pb-2.5 md:pb-2 flex-wrap justify-end">
                   {/* COPY TO CLIPBOARD Button */}
                   <button
                       onClick={handleCopyLink}
-                      className="cursor-pointer px-4 sm:px-5 py-2.5 sm:py-3 bg-gold/15 hover:bg-gold text-gold hover:text-pitchblack border border-gold font-heading text-xs font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase transition-all duration-300 shadow-[0_0_15px_rgba(212,175,55,0.25)] hover:shadow-[0_0_25px_rgba(212,175,55,0.5)] flex items-center gap-2 group whitespace-nowrap focus:outline-none"
+                      className="cursor-pointer px-3 sm:px-4 py-2 sm:py-2.5 bg-gold/15 hover:bg-gold text-gold hover:text-pitchblack border border-gold font-heading text-xs font-bold tracking-wider uppercase transition-all duration-300 shadow-[0_0_15px_rgba(212,175,55,0.25)] hover:shadow-[0_0_25px_rgba(212,175,55,0.5)] flex items-center gap-1.5 group whitespace-nowrap focus:outline-none"
                       title="Copy direct leaderboard link to clipboard"
                   >
                       <svg 
-                          className="w-4 h-4 transition-transform group-hover:scale-110 flex-shrink-0" 
+                          className="w-3.5 h-3.5 transition-transform group-hover:scale-110 flex-shrink-0" 
                           viewBox="0 0 24 24" 
                           fill="none" 
                           stroke="currentColor" 
@@ -305,11 +305,11 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
                   {/* SHARE Button */}
                   <button
                       onClick={() => setIsShareModalOpen(true)}
-                      className="cursor-pointer px-3 sm:px-4 py-2.5 sm:py-3 bg-transparent hover:bg-gold/15 text-gold border border-gold/50 hover:border-gold font-heading text-xs font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase transition-all duration-300 flex items-center gap-2 group whitespace-nowrap focus:outline-none"
+                      className="cursor-pointer px-2.5 sm:px-3.5 py-2 sm:py-2.5 bg-transparent hover:bg-gold/15 text-gold border border-gold/50 hover:border-gold font-heading text-xs font-bold tracking-wider uppercase transition-all duration-300 flex items-center gap-1.5 group whitespace-nowrap focus:outline-none"
                       title="Share to WhatsApp, Twitter, LinkedIn"
                   >
                       <svg 
-                          className="w-4 h-4 transition-transform group-hover:scale-110 flex-shrink-0" 
+                          className="w-3.5 h-3.5 transition-transform group-hover:scale-110 flex-shrink-0" 
                           viewBox="0 0 24 24" 
                           fill="none" 
                           stroke="currentColor" 
