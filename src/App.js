@@ -16,6 +16,7 @@ import Uprise from "./pages/Uprise";
 import PreHackathonPage from "./pages/PreHackathonPage";
 import ClubActivities from "./pages/ClubActivities";
 import LeaderboardPage from "./pages/LeaderboardPage";
+import UpriseProfilePage from "./pages/UpriseProfilePage";
 import NotFoundWinner from "./pages/NotFoundWinner";
 
 const AppContent = () => {
@@ -25,7 +26,9 @@ const AppContent = () => {
                    location.pathname === '/club-activities' ||
                    location.pathname === '/leaderboard' ||
                    location.pathname === '/uprise/leaderboard' ||
-                   location.pathname === '/uprise-leaderboard';
+                   location.pathname === '/uprise-leaderboard' ||
+                   location.pathname === '/uprise/profile' ||
+                   location.pathname === '/uprise-profile';
 
   return (
     <>
@@ -48,6 +51,8 @@ const AppContent = () => {
         <Route path="/leaderboard" element={<LeaderboardPage />} />
         <Route path="/uprise/leaderboard" element={<LeaderboardPage />} />
         <Route path="/uprise-leaderboard" element={<LeaderboardPage />} />
+        <Route path="/uprise/profile" element={<UpriseProfilePage />} />
+        <Route path="/uprise-profile" element={<UpriseProfilePage />} />
         <Route path="/404-winner" element={<NotFoundWinner />} />
         <Route path="/404" element={<NotFoundWinner />} />
         <Route path="/team/pratik-linkedin" element={<NotFoundWinner />} />
