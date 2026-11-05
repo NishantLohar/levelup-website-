@@ -1415,10 +1415,10 @@ const PreHackathonPage = () => {
                                                 key={pageIdx}
                                                 type="button"
                                                 onClick={() => setCurrentPage(pageIdx)}
-                                                className={`px-2.5 sm:px-3 py-1 text-[10.5px] sm:text-[11px] font-heading font-bold uppercase tracking-wider border transition-all cursor-pointer sharp flex items-center gap-1 ${
+                                                className={`px-2.5 sm:px-3 py-1.5 text-[10.5px] sm:text-[11px] font-heading font-bold uppercase tracking-wider border transition-all cursor-pointer sharp flex items-center gap-1 ${
                                                     isActive
-                                                        ? 'bg-gold text-pitchblack border-gold shadow-[0_0_12px_rgba(212,175,55,0.4)]'
-                                                        : 'bg-pitchblack/60 text-lightgrey border-gold/30 hover:border-gold hover:text-white'
+                                                        ? 'bg-black text-gold border-2 border-gold shadow-[0_0_15px_rgba(212,175,55,0.4)]'
+                                                        : 'bg-black text-lightgrey border border-gold/30 hover:border-gold hover:text-white'
                                                 }`}
                                             >
                                                 <span>PAGE {pageIdx + 1} ({startNum}–{endNum})</span>

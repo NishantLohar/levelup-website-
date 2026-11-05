@@ -197,7 +197,7 @@ const UpriseProfilePage = () => {
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
           <Link 
             to="/uprise" 
-            className="inline-flex items-center gap-2 text-xs font-heading font-bold text-gold hover:text-white uppercase tracking-widest transition-colors py-2 px-4 border border-gold/40 hover:border-gold bg-gold/5"
+            className="inline-flex items-center gap-2 text-xs font-heading font-bold text-gold hover:text-white uppercase tracking-widest transition-colors py-2 px-4 border border-gold/40 hover:border-gold bg-black shadow-[0_0_10px_rgba(212,175,55,0.2)]"
           >
             <span>←</span>
             <span>BACK TO UPRISE SUMMIT</span>
@@ -205,14 +205,14 @@ const UpriseProfilePage = () => {
           <div className="flex items-center gap-3">
             <Link 
               to="/pre-hackathon" 
-              className="inline-flex items-center gap-2 text-xs font-heading font-bold text-lightgrey hover:text-gold uppercase tracking-widest transition-colors py-2 px-4 border border-lightgrey/30 hover:border-gold bg-pitchblack"
+              className="inline-flex items-center gap-2 text-xs font-heading font-bold text-lightgrey hover:text-gold uppercase tracking-widest transition-colors py-2 px-4 border border-gold/30 hover:border-gold bg-black shadow-[0_0_10px_rgba(0,0,0,0.5)]"
             >
               <span>MISSIONS & TASKS</span>
               <span>→</span>
             </Link>
             <Link 
               to="/leaderboard" 
-              className="inline-flex items-center gap-2 text-xs font-heading font-bold text-lightgrey hover:text-gold uppercase tracking-widest transition-colors py-2 px-4 border border-lightgrey/30 hover:border-gold bg-pitchblack"
+              className="inline-flex items-center gap-2 text-xs font-heading font-bold text-lightgrey hover:text-gold uppercase tracking-widest transition-colors py-2 px-4 border border-gold/30 hover:border-gold bg-black shadow-[0_0_10px_rgba(0,0,0,0.5)]"
             >
               <span>LEADERBOARD</span>
               <span>→</span>
@@ -404,13 +404,13 @@ const UpriseProfilePage = () => {
             </div>
 
             {/* 4. Tab Navigation for Detailed Data */}
-            <div className="flex border-b border-gold/30 gap-4 sm:gap-8 text-xs sm:text-sm font-heading font-bold uppercase tracking-widest">
+            <div className="flex items-center gap-2 sm:gap-3 flex-wrap border-b border-gold/30 pb-3 text-xs sm:text-sm font-heading font-bold uppercase tracking-widest">
               <button
                 onClick={() => setActiveTab('missions')}
-                className={`py-3.5 border-b-2 transition-all cursor-pointer focus:outline-none flex items-center gap-2 ${
+                className={`px-4 py-2 sm:py-2.5 border transition-all cursor-pointer focus:outline-none flex items-center gap-2 ${
                   activeTab === 'missions'
-                    ? 'border-gold text-gold shadow-[0_3px_15px_rgba(212,175,55,0.35)]'
-                    : 'border-transparent text-lightgrey hover:text-white'
+                    ? 'bg-black border-2 border-gold text-gold shadow-[0_0_15px_rgba(212,175,55,0.35)]'
+                    : 'bg-black border border-gold/30 text-lightgrey hover:text-white hover:border-gold'
                 }`}
               >
                 <span>TASKS & XP GAINED</span>
@@ -421,10 +421,10 @@ const UpriseProfilePage = () => {
 
               <button
                 onClick={() => setActiveTab('referrals')}
-                className={`py-3.5 border-b-2 transition-all cursor-pointer focus:outline-none flex items-center gap-2 ${
+                className={`px-4 py-2 sm:py-2.5 border transition-all cursor-pointer focus:outline-none flex items-center gap-2 ${
                   activeTab === 'referrals'
-                    ? 'border-gold text-gold shadow-[0_3px_15px_rgba(212,175,55,0.35)]'
-                    : 'border-transparent text-lightgrey hover:text-white'
+                    ? 'bg-black border-2 border-gold text-gold shadow-[0_0_15px_rgba(212,175,55,0.35)]'
+                    : 'bg-black border border-gold/30 text-lightgrey hover:text-white hover:border-gold'
                 }`}
               >
                 <span>PEOPLE REFERRED</span>
@@ -435,10 +435,10 @@ const UpriseProfilePage = () => {
 
               <button
                 onClick={() => setActiveTab('overview')}
-                className={`py-3.5 border-b-2 transition-all cursor-pointer focus:outline-none ${
+                className={`px-4 py-2 sm:py-2.5 border transition-all cursor-pointer focus:outline-none ${
                   activeTab === 'overview'
-                    ? 'border-gold text-gold shadow-[0_3px_15px_rgba(212,175,55,0.35)]'
-                    : 'border-transparent text-lightgrey hover:text-white'
+                    ? 'bg-black border-2 border-gold text-gold shadow-[0_0_15px_rgba(212,175,55,0.35)]'
+                    : 'bg-black border border-gold/30 text-lightgrey hover:text-white hover:border-gold'
                 }`}
               >
                 SUMMARY & DIRECT LINKS

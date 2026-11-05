@@ -245,34 +245,34 @@ const Leaderboard = ({ initialBoard, isStandalone = false }) => {
 
           {/* Category Tabs and Actions: Tabs left-aligned in 1 line, Copy & Share right-aligned */}
           <div className="w-full flex flex-col lg:flex-row lg:items-end justify-between gap-3 mb-10 border-b border-lightgrey/20 pb-0">
-              {/* All three tabs in one single line, left-aligned with compact sizing so they never cut off */}
-              <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto whitespace-nowrap scrollbar-none flex-nowrap -mb-[1px]">
+              {/* All three tabs in one single line, left-aligned with compact sizing so they never cut off, with black background */}
+              <div className="flex items-center gap-1.5 sm:gap-2.5 overflow-x-auto whitespace-nowrap scrollbar-none flex-nowrap pb-2.5 md:pb-2">
                   <button 
                       onClick={() => handleBoardChange('hackers')} 
-                      className={`bg-transparent px-2.5 sm:px-3.5 md:px-4 py-3 sm:py-3.5 font-heading text-xs md:text-[13px] font-bold border-b-2 transition-colors tracking-wider uppercase whitespace-nowrap focus:outline-none cursor-pointer ${
+                      className={`px-3 sm:px-4 py-2 sm:py-2.5 font-heading text-xs md:text-[13px] font-bold border transition-all tracking-wider uppercase whitespace-nowrap focus:outline-none cursor-pointer ${
                           activeBoard === 'hackers' 
-                              ? 'border-gold text-gold' 
-                              : 'border-transparent text-lightgrey hover:text-white'
+                              ? 'bg-black border-2 border-gold text-gold shadow-[0_0_15px_rgba(212,175,55,0.35)]' 
+                              : 'bg-black border border-gold/30 text-lightgrey hover:text-white hover:border-gold'
                       }`}
                   >
                       UPRISE HACKERS
                   </button>
                   <button 
                       onClick={() => handleBoardChange('levelup')} 
-                      className={`bg-transparent px-2.5 sm:px-3.5 md:px-4 py-3 sm:py-3.5 font-heading text-xs md:text-[13px] font-bold border-b-2 transition-colors tracking-wider uppercase whitespace-nowrap focus:outline-none cursor-pointer ${
+                      className={`px-3 sm:px-4 py-2 sm:py-2.5 font-heading text-xs md:text-[13px] font-bold border transition-all tracking-wider uppercase whitespace-nowrap focus:outline-none cursor-pointer ${
                           activeBoard === 'levelup' 
-                              ? 'border-gold text-gold' 
-                              : 'border-transparent text-lightgrey hover:text-white'
+                              ? 'bg-black border-2 border-gold text-gold shadow-[0_0_15px_rgba(212,175,55,0.35)]' 
+                              : 'bg-black border border-gold/30 text-lightgrey hover:text-white hover:border-gold'
                       }`}
                   >
                       LEVELUP BUILDERS
                   </button>
                   <button 
                       onClick={() => handleBoardChange('college')} 
-                      className={`bg-transparent px-2.5 sm:px-3.5 md:px-4 py-3 sm:py-3.5 font-heading text-xs md:text-[13px] font-bold border-b-2 transition-colors tracking-wider uppercase whitespace-nowrap focus:outline-none cursor-pointer ${
+                      className={`px-3 sm:px-4 py-2 sm:py-2.5 font-heading text-xs md:text-[13px] font-bold border transition-all tracking-wider uppercase whitespace-nowrap focus:outline-none cursor-pointer ${
                           activeBoard === 'college' 
-                              ? 'border-gold text-gold' 
-                              : 'border-transparent text-lightgrey hover:text-white'
+                              ? 'bg-black border-2 border-gold text-gold shadow-[0_0_15px_rgba(212,175,55,0.35)]' 
+                              : 'bg-black border border-gold/30 text-lightgrey hover:text-white hover:border-gold'
                       }`}
                   >
                       STUDENT COMMUNITIES
