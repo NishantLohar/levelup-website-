@@ -173,7 +173,7 @@ const PreHackathonPage = () => {
             </AnimatePresence>
 
             {/* Main Content */}
-            <section className="pt-32 pb-20 px-6 relative z-10">
+            <section className="pt-32 pb-20 px-6 relative">
                 <div className="max-w-6xl mx-auto">
                     {/* Header Section */}
                     <div className="text-center mb-24">
@@ -309,17 +309,19 @@ const PreHackathonPage = () => {
             {/* Revealing Soon Modal Popup */}
             <AnimatePresence>
                 {isRevealingSoonOpen && (
-                    <div className="fixed inset-0 z-[999999] bg-pitchblack/85 backdrop-blur-md flex items-center justify-center p-4 font-grotesk">
+                    <div className="fixed inset-0 z-[9999999] flex items-center justify-center p-4 pt-24 sm:pt-28 pb-10 overflow-y-auto bg-pitchblack/85 backdrop-blur-md font-grotesk" onClick={(e) => { if (e.target === e.currentTarget) setIsRevealingSoonOpen(false); }}>
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="glass-card border border-gold/40 p-8 sm:p-10 w-full max-w-md relative sharp gold-glow bg-obsidian text-white text-center"
+                            className="glass-card border border-gold/40 p-8 sm:p-10 w-full max-w-md relative sharp gold-glow bg-obsidian text-white text-center my-auto"
                         >
                             <button
                                 type="button"
-                                className="absolute top-4 right-4 text-lightgrey hover:text-white text-xl cursor-pointer"
+                                className="absolute top-3 right-3 sm:top-4 sm:right-4 z-40 w-8 h-8 rounded-full border border-gold/50 hover:border-gold bg-pitchblack/95 text-gold hover:text-white hover:bg-gold/20 flex items-center justify-center transition-all cursor-pointer font-bold text-sm shadow-[0_0_12px_rgba(212,175,55,0.4)]"
                                 onClick={() => setIsRevealingSoonOpen(false)}
+                                title="Close"
+                                aria-label="Close"
                             >
                                 ✕
                             </button>

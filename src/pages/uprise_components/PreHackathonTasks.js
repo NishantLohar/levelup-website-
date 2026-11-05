@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -393,6 +394,16 @@ const socialTasks = [
 
 const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandalone = false }) => {
     const navigate = useNavigate();
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    const renderPortal = (children) => {
+        if (!isMounted || typeof document === 'undefined') return null;
+        return createPortal(children, document.body);
+    };
     const [currentPage, setCurrentPage] = useState(0);
     const [touchStartX, setTouchStartX] = useState(null);
     const [shareModalData, setShareModalData] = useState(null);
@@ -1254,19 +1265,21 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
     return (
         <div className="relative w-full">
             {/* Celebratory Notification Toast */}
-            <AnimatePresence>
-                {toastMsg && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -50 }}
-                        className="fixed top-24 left-1/2 transform -translate-x-1/2 z-[99999] px-6 py-3 bg-pitchblack border-2 border-gold text-gold font-heading font-black tracking-widest text-xs uppercase gold-glow shadow-2xl flex items-center gap-3 sharp"
-                    >
-                        <span>⚡</span>
-                        <span>{toastMsg}</span>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {renderPortal(
+                <AnimatePresence>
+                    {toastMsg && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -50 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -50 }}
+                            className="fixed top-24 left-1/2 transform -translate-x-1/2 z-[9999999] px-6 py-3 bg-pitchblack border-2 border-gold text-gold font-heading font-black tracking-widest text-xs uppercase gold-glow shadow-2xl flex items-center gap-3 sharp"
+                        >
+                            <span>⚡</span>
+                            <span>{toastMsg}</span>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            )}
 
             {/* Following Social Media Points Section */}
             <div className={isStandalone ? "mb-16" : "mb-20"}>
@@ -1463,23 +1476,18 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
                             </div>
             </div>
 
-            {/* Share Asset Download Modal Popup */}
-            <AnimatePresence>
-                {shareModalData && (
-                    <div className="fixed inset-0 z-[999999] bg-pitchblack/85 backdrop-blur-md flex items-center justify-center p-4 font-grotesk">
+                        {/* Share Asset Download Modal Popup */}
+            {renderPortal(
+                <AnimatePresence>
+                    {shareModalData && (
+                    <div className="fixed inset-0 z-[9999999] flex items-center justify-center p-4 pt-24 sm:pt-28 pb-10 overflow-y-auto bg-pitchblack/90 backdrop-blur-md" onClick={(e) => { if (e.target === e.currentTarget) setShareModalData(null); }}>
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="glass-card border border-gold/40 p-6 sm:p-8 w-full max-w-md sm:max-w-lg relative sharp gold-glow bg-obsidian text-white"
+                            className="glass-card border border-gold/40 my-auto p-6 sm:p-8 w-full max-w-md sm:max-w-lg relative sharp gold-glow bg-obsidian text-white"
                         >
-                            <button
-                                type="button"
-                                className="absolute top-4 right-4 text-lightgrey hover:text-white text-xl cursor-pointer"
-                                onClick={() => setShareModalData(null)}
-                            >
-                                ✕
-                            </button>
+                            <button type="button" onClick={() => setShareModalData(null)} className="absolute top-3 right-3 sm:top-4 sm:right-4 z-40 w-8 h-8 rounded-full border border-gold/50 hover:border-gold bg-pitchblack/95 text-gold hover:text-white hover:bg-gold/20 flex items-center justify-center transition-all cursor-pointer font-bold text-sm shadow-[0_0_12px_rgba(212,175,55,0.4)]" title="Close" aria-label="Close">✕</button>
 
                             <div className="text-center mb-4">
                                 <span className="font-heading font-black text-xs px-3 py-1 bg-gold/15 border border-gold text-gold gold-glow tracking-widest uppercase inline-block mb-2">
@@ -1554,31 +1562,21 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
                         </motion.div>
                     </div>
                 )}
-            </AnimatePresence>
-
+                </AnimatePresence>
+            )}
 
             {/* Interactive Quiz / Mission Briefing Modal */}
-            <AnimatePresence>
-                {quizModalData && (
-                    <div className="fixed inset-0 z-[999999] bg-pitchblack/85 backdrop-blur-md flex items-center justify-center p-4 font-grotesk">
+            {renderPortal(
+                <AnimatePresence>
+                    {quizModalData && (
+                    <div className="fixed inset-0 z-[9999999] flex items-center justify-center p-4 pt-24 sm:pt-28 pb-10 overflow-y-auto bg-pitchblack/90 backdrop-blur-md" onClick={(e) => { if (e.target === e.currentTarget) { setQuizModalData(null); setQuizAnswer(''); setQuizClaimEmail(''); setQuizResult(null); } }}>
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="glass-card border border-gold/40 p-6 sm:p-8 w-full max-w-md sm:max-w-lg relative sharp gold-glow bg-obsidian text-white"
+                            className="glass-card border border-gold/40 my-auto p-6 sm:p-8 w-full max-w-md sm:max-w-lg relative sharp gold-glow bg-obsidian text-white"
                         >
-                            <button
-                                type="button"
-                                className="absolute top-4 right-4 text-lightgrey hover:text-white text-xl cursor-pointer"
-                                onClick={() => {
-                                    setQuizModalData(null);
-                                    setQuizAnswer('');
-                                    setQuizClaimEmail('');
-                                    setQuizResult(null);
-                                }}
-                            >
-                                ✕
-                            </button>
+                            <button type="button" onClick={() => { setQuizModalData(null); setQuizAnswer(''); setQuizClaimEmail(''); setQuizResult(null); }} className="absolute top-3 right-3 sm:top-4 sm:right-4 z-40 w-8 h-8 rounded-full border border-gold/50 hover:border-gold bg-pitchblack/95 text-gold hover:text-white hover:bg-gold/20 flex items-center justify-center transition-all cursor-pointer font-bold text-sm shadow-[0_0_12px_rgba(212,175,55,0.4)]" title="Close" aria-label="Close">✕</button>
 
                             <div className="text-center mb-5">
                                 <span className="font-heading font-black text-xs px-3 py-1 bg-gold/15 border border-gold text-gold gold-glow tracking-widest uppercase inline-block mb-2">
@@ -1698,9 +1696,14 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
                         </motion.div>
                     </div>
                 )}
+                </AnimatePresence>
+            )}
 
-                {hunt404ModalOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-pitchblack/85 backdrop-blur-md">
+            {/* 404 Hunt Modal Dialog */}
+            {renderPortal(
+                <AnimatePresence>
+                    {hunt404ModalOpen && (
+                    <div className="fixed inset-0 z-[9999999] flex items-center justify-center p-4 pt-24 sm:pt-28 pb-10 overflow-y-auto bg-pitchblack/90 backdrop-blur-md" onClick={(e) => { if (e.target === e.currentTarget) { setHunt404ModalOpen(false); setHunt404Input(''); setHunt404Result(null); } }}>
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -1785,20 +1788,16 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
                         </motion.div>
                     </div>
                 )}
-            </AnimatePresence>
+                </AnimatePresence>
+            )}
 
-            
             {/* Pre-Hackathon Tasks Share Modal Dialog */}
-            <AnimatePresence>
-                {isTasksShareModalOpen && (
-                    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-pitchblack/85 backdrop-blur-md">
-                        <div className="glass-card sharp border-2 border-gold p-6 sm:p-8 max-w-lg w-full bg-obsidian relative shadow-[0_0_50px_rgba(212,175,55,0.35)]">
-                            <button 
-                                onClick={() => setIsTasksShareModalOpen(false)}
-                                className="absolute top-4 right-4 text-lightgrey hover:text-white font-heading text-xl font-bold px-2 cursor-pointer"
-                            >
-                                ✕
-                            </button>
+            {renderPortal(
+                <AnimatePresence>
+                    {isTasksShareModalOpen && (
+                    <div className="fixed inset-0 z-[9999999] flex items-center justify-center p-4 pt-24 sm:pt-28 pb-10 overflow-y-auto bg-pitchblack/90 backdrop-blur-md" onClick={(e) => { if (e.target === e.currentTarget) { setIsTasksShareModalOpen(false); } }}>
+                        <div className="glass-card sharp border-2 border-gold my-auto p-6 sm:p-8 max-w-lg w-full bg-obsidian relative shadow-[0_0_50px_rgba(212,175,55,0.35)]">
+                            <button type="button" onClick={() => setIsTasksShareModalOpen(false)} className="absolute top-3 right-3 sm:top-4 sm:right-4 z-40 w-8 h-8 rounded-full border border-gold/50 hover:border-gold bg-pitchblack/95 text-gold hover:text-white hover:bg-gold/20 flex items-center justify-center transition-all cursor-pointer font-bold text-sm shadow-[0_0_12px_rgba(212,175,55,0.4)]" title="Close" aria-label="Close">✕</button>
 
                             <div className="text-center mb-6">
                                 <h3 className="text-xl sm:text-2xl font-black font-heading text-white tracking-wider mb-2">
@@ -1855,23 +1854,21 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
                         </div>
                     </div>
                 )}
-            </AnimatePresence>
-                    {/* Individual Task Share Modal Dialog */}
-            <AnimatePresence>
-                {individualShareTask && (
-                    <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 bg-pitchblack/85 backdrop-blur-md">
+                </AnimatePresence>
+            )}
+
+            {/* Individual Task Share Modal Dialog */}
+            {renderPortal(
+                <AnimatePresence>
+                    {individualShareTask && (
+                    <div className="fixed inset-0 z-[9999999] flex items-center justify-center p-4 pt-24 sm:pt-28 pb-10 overflow-y-auto bg-pitchblack/90 backdrop-blur-md" onClick={(e) => { if (e.target === e.currentTarget) { setIndividualShareTask(null); } }}>
                         <motion.div 
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="glass-card sharp border-2 border-gold p-6 sm:p-8 max-w-lg w-full bg-obsidian relative shadow-[0_0_50px_rgba(212,175,55,0.35)]"
+                            className="glass-card sharp border-2 border-gold my-auto p-6 sm:p-8 max-w-lg w-full bg-obsidian relative shadow-[0_0_50px_rgba(212,175,55,0.35)]"
                         >
-                            <button 
-                                onClick={() => setIndividualShareTask(null)}
-                                className="absolute top-4 right-4 text-lightgrey hover:text-white font-heading text-xl font-bold px-2 cursor-pointer"
-                            >
-                                ✕
-                            </button>
+                            <button type="button" onClick={() => setIndividualShareTask(null)} className="absolute top-3 right-3 sm:top-4 sm:right-4 z-40 w-8 h-8 rounded-full border border-gold/50 hover:border-gold bg-pitchblack/95 text-gold hover:text-white hover:bg-gold/20 flex items-center justify-center transition-all cursor-pointer font-bold text-sm shadow-[0_0_12px_rgba(212,175,55,0.4)]" title="Close" aria-label="Close">✕</button>
 
                             <div className="text-center mb-6">
                                 <span className="font-heading font-black text-xs px-3 py-1 bg-gold/15 border border-gold text-gold gold-glow uppercase tracking-wider inline-block mb-3">
@@ -1955,25 +1952,21 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
                         </motion.div>
                     </div>
                 )}
-            </AnimatePresence>
+                </AnimatePresence>
+            )}
 
             {/* Individual Task Spotlight Modal View */}
-            <AnimatePresence>
-                {spotlightTask && (
-                    <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 bg-pitchblack/90 backdrop-blur-md">
+            {renderPortal(
+                <AnimatePresence>
+                    {spotlightTask && (
+                    <div className="fixed inset-0 z-[9999999] flex items-center justify-center p-4 pt-24 sm:pt-28 pb-10 overflow-y-auto bg-pitchblack/90 backdrop-blur-md" onClick={(e) => { if (e.target === e.currentTarget) { setSpotlightTask(null); } }}>
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="glass-card sharp border-2 border-gold p-6 sm:p-10 max-w-xl w-full bg-obsidian relative shadow-[0_0_60px_rgba(212,175,55,0.45)] text-white"
+                            className="glass-card sharp border-2 border-gold my-auto p-6 sm:p-10 max-w-xl w-full bg-obsidian relative shadow-[0_0_60px_rgba(212,175,55,0.45)] text-white"
                         >
-                            <button 
-                                onClick={() => setSpotlightTask(null)}
-                                className="absolute top-4 right-4 text-lightgrey hover:text-white font-heading text-xl font-bold px-2 cursor-pointer"
-                                title="Close Spotlight"
-                            >
-                                ✕
-                            </button>
+                            <button type="button" onClick={() => setSpotlightTask(null)} className="absolute top-3 right-3 sm:top-4 sm:right-4 z-40 w-8 h-8 rounded-full border border-gold/50 hover:border-gold bg-pitchblack/95 text-gold hover:text-white hover:bg-gold/20 flex items-center justify-center transition-all cursor-pointer font-bold text-sm shadow-[0_0_12px_rgba(212,175,55,0.4)]" title="Close" aria-label="Close">✕</button>
 
                             <div className="flex items-center gap-3 mb-6">
                                 <span className="font-heading font-black text-xs px-3 py-1 bg-gold/15 border border-gold text-gold gold-glow uppercase tracking-wider">
@@ -2078,9 +2071,9 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
                         </motion.div>
                     </div>
                 )}
-            </AnimatePresence>
-
-        </div>
+                </AnimatePresence>
+            )}
+</div>
     );
 };
 

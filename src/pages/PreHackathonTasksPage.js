@@ -60,7 +60,7 @@ const PreHackathonTasksPage = () => {
       />
 
       {/* Main Content Area: Exclusively Pre-Hackathon Tasks */}
-      <main className="relative z-10 pt-24 pb-16 flex-grow">
+      <main className="relative pt-24 pb-16 flex-grow">
         {/* Navigation Breadcrumb / Quick Back Links */}
         <div className="max-w-6xl mx-auto px-6 pt-2 pb-6 flex flex-wrap items-center justify-between gap-4">
           <Link 
