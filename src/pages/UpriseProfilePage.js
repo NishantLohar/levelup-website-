@@ -51,7 +51,6 @@ export const TASK_INFO_MAP = {
 };
 
 const UpriseProfilePage = () => {
-  const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const stored = localStorage.getItem('uprise_user') || sessionStorage.getItem('uprise_user');
