@@ -2,6 +2,395 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const socialTasks = [
+        // --- PAGE 1 MISSIONS (1 to 12) ---
+        {
+            key: "instagram",
+            title: "Instagram",
+            action: "Follow @levelupofficial.in on Instagram",
+            xp: "20 XP",
+            link: "https://www.instagram.com/levelupofficial.in/",
+            btnText: "Follow",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+            )
+        },
+        {
+            key: "youtube",
+            title: "YouTube",
+            action: "Subscribe to LevelUp Official",
+            xp: "20 XP",
+            link: "https://www.youtube.com/@LevelUpOfficial-in",
+            btnText: "Subscribe",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+            )
+        },
+        {
+            key: "linkedin",
+            title: "LinkedIn",
+            action: "Follow LevelUp Events on LinkedIn",
+            xp: "20 XP",
+            link: "https://linkedin.com/company/levelupevents",
+            btnText: "Follow",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+            )
+        },
+        {
+            key: "whatsapp",
+            title: "Community WhatsApp Group",
+            action: "Join LevelUp Official WhatsApp Community",
+            xp: "40 XP",
+            link: "https://chat.whatsapp.com/HgtgSww0doQFh6Tq0IJf4v?s=cl&p=a&mlu=4&ilr=4",
+            btnText: "Join Group",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                </svg>
+            )
+        },
+        {
+            key: "uprise_whatsapp",
+            title: "Uprise WhatsApp Group",
+            action: "Join Official Uprise WhatsApp Group",
+            xp: "40 XP",
+            link: "https://chat.whatsapp.com/BWRaFrpD9bkGPpi0vWS2M9",
+            btnText: "Join Group",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                </svg>
+            )
+        },
+        {
+            key: "discord",
+            title: "Discord",
+            action: "Join LevelUp Discord Server & Community",
+            xp: "40 XP",
+            link: "https://discord.gg/BxkRwU6X5",
+            btnText: "Join Discord",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                </svg>
+            )
+        },
+        {
+            key: "instagram_story",
+            title: "Instagram Story",
+            action: "Share story & tag @levelupofficial.in",
+            xp: "20 XP",
+            link: "https://www.instagram.com/levelupofficial.in/",
+            btnText: "Share Story",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+            )
+        },
+        {
+            key: "linkedin_post",
+            title: "LinkedIn Post",
+            action: "Post about joining & tag LevelUp Events",
+            xp: "30 XP",
+            link: "https://linkedin.com/company/levelupevents",
+            btnText: "Post & Tag",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+            )
+        },
+        {
+            key: "student_profile",
+            title: "Student Profile",
+            action: "Complete your student dashboard profile",
+            xp: "20 XP",
+            link: "https://account.levelupevents.in/accounts/profile/",
+            btnText: "Complete Profile",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            )
+        },
+        {
+            key: "hirestop",
+            title: "Hirestop Eligibility",
+            action: "Give at least 2 AI job interviews & 3 skill tests (avg 70) OR gain 2,000 XP",
+            xp: "ELIGIBILITY",
+            link: "https://account.levelupevents.in/skill-test/",
+            btnText: "Take Skill Test",
+            isExternal: true,
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                </svg>
+            )
+        },
+        {
+            key: "squad_assembly",
+            title: "Squad Assembly",
+            action: "Give your custom Uprise invite code to a developer. XP unlocks the moment they register.",
+            xp: "50 XP · 70 XP FOR BUILDERS",
+            link: "#",
+            btnText: "Copy Invite Code",
+            isAction: true,
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+            )
+        },
+        {
+            key: "club_referral",
+            title: "Organisation Referral",
+            action: "Refer a college club or partner organisation. Massive XP credited upon verification.",
+            xp: "2000 XP · 2200 XP FOR BUILDERS",
+            link: "/club-activities",
+            btnText: "Refer Organisation",
+            isAction: true,
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <path d="M3 21h18"></path>
+                    <path d="M5 21V7l8-4v18"></path>
+                    <path d="M19 21V11l-6-4"></path>
+                    <path d="M9 9v.01"></path>
+                    <path d="M9 12v.01"></path>
+                    <path d="M9 15v.01"></path>
+                    <path d="M9 18v.01"></path>
+                </svg>
+            )
+        },
+        {
+            key: "hunt_404",
+            title: "404 Hunt",
+            action: "6 Digit code on a broken link. Find the hidden key across LevelUp pages.",
+            xp: "70 XP",
+            link: "#",
+            btnText: "Start 404 Hunt",
+            isAction: true,
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    <path d="M9 9l4 4m0-4l-4 4"></path>
+                </svg>
+            )
+        },
+
+        // --- PAGE 2 MISSIONS (13 to 24) ---
+        {
+            key: "discord_rollcall",
+            title: "Discord Roll-Call",
+            action: "Introduce yourself on the #introduction channel in the LevelUp Discord server.",
+            xp: "100 XP",
+            link: "https://discord.gg/BxkRwU6X5",
+            btnText: "Introduce Yourself",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                </svg>
+            )
+        },
+        {
+            key: "bounty_hunter",
+            title: "The Bounty Hunter",
+            action: "Complete 50 referrals successfully to unlock this legendary badge.",
+            xp: "500 XP",
+            link: "#",
+            btnText: "Copy Referral Link",
+            isAction: true,
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <circle cx="12" cy="12" r="6"></circle>
+                    <circle cx="12" cy="12" r="2"></circle>
+                </svg>
+            )
+        },
+        {
+            key: "the_veteran",
+            title: "The Veteran",
+            action: "Post a valid certificate from a recognized national level Hackathon on Showcase channel.",
+            xp: "50 XP",
+            link: "https://discord.gg/BxkRwU6X5",
+            btnText: "Post Certificate",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <circle cx="12" cy="8" r="7"></circle>
+                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                </svg>
+            )
+        },
+        {
+            key: "architects_review",
+            title: "The Architect's Review",
+            action: "Post 1 page technical architecture proposal on the project you want to build in Uprise Hackathon on LinkedIn.",
+            xp: "50 XP",
+            link: "https://linkedin.com/company/levelupevents",
+            btnText: "Post Proposal",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    <polyline points="2 17 12 22 22 17"></polyline>
+                    <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+            )
+        },
+        {
+            key: "github_audit",
+            title: "GitHub Audit",
+            action: "Submit Profile URL and ensure you have a profile picture and a bio.",
+            xp: "30 XP",
+            link: "https://discord.gg/BxkRwU6X5",
+            btnText: "Submit Profile",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+            )
+        },
+        {
+            key: "package_manager_quiz",
+            title: "Package Manager Quiz",
+            action: "What is the exact terminal command to initialize a new node js project?",
+            xp: "25 XP",
+            link: "#",
+            btnText: "Take Quiz",
+            isQuiz: true,
+            quizQuestion: "What is the exact terminal command to initialize a new node js project?",
+            quizAccepted: ["npm init", "npm init -y", "npm init --yes", "yarn init", "pnpm init"],
+            quizHint: "Think of the standard Node Package Manager initialization command.",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+            )
+        },
+        {
+            key: "terminal_navigator_quiz",
+            title: "Terminal Navigator Quiz",
+            action: "What is the exact Linux terminal command used to list all files in a directory, including the new ones?",
+            xp: "25 XP",
+            link: "#",
+            btnText: "Take Quiz",
+            isQuiz: true,
+            quizQuestion: "What is the exact Linux terminal command used to list all files in a directory, including hidden & new ones?",
+            quizAccepted: ["ls -la", "ls -a", "ls -al", "ls -lart", "ls -lat", "ls -ltr", "ls -lt"],
+            quizHint: "Starts with 'ls' combined with flags for all files and detailed listing.",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                    <path d="M6 8l4 4-4 4"></path>
+                    <line x1="12" y1="16" x2="18" y2="16"></line>
+                </svg>
+            )
+        },
+        {
+            key: "the_css_center",
+            title: "The CSS Center",
+            action: "Using CSS flexbox, what are the two exact properties and values required on a parent container to perfectly center a child DIV both vertically and horizontally?",
+            xp: "25 XP",
+            link: "#",
+            btnText: "Take Quiz",
+            isQuiz: true,
+            quizQuestion: "Using CSS flexbox, what are the two exact properties and values required on a parent container to perfectly center a child DIV both vertically and horizontally?",
+            quizAccepted: ["justify-content: center; align-items: center;", "align-items: center; justify-content: center;", "justify-content: center", "align-items: center"],
+            quizHint: "One property centers along the main axis, and the other along the cross axis.",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <line x1="12" y1="3" x2="12" y2="9"></line>
+                    <line x1="12" y1="15" x2="12" y2="21"></line>
+                    <line x1="3" y1="12" x2="9" y2="12"></line>
+                    <line x1="15" y1="12" x2="21" y2="12"></line>
+                </svg>
+            )
+        },
+        {
+            key: "dom_manipulation",
+            title: "DOM Manipulation",
+            action: "Open Uprise page and right click and select inspect to open DevTools, edit the DOM HTML to change the main header text to say '{Your name} owns this system', upload the screenshot on showcase channel",
+            xp: "35 XP",
+            link: "https://discord.gg/BxkRwU6X5",
+            btnText: "Upload Screenshot",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+            )
+        },
+        {
+            key: "skill_test_mission",
+            title: "Skill Test",
+            action: "Complete a skill test with 70+ score and upload on showcase channel",
+            xp: "40 XP",
+            link: "https://account.levelupevents.in/skill-test/",
+            btnText: "Take Skill Test",
+            isExternal: true,
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            )
+        },
+        {
+            key: "ai_interview_mission",
+            title: "AI Job Interview",
+            action: "Take an interview and upload the report's screenshot on showcase channel",
+            xp: "50 XP",
+            link: "https://account.levelupevents.in/ai-interview/",
+            btnText: "Take Interview",
+            isExternal: true,
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    <circle cx="12" cy="16" r="1"></circle>
+                </svg>
+            )
+        },
+        {
+            key: "post_meme_mission",
+            title: "Post A Meme",
+            action: "Create a meme yourself and post on Uprise Discord server",
+            xp: "20 XP",
+            link: "https://discord.gg/BxkRwU6X5",
+            btnText: "Post On Discord",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                </svg>
+            )
+        }
+    ];
+
 const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandalone = false }) => {
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(0);
@@ -34,6 +423,40 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
     const [isTasksShareModalOpen, setIsTasksShareModalOpen] = useState(false);
     const [tasksCopied, setTasksCopied] = useState(false);
 
+    // Individual Task Share & Spotlight State
+    const [individualShareTask, setIndividualShareTask] = useState(null);
+    const [individualTaskCopied, setIndividualTaskCopied] = useState(false);
+    const [spotlightTask, setSpotlightTask] = useState(null);
+    const [highlightedTaskKey, setHighlightedTaskKey] = useState(null);
+
+    const getIndividualTaskUrl = (taskKey) => {
+        const origin = typeof window !== 'undefined' ? window.location.origin : 'https://levelupevents.in';
+        return `${origin}/tasks?task=${encodeURIComponent(taskKey)}`;
+    };
+
+    const handleCopyIndividualTaskLink = async (task) => {
+        if (!task) return;
+        const url = getIndividualTaskUrl(task.key);
+        try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(url);
+            } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = url;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+            }
+            setIndividualTaskCopied(true);
+            setToastMsg(`⚡ LINK FOR "${task.title.toUpperCase()}" COPIED!`);
+            setTimeout(() => setIndividualTaskCopied(false), 2500);
+            setTimeout(() => setToastMsg(null), 3000);
+        } catch (err) {
+            console.error('Failed to copy individual task link:', err);
+        }
+    };
+
     const getTasksShareUrl = () => {
         const origin = typeof window !== 'undefined' ? window.location.origin : 'https://levelupevents.in';
         return `${origin}/tasks`;
@@ -61,7 +484,7 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
         }
     };
 
-    // Auto-open 404 hunt modal if ?code= is passed in URL
+    // Auto-open 404 hunt modal or individual task if ?code= or ?task= is passed in URL
     useEffect(() => {
         try {
             const params = new URLSearchParams(window.location.search);
@@ -69,6 +492,20 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
             if (codeParam) {
                 setHunt404Input(codeParam.trim());
                 setHunt404ModalOpen(true);
+            }
+
+            const taskParam = params.get('task');
+            if (taskParam) {
+                const cleanKey = taskParam.trim().toLowerCase();
+                const foundIndex = socialTasks.findIndex(t => t.key && t.key.toLowerCase() === cleanKey);
+                if (foundIndex !== -1) {
+                    const foundTask = socialTasks[foundIndex];
+                    const pageNum = Math.floor(foundIndex / 12);
+                    setCurrentPage(pageNum);
+                    setSpotlightTask(foundTask);
+                    setHighlightedTaskKey(foundTask.key);
+                    setTimeout(() => setHighlightedTaskKey(null), 8000);
+                }
             }
         } catch (e) {}
     }, []);
@@ -572,401 +1009,13 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
         }
     };
 
-    const socialTasks = [
-        // --- PAGE 1 MISSIONS (1 to 12) ---
-        {
-            key: "instagram",
-            title: "Instagram",
-            action: "Follow @levelupofficial.in on Instagram",
-            xp: "20 XP",
-            link: "https://www.instagram.com/levelupofficial.in/",
-            btnText: "Follow",
-            icon: (
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                </svg>
-            )
-        },
-        {
-            key: "youtube",
-            title: "YouTube",
-            action: "Subscribe to LevelUp Official",
-            xp: "20 XP",
-            link: "https://www.youtube.com/@LevelUpOfficial-in",
-            btnText: "Subscribe",
-            icon: (
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-            )
-        },
-        {
-            key: "linkedin",
-            title: "LinkedIn",
-            action: "Follow LevelUp Events on LinkedIn",
-            xp: "20 XP",
-            link: "https://linkedin.com/company/levelupevents",
-            btnText: "Follow",
-            icon: (
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                </svg>
-            )
-        },
-        {
-            key: "whatsapp",
-            title: "Community WhatsApp Group",
-            action: "Join LevelUp Official WhatsApp Community",
-            xp: "40 XP",
-            link: "https://chat.whatsapp.com/HgtgSww0doQFh6Tq0IJf4v?s=cl&p=a&mlu=4&ilr=4",
-            btnText: "Join Group",
-            icon: (
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-                </svg>
-            )
-        },
-        {
-            key: "uprise_whatsapp",
-            title: "Uprise WhatsApp Group",
-            action: "Join Official Uprise WhatsApp Group",
-            xp: "40 XP",
-            link: "https://chat.whatsapp.com/BWRaFrpD9bkGPpi0vWS2M9",
-            btnText: "Join Group",
-            icon: (
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-                </svg>
-            )
-        },
-        {
-            key: "discord",
-            title: "Discord",
-            action: "Join LevelUp Discord Server & Community",
-            xp: "40 XP",
-            link: "https://discord.gg/BxkRwU6X5",
-            btnText: "Join Discord",
-            icon: (
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
-                </svg>
-            )
-        },
-        {
-            key: "instagram_story",
-            title: "Instagram Story",
-            action: "Share story & tag @levelupofficial.in",
-            xp: "20 XP",
-            link: "https://www.instagram.com/levelupofficial.in/",
-            btnText: "Share Story",
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                </svg>
-            )
-        },
-        {
-            key: "linkedin_post",
-            title: "LinkedIn Post",
-            action: "Post about joining & tag LevelUp Events",
-            xp: "30 XP",
-            link: "https://linkedin.com/company/levelupevents",
-            btnText: "Post & Tag",
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                </svg>
-            )
-        },
-        {
-            key: "student_profile",
-            title: "Student Profile",
-            action: "Complete your student dashboard profile",
-            xp: "20 XP",
-            link: "https://account.levelupevents.in/accounts/profile/",
-            btnText: "Complete Profile",
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-            )
-        },
-        {
-            key: "hirestop",
-            title: "Hirestop Eligibility",
-            action: "Give at least 2 AI job interviews & 3 skill tests (avg 70) OR gain 2,000 XP",
-            xp: "ELIGIBILITY",
-            link: "https://account.levelupevents.in/skill-test/",
-            btnText: "Take Skill Test",
-            isExternal: true,
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-                </svg>
-            )
-        },
-        {
-            key: "squad_assembly",
-            title: "Squad Assembly",
-            action: "Give your custom Uprise invite code to a developer. XP unlocks the moment they register.",
-            xp: "50 XP · 70 XP FOR BUILDERS",
-            link: "#",
-            btnText: "Copy Invite Code",
-            isAction: true,
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="9" cy="7" r="4"></circle>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                </svg>
-            )
-        },
-        {
-            key: "club_referral",
-            title: "Organisation Referral",
-            action: "Refer a college club or partner organisation. Massive XP credited upon verification.",
-            xp: "2000 XP · 2200 XP FOR BUILDERS",
-            link: "/club-activities",
-            btnText: "Refer Organisation",
-            isAction: true,
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                    <path d="M3 21h18"></path>
-                    <path d="M5 21V7l8-4v18"></path>
-                    <path d="M19 21V11l-6-4"></path>
-                    <path d="M9 9v.01"></path>
-                    <path d="M9 12v.01"></path>
-                    <path d="M9 15v.01"></path>
-                    <path d="M9 18v.01"></path>
-                </svg>
-            )
-        },
-        {
-            key: "hunt_404",
-            title: "404 Hunt",
-            action: "6 Digit code on a broken link. Find the hidden key across LevelUp pages.",
-            xp: "70 XP",
-            link: "#",
-            btnText: "Start 404 Hunt",
-            isAction: true,
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    <path d="M9 9l4 4m0-4l-4 4"></path>
-                </svg>
-            )
-        },
-
-        // --- PAGE 2 MISSIONS (13 to 24) ---
-        {
-            key: "discord_rollcall",
-            title: "Discord Roll-Call",
-            action: "Introduce yourself on the #introduction channel in the LevelUp Discord server.",
-            xp: "100 XP",
-            link: "https://discord.gg/BxkRwU6X5",
-            btnText: "Introduce Yourself",
-            icon: (
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
-                </svg>
-            )
-        },
-        {
-            key: "bounty_hunter",
-            title: "The Bounty Hunter",
-            action: "Complete 50 referrals successfully to unlock this legendary badge.",
-            xp: "500 XP",
-            link: "#",
-            btnText: "Copy Referral Link",
-            isAction: true,
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <circle cx="12" cy="12" r="6"></circle>
-                    <circle cx="12" cy="12" r="2"></circle>
-                </svg>
-            )
-        },
-        {
-            key: "the_veteran",
-            title: "The Veteran",
-            action: "Post a valid certificate from a recognized national level Hackathon on Showcase channel.",
-            xp: "50 XP",
-            link: "https://discord.gg/BxkRwU6X5",
-            btnText: "Post Certificate",
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                    <circle cx="12" cy="8" r="7"></circle>
-                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-                </svg>
-            )
-        },
-        {
-            key: "architects_review",
-            title: "The Architect's Review",
-            action: "Post 1 page technical architecture proposal on the project you want to build in Uprise Hackathon on LinkedIn.",
-            xp: "50 XP",
-            link: "https://linkedin.com/company/levelupevents",
-            btnText: "Post Proposal",
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                    <polyline points="2 17 12 22 22 17"></polyline>
-                    <polyline points="2 12 12 17 22 12"></polyline>
-                </svg>
-            )
-        },
-        {
-            key: "github_audit",
-            title: "GitHub Audit",
-            action: "Submit Profile URL and ensure you have a profile picture and a bio.",
-            xp: "30 XP",
-            link: "https://discord.gg/BxkRwU6X5",
-            btnText: "Submit Profile",
-            icon: (
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-                </svg>
-            )
-        },
-        {
-            key: "package_manager_quiz",
-            title: "Package Manager Quiz",
-            action: "What is the exact terminal command to initialize a new node js project?",
-            xp: "25 XP",
-            link: "#",
-            btnText: "Take Quiz",
-            isQuiz: true,
-            quizQuestion: "What is the exact terminal command to initialize a new node js project?",
-            quizAccepted: ["npm init", "npm init -y", "npm init --yes", "yarn init", "pnpm init"],
-            quizHint: "Think of the standard Node Package Manager initialization command.",
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                    <polyline points="16 18 22 12 16 6"></polyline>
-                    <polyline points="8 6 2 12 8 18"></polyline>
-                </svg>
-            )
-        },
-        {
-            key: "terminal_navigator_quiz",
-            title: "Terminal Navigator Quiz",
-            action: "What is the exact Linux terminal command used to list all files in a directory, including the new ones?",
-            xp: "25 XP",
-            link: "#",
-            btnText: "Take Quiz",
-            isQuiz: true,
-            quizQuestion: "What is the exact Linux terminal command used to list all files in a directory, including hidden & new ones?",
-            quizAccepted: ["ls -la", "ls -a", "ls -al", "ls -lart", "ls -lat", "ls -ltr", "ls -lt"],
-            quizHint: "Starts with 'ls' combined with flags for all files and detailed listing.",
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-                    <path d="M6 8l4 4-4 4"></path>
-                    <line x1="12" y1="16" x2="18" y2="16"></line>
-                </svg>
-            )
-        },
-        {
-            key: "the_css_center",
-            title: "The CSS Center",
-            action: "Using CSS flexbox, what are the two exact properties and values required on a parent container to perfectly center a child DIV both vertically and horizontally?",
-            xp: "25 XP",
-            link: "#",
-            btnText: "Take Quiz",
-            isQuiz: true,
-            quizQuestion: "Using CSS flexbox, what are the two exact properties and values required on a parent container to perfectly center a child DIV both vertically and horizontally?",
-            quizAccepted: ["justify-content: center; align-items: center;", "align-items: center; justify-content: center;", "justify-content: center", "align-items: center"],
-            quizHint: "One property centers along the main axis, and the other along the cross axis.",
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-                    <circle cx="12" cy="12" r="3"></circle>
-                    <line x1="12" y1="3" x2="12" y2="9"></line>
-                    <line x1="12" y1="15" x2="12" y2="21"></line>
-                    <line x1="3" y1="12" x2="9" y2="12"></line>
-                    <line x1="15" y1="12" x2="21" y2="12"></line>
-                </svg>
-            )
-        },
-        {
-            key: "dom_manipulation",
-            title: "DOM Manipulation",
-            action: "Open Uprise page and right click and select inspect to open DevTools, edit the DOM HTML to change the main header text to say '{Your name} owns this system', upload the screenshot on showcase channel",
-            xp: "35 XP",
-            link: "https://discord.gg/BxkRwU6X5",
-            btnText: "Upload Screenshot",
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                    <polyline points="10 9 9 9 8 9"></polyline>
-                </svg>
-            )
-        },
-        {
-            key: "skill_test_mission",
-            title: "Skill Test",
-            action: "Complete a skill test with 70+ score and upload on showcase channel",
-            xp: "40 XP",
-            link: "https://account.levelupevents.in/skill-test/",
-            btnText: "Take Skill Test",
-            isExternal: true,
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                </svg>
-            )
-        },
-        {
-            key: "ai_interview_mission",
-            title: "AI Job Interview",
-            action: "Take an interview and upload the report's screenshot on showcase channel",
-            xp: "50 XP",
-            link: "https://account.levelupevents.in/ai-interview/",
-            btnText: "Take Interview",
-            isExternal: true,
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                    <circle cx="12" cy="16" r="1"></circle>
-                </svg>
-            )
-        },
-        {
-            key: "post_meme_mission",
-            title: "Post A Meme",
-            action: "Create a meme yourself and post on Uprise Discord server",
-            xp: "20 XP",
-            link: "https://discord.gg/BxkRwU6X5",
-            btnText: "Post On Discord",
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
-                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
-                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
-                </svg>
-            )
-        }
-    ];
-
     const totalTaskPages = Math.ceil(socialTasks.length / 12);
 
-    const renderTaskCard = (task, index) => {
-        // Custom 404 Hunt card with dual buttons (Start 404 Hunt & Write The Number)
+        const renderTaskCard = (task, index) => {
+        // Custom 404 Hunt card with dual buttons (Start 404 Hunt & Write The Number) + Share
         if (task.key === 'hunt_404') {
             const isClaimed404 = currentUser?.claimed_tasks?.includes('hunt_404');
+            const isHighlighted404 = highlightedTaskKey === 'hunt_404';
             return (
                 <motion.div
                     key={task.key || index}
@@ -975,7 +1024,9 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
                     viewport={{ once: true }}
                     transition={{ duration: 0.35, delay: (index % 12) * 0.03 }}
                     className={`glass-card border ${
-                        isClaimed404 
+                        isHighlighted404
+                            ? 'border-gold ring-2 ring-gold/70 shadow-[0_0_30px_rgba(212,175,55,0.85)] animate-pulse-gold'
+                            : isClaimed404 
                             ? 'border-green-500/50 bg-green-500/5' 
                             : 'border-gold/30 hover:border-gold bg-obsidian/90 hover:bg-gold/10'
                     } p-5 sm:p-6 sharp transition-all duration-300 flex flex-col justify-between group relative overflow-hidden min-h-[225px]`}
@@ -1015,18 +1066,39 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
                     </div>
 
                     {isClaimed404 ? (
-                        <div className="text-xs uppercase font-heading font-bold py-2.5 px-3 border border-green-500/40 text-green-300 bg-green-500/10 text-center tracking-wider mt-auto flex items-center justify-center gap-1.5 sharp">
-                            <span>CLAIMED ✓ (+70 XP)</span>
+                        <div className="flex items-center gap-1.5 mt-auto">
+                            <div className="flex-1 text-xs uppercase font-heading font-bold py-2.5 px-3 border border-green-500/40 text-green-300 bg-green-500/10 text-center tracking-wider flex items-center justify-center gap-1.5 sharp">
+                                <span>CLAIMED ✓ (+70 XP)</span>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setIndividualShareTask(task);
+                                }}
+                                className="w-10 h-10 flex-shrink-0 border border-gold/40 hover:border-gold bg-pitchblack hover:bg-gold text-gold hover:text-pitchblack flex items-center justify-center transition-all cursor-pointer sharp group/share"
+                                title={`Share ${task.title} Mission`}
+                                aria-label={`Share ${task.title} Mission`}
+                            >
+                                <svg className="w-4 h-4 transition-transform group-hover/share:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="18" cy="5" r="3"></circle>
+                                    <circle cx="6" cy="12" r="3"></circle>
+                                    <circle cx="18" cy="19" r="3"></circle>
+                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                                </svg>
+                            </button>
                         </div>
                     ) : (
-                        <div className="flex gap-2 mt-auto">
+                        <div className="flex items-center gap-1.5 mt-auto">
                             <button
                                 type="button"
                                 onClick={() => window.open('/about', '_blank')}
                                 className="flex-1 text-[10px] sm:text-[11px] uppercase font-heading font-bold py-2.5 px-1 border border-gold/40 hover:border-gold bg-gold/5 hover:bg-gold hover:text-pitchblack text-white text-center tracking-wider transition-all cursor-pointer flex items-center justify-center gap-1 sharp"
                                 title="Open website to find broken link"
                             >
-                                <span>Start 404 Hunt</span>
+                                <span>Start Hunt</span>
                                 <span>↗</span>
                             </button>
                             <button
@@ -1038,8 +1110,27 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
                                 className="flex-1 text-[10px] sm:text-[11px] uppercase font-heading font-bold py-2.5 px-1 border border-gold bg-gold/25 hover:bg-gold text-gold hover:text-pitchblack text-center tracking-wider transition-all cursor-pointer flex items-center justify-center gap-1 sharp font-black shadow-[0_0_10px_rgba(212,175,55,0.2)]"
                                 title="Enter found 6-digit code"
                             >
-                                <span>Write The Number</span>
+                                <span>Enter Code</span>
                                 <span>✍️</span>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setIndividualShareTask(task);
+                                }}
+                                className="w-10 h-10 flex-shrink-0 border border-gold/40 hover:border-gold bg-pitchblack hover:bg-gold text-gold hover:text-pitchblack flex items-center justify-center transition-all cursor-pointer sharp group/share"
+                                title={`Share ${task.title} Mission`}
+                                aria-label={`Share ${task.title} Mission`}
+                            >
+                                <svg className="w-4 h-4 transition-transform group-hover/share:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="18" cy="5" r="3"></circle>
+                                    <circle cx="6" cy="12" r="3"></circle>
+                                    <circle cx="18" cy="19" r="3"></circle>
+                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                                </svg>
                             </button>
                         </div>
                     )}
@@ -1051,6 +1142,7 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
         const isManualClicked = isManualTask && manualClickedTasks.includes(task.key);
         const isClaimed = !isManualTask && currentUser?.claimed_tasks?.includes(task.key);
         const isClaiming = claimingKey === task.key;
+        const isHighlighted = highlightedTaskKey === task.key;
 
         return (
             <motion.div
@@ -1060,7 +1152,9 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
                 viewport={{ once: true }}
                 transition={{ duration: 0.35, delay: (index % 12) * 0.03 }}
                 className={`glass-card border ${
-                    isClaimed 
+                    isHighlighted
+                        ? 'border-gold ring-2 ring-gold/70 shadow-[0_0_30px_rgba(212,175,55,0.85)] animate-pulse-gold'
+                        : isClaimed 
                         ? 'border-green-500/50 bg-green-500/5' 
                         : isManualClicked
                         ? 'border-gold/60 bg-gold/10 shadow-[0_0_20px_rgba(212,175,55,0.15)]'
@@ -1107,30 +1201,52 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
                         {task.action}
                     </p>
                 </div>
-                <a
-                    href={isManualClicked ? 'https://discord.gg/BxkRwU6X5' : task.link}
-                    target={task.link?.startsWith('http') ? '_blank' : '_self'}
-                    rel="noopener noreferrer"
-                    onClick={(e) => handleTaskClick(e, task)}
-                    className={`text-xs uppercase font-heading font-bold py-2.5 px-3 border ${
-                        isClaimed 
-                            ? 'border-green-500/40 text-green-300 hover:bg-green-500/20' 
-                            : isManualClicked
-                            ? 'border-gold bg-gold/15 text-gold hover:bg-gold hover:text-pitchblack'
-                            : 'border-gold/40 hover:border-gold bg-gold/5 hover:bg-gold hover:text-pitchblack text-white'
-                    } text-center tracking-wider transition-all duration-200 mt-auto flex items-center justify-center gap-1.5 cursor-pointer leading-tight`}
-                >
-                    <span className="truncate">
-                        {isClaiming 
-                            ? 'CREDITING...' 
-                            : isClaimed 
-                            ? 'VISITED ✓' 
-                            : isManualClicked 
-                            ? 'DISCORD PROOF' 
-                            : task.btnText}
-                    </span>
-                    <span className="flex-shrink-0">&rarr;</span>
-                </a>
+
+                <div className="flex items-center gap-1.5 mt-auto">
+                    <a
+                        href={isManualClicked ? 'https://discord.gg/BxkRwU6X5' : task.link}
+                        target={task.link?.startsWith('http') ? '_blank' : '_self'}
+                        rel="noopener noreferrer"
+                        onClick={(e) => handleTaskClick(e, task)}
+                        className={`flex-1 text-xs uppercase font-heading font-bold py-2.5 px-3 border ${
+                            isClaimed 
+                                ? 'border-green-500/40 text-green-300 hover:bg-green-500/20' 
+                                : isManualClicked
+                                ? 'border-gold bg-gold/15 text-gold hover:bg-gold hover:text-pitchblack'
+                                : 'border-gold/40 hover:border-gold bg-gold/5 hover:bg-gold hover:text-pitchblack text-white'
+                        } text-center tracking-wider transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer leading-tight`}
+                    >
+                        <span className="truncate">
+                            {isClaiming 
+                                ? 'CREDITING...' 
+                                : isClaimed 
+                                ? 'CLAIMED ✓' 
+                                : isManualClicked 
+                                ? 'SUBMIT PROOF' 
+                                : task.btnText}
+                        </span>
+                        <span className="flex-shrink-0">&rarr;</span>
+                    </a>
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setIndividualShareTask(task);
+                        }}
+                        className="w-10 h-10 flex-shrink-0 border border-gold/40 hover:border-gold bg-pitchblack hover:bg-gold text-gold hover:text-pitchblack flex items-center justify-center transition-all cursor-pointer sharp group/share"
+                        title={`Share ${task.title} Mission`}
+                        aria-label={`Share ${task.title} Mission`}
+                    >
+                        <svg className="w-4 h-4 transition-transform group-hover/share:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="18" cy="5" r="3"></circle>
+                            <circle cx="6" cy="12" r="3"></circle>
+                            <circle cx="18" cy="19" r="3"></circle>
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                        </svg>
+                    </button>
+                </div>
             </motion.div>
         );
     };
@@ -1740,6 +1856,230 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
                     </div>
                 )}
             </AnimatePresence>
+                    {/* Individual Task Share Modal Dialog */}
+            <AnimatePresence>
+                {individualShareTask && (
+                    <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 bg-pitchblack/85 backdrop-blur-md">
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="glass-card sharp border-2 border-gold p-6 sm:p-8 max-w-lg w-full bg-obsidian relative shadow-[0_0_50px_rgba(212,175,55,0.35)]"
+                        >
+                            <button 
+                                onClick={() => setIndividualShareTask(null)}
+                                className="absolute top-4 right-4 text-lightgrey hover:text-white font-heading text-xl font-bold px-2 cursor-pointer"
+                            >
+                                ✕
+                            </button>
+
+                            <div className="text-center mb-6">
+                                <span className="font-heading font-black text-xs px-3 py-1 bg-gold/15 border border-gold text-gold gold-glow uppercase tracking-wider inline-block mb-3">
+                                    {individualShareTask.xp.includes('XP') ? `+${individualShareTask.xp} MISSION` : `${individualShareTask.xp} XP MISSION`}
+                                </span>
+                                <h3 className="text-xl sm:text-2xl font-black font-heading text-white tracking-wider mb-2 uppercase">
+                                    SHARE <span className="text-gold bright">{individualShareTask.title}</span>
+                                </h3>
+                                <p className="text-xs text-lightgrey font-grotesk tracking-widest uppercase">
+                                    Share this direct link so anyone can open & complete this exact mission!
+                                </p>
+                            </div>
+
+                            {/* Mission Summary Card */}
+                            <div className="p-4 bg-pitchblack border border-gold/40 mb-5 flex items-center gap-3">
+                                <div className="w-10 h-10 border border-gold text-gold bg-pitchblack flex items-center justify-center flex-shrink-0">
+                                    {individualShareTask.icon}
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <h4 className="text-sm font-bold text-white uppercase truncate">{individualShareTask.title}</h4>
+                                    <p className="text-xs text-lightgrey line-clamp-2">{individualShareTask.action}</p>
+                                </div>
+                            </div>
+
+                            {/* Direct Task Link Preview & Copy Button */}
+                            <div className="flex items-center gap-2 mb-6 bg-pitchblack border border-gold/50 p-2">
+                                <input 
+                                    type="text" 
+                                    readOnly 
+                                    value={getIndividualTaskUrl(individualShareTask.key)}
+                                    className="bg-transparent text-white font-mono text-xs px-2 w-full focus:outline-none"
+                                />
+                                <button
+                                    onClick={() => handleCopyIndividualTaskLink(individualShareTask)}
+                                    className="px-4 py-2 bg-gold text-pitchblack font-heading font-bold text-xs tracking-wider uppercase hover:bg-white transition-colors flex-shrink-0 cursor-pointer"
+                                >
+                                    {individualTaskCopied ? 'COPIED!' : 'COPY LINK'}
+                                </button>
+                            </div>
+
+                            {/* Quick Share to Social Apps */}
+                            <div className="grid grid-cols-3 gap-3 mb-4">
+                                <a 
+                                    href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Complete the "${individualShareTask.title}" mission (+${individualShareTask.xp}) on LevelUp Uprise! Direct Task Link: ` + getIndividualTaskUrl(individualShareTask.key))}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-3 border border-green-500/40 bg-green-500/10 hover:bg-green-500 text-green-400 hover:text-black font-heading text-xs font-bold text-center tracking-wider uppercase transition-colors"
+                                >
+                                    WhatsApp
+                                </a>
+                                <a 
+                                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Complete the "${individualShareTask.title}" mission (+${individualShareTask.xp}) on LevelUp Uprise! Direct Mission:`)}&url=${encodeURIComponent(getIndividualTaskUrl(individualShareTask.key))}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-3 border border-blue-400/40 bg-blue-400/10 hover:bg-blue-400 text-blue-300 hover:text-black font-heading text-xs font-bold text-center tracking-wider uppercase transition-colors"
+                                >
+                                    Twitter / X
+                                </a>
+                                <a 
+                                    href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(getIndividualTaskUrl(individualShareTask.key))}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-3 border border-blue-600/40 bg-blue-600/10 hover:bg-blue-600 text-blue-400 hover:text-white font-heading text-xs font-bold text-center tracking-wider uppercase transition-colors"
+                                >
+                                    LinkedIn
+                                </a>
+                            </div>
+
+                            {/* Open Mission Button */}
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    const t = individualShareTask;
+                                    setIndividualShareTask(null);
+                                    setSpotlightTask(t);
+                                }}
+                                className="w-full py-2.5 px-4 border border-gold/40 hover:border-gold text-gold hover:text-white font-heading text-xs uppercase tracking-widest transition-colors text-center cursor-pointer"
+                            >
+                                OPEN MISSION INDIVIDUALLY →
+                            </button>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Individual Task Spotlight Modal View */}
+            <AnimatePresence>
+                {spotlightTask && (
+                    <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 bg-pitchblack/90 backdrop-blur-md">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="glass-card sharp border-2 border-gold p-6 sm:p-10 max-w-xl w-full bg-obsidian relative shadow-[0_0_60px_rgba(212,175,55,0.45)] text-white"
+                        >
+                            <button 
+                                onClick={() => setSpotlightTask(null)}
+                                className="absolute top-4 right-4 text-lightgrey hover:text-white font-heading text-xl font-bold px-2 cursor-pointer"
+                                title="Close Spotlight"
+                            >
+                                ✕
+                            </button>
+
+                            <div className="flex items-center gap-3 mb-6">
+                                <span className="font-heading font-black text-xs px-3 py-1 bg-gold/15 border border-gold text-gold gold-glow uppercase tracking-wider">
+                                    {spotlightTask.xp.includes('XP') ? `+${spotlightTask.xp}` : `+${spotlightTask.xp} XP`}
+                                </span>
+                                <span className="text-xs font-mono text-lightgrey uppercase tracking-widest">
+                                    MISSION SPOTLIGHT
+                                </span>
+                            </div>
+
+                            <div className="flex items-start gap-4 mb-6">
+                                <div className="w-14 h-14 border-2 border-gold text-gold bg-pitchblack flex items-center justify-center flex-shrink-0 shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+                                    {spotlightTask.icon}
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl sm:text-3xl font-black font-heading text-white uppercase tracking-tight mb-2">
+                                        {spotlightTask.title}
+                                    </h2>
+                                    <p className="text-sm text-lightgrey font-grotesk leading-relaxed">
+                                        {spotlightTask.action}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Mission Actions */}
+                            <div className="space-y-3 pt-2">
+                                {spotlightTask.key === 'hunt_404' ? (
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setSpotlightTask(null);
+                                                window.open('/about', '_blank');
+                                            }}
+                                            className="py-3 px-4 border border-gold/40 hover:border-gold bg-gold/10 hover:bg-gold hover:text-pitchblack text-white font-heading font-bold text-xs uppercase tracking-widest transition-all cursor-pointer text-center sharp"
+                                        >
+                                            SEARCH SITE ↗
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setSpotlightTask(null);
+                                                setHunt404Result(null);
+                                                setHunt404ModalOpen(true);
+                                            }}
+                                            className="py-3 px-4 bg-gold text-pitchblack hover:bg-white font-heading font-bold text-xs uppercase tracking-widest transition-all cursor-pointer text-center sharp"
+                                        >
+                                            ENTER CODE ✍️
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <a
+                                        href={manualClickedTasks.includes(spotlightTask.key) ? 'https://discord.gg/BxkRwU6X5' : spotlightTask.link}
+                                        target={spotlightTask.link?.startsWith('http') ? '_blank' : '_self'}
+                                        rel="noopener noreferrer"
+                                        onClick={(e) => {
+                                            handleTaskClick(e, spotlightTask);
+                                            setSpotlightTask(null);
+                                        }}
+                                        className="w-full py-3.5 px-6 bg-gold text-pitchblack hover:bg-white font-heading font-bold text-xs sm:text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-2 cursor-pointer sharp text-center"
+                                    >
+                                        <span>
+                                            {currentUser?.claimed_tasks?.includes(spotlightTask.key)
+                                                ? 'CLAIMED ✓'
+                                                : manualClickedTasks.includes(spotlightTask.key)
+                                                ? 'SUBMIT PROOF ON DISCORD'
+                                                : spotlightTask.btnText}
+                                        </span>
+                                        <span>&rarr;</span>
+                                    </a>
+                                )}
+
+                                {/* Share This Mission & View All */}
+                                <div className="grid grid-cols-2 gap-3 pt-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            const t = spotlightTask;
+                                            setSpotlightTask(null);
+                                            setIndividualShareTask(t);
+                                        }}
+                                        className="py-3 px-4 border border-gold/50 bg-gold/10 hover:bg-gold hover:text-pitchblack text-gold font-heading font-bold text-xs uppercase tracking-widest transition-all cursor-pointer flex items-center justify-center gap-2 sharp"
+                                    >
+                                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <circle cx="18" cy="5" r="3"></circle>
+                                            <circle cx="6" cy="12" r="3"></circle>
+                                            <circle cx="18" cy="19" r="3"></circle>
+                                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                                        </svg>
+                                        <span>SHARE MISSION</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setSpotlightTask(null)}
+                                        className="py-3 px-4 border border-lightgrey/30 hover:border-white text-lightgrey hover:text-white font-heading font-bold text-xs uppercase tracking-widest transition-all cursor-pointer text-center sharp"
+                                    >
+                                        VIEW ALL MISSIONS →
+                                    </button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
         </div>
     );
 };
