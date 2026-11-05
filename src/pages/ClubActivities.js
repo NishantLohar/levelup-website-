@@ -148,12 +148,13 @@ const ClubActivities = () => {
     const [claimModalData, setClaimModalData] = useState(null);
     const [problemCount, setProblemCount] = useState(1);
     const [manualEmail, setManualEmail] = useState('');
+    const [proofUrl, setProofUrl] = useState('');
+    const [proofDetails, setProofDetails] = useState('');
     const [claimSubmitting, setClaimSubmitting] = useState(false);
     const [copiedMessage, setCopiedMessage] = useState(false);
     const [registeredClubs, setRegisteredClubs] = useState([]);
     const [quickClubInput, setQuickClubInput] = useState('');
     const [quickClubLoading, setQuickClubLoading] = useState(false);
-    const [submittingActKey, setSubmittingActKey] = useState(null);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -203,10 +204,11 @@ const ClubActivities = () => {
             category: "COMMUNITY ONBOARDING",
             xp: 10000,
             xpBadge: "10,000 XP",
+            isSpartan100: true,
             description: "Colleges to get 100 registrations and complete hirestop profiles.",
-            details: "Mobilize your campus builders! Every verified registration with a completed Hirestop profile counts toward your Spartan quota. Reaching 100 member registrations automatically awards +10,000 XP to your club.",
-            actionText: "Check 100 Referrals & Claim XP",
-            instructions: "Share your club referral code with your students. Once your club achieves 100 student registrations, +10,000 XP is automatically added to your leaderboard standing!"
+            details: "Mobilize your campus builders! Every verified registration with a completed Hirestop profile counts toward your Spartan quota. Reaching 100 member registrations unlocks +10,000 XP for your club.",
+            actionText: "View 100 Referrals Progress & Claim",
+            instructions: "Share your club referral code with students. Once your club achieves 100 verified member registrations, +10,000 XP is unlocked and awarded!"
         },
         {
             id: 2,
@@ -216,10 +218,14 @@ const ClubActivities = () => {
             category: "LOCAL HACKATHON",
             xp: 15000,
             xpBadge: "15,000 XP",
+            proofLabel: "Campus Hackathon Drive Link / Photos URL / Event Report",
+            proofPlaceholder: "https://drive.google.com/drive/folders/... or https://linkedin.com/posts/...",
+            detailsLabel: "Event Date & Attendance Summary",
+            detailsPlaceholder: "e.g. Held on Nov 2nd with 45 participating coders across 12 teams.",
             description: "Host 2 hours collaborated offline hackathon with Uprise's easy problem statement.",
             details: "Organize an on-campus mini sprint using standard Uprise problem tracks to ignite competitive coding in your institution.",
-            actionText: "Complete & Claim +15,000 XP",
-            instructions: "Host an on-campus 2-hour mini-sprint using Uprise problem statements and share event photos/summary in the Discord community or confirm completion below."
+            actionText: "Submit Proof & Claim +15,000 XP",
+            instructions: "Host an on-campus 2-hour mini-sprint using Uprise problem statements. Submit your event photos or drive folder URL below to verify completion."
         },
         {
             id: 3,
@@ -229,10 +235,14 @@ const ClubActivities = () => {
             category: "INTER-COLLEGE NETWORKING",
             xp: 2000,
             xpBadge: "2,000 XP",
+            proofLabel: "Discord Event Link / Stage Recording URL",
+            proofPlaceholder: "https://discord.com/events/... or Drive recording link",
+            detailsLabel: "Partner Club & Topic Title",
+            detailsPlaceholder: "e.g. Co-hosted AMA with GDSC VESIT, 110 attendees.",
             description: "Host a Discord event on Uprise server for networking with co-communities and participants.",
             details: "Co-host an interactive community session, AMA, or workshop on the official Uprise Discord to bridge collegiate networks.",
-            actionText: "Complete & Claim +2,000 XP",
-            instructions: "Schedule and co-host a live voice/stage session on the official Uprise Discord server with peer college communities."
+            actionText: "Submit Proof & Claim +2,000 XP",
+            instructions: "Schedule and co-host a live voice/stage session on the official Uprise Discord server. Provide the event or recording URL to verify completion."
         },
         {
             id: 4,
@@ -242,10 +252,14 @@ const ClubActivities = () => {
             category: "STARTUP SIMULATION",
             xp: 20000,
             xpBadge: "20,000 XP",
+            proofLabel: "Founder Pitch Deck / Recording / Demo Drive URL",
+            proofPlaceholder: "https://drive.google.com/... or pitch recording link",
+            detailsLabel: "Participating Teams & Winning Pitch",
+            detailsPlaceholder: "e.g. 8 student startup prototypes reviewed by industry mentors.",
             description: "Host an inter-college collaborated startup pitch online.",
             details: "Simulate a high-stakes founder showcase with peer institutions. Showcase student prototypes to judges and prospective builders.",
-            actionText: "Complete & Claim +20,000 XP",
-            instructions: "Conduct an online inter-college startup pitch showcase presenting early builder prototypes to prospective mentors."
+            actionText: "Submit Proof & Claim +20,000 XP",
+            instructions: "Conduct an online inter-college startup pitch showcase. Submit your pitch decks or session recording URL below to verify completion."
         },
         {
             id: 5,
@@ -255,10 +269,14 @@ const ClubActivities = () => {
             category: "VIRAL CAMPAIGN",
             xp: 5000,
             xpBadge: "5,000 XP",
+            proofLabel: "Live Public Video Post URL (Instagram Reel / YouTube / LinkedIn)",
+            proofPlaceholder: "https://www.instagram.com/reel/... or https://youtube.com/shorts/...",
+            detailsLabel: "Club Handle & Tag Status",
+            detailsPlaceholder: "e.g. Published on @our_club tagging @levelupofficial.in",
             description: "Capture reaction of the members getting golden ticket for uprise and post on all social media handles.",
             details: "Document the celebration! Film high-energy unboxing and reaction clips as members receive their official Uprise Golden Pass.",
-            actionText: "Complete & Claim +5,000 XP",
-            instructions: "Record your team's golden ticket reaction video and share across Instagram / LinkedIn tagging @levelupofficial.in."
+            actionText: "Submit Video Proof & Claim +5,000 XP",
+            instructions: "Record your team's golden ticket reaction video and share across Instagram / LinkedIn tagging @levelupofficial.in. Provide the live post URL to verify completion."
         },
         {
             id: 6,
@@ -268,10 +286,14 @@ const ClubActivities = () => {
             category: "MEDIA BROADCAST",
             xp: 800,
             xpBadge: "800 XP",
+            proofLabel: "Public Instagram / LinkedIn Alliance Post URL",
+            proofPlaceholder: "https://www.instagram.com/p/... or https://www.linkedin.com/posts/...",
+            detailsLabel: "Club Social Handle",
+            detailsPlaceholder: "e.g. @levelup_club_xyz on Instagram",
             description: "Post a banner informing your participation for Uprise.",
             details: "Broadcast your club's official alliance with Uprise across Instagram and LinkedIn with verified tags and alliance banners.",
-            actionText: "Complete & Claim +800 XP",
-            instructions: "Post the official Uprise partnership announcement banner on your club's Instagram and LinkedIn handles."
+            actionText: "Submit Post URL & Claim +800 XP",
+            instructions: "Post the official Uprise partnership announcement banner on your club's Instagram or LinkedIn handle. Provide the live post URL to verify completion."
         },
         {
             id: 7,
@@ -281,10 +303,14 @@ const ClubActivities = () => {
             category: "CAMPUS TAKEOVER",
             xp: 1500,
             xpBadge: "1,500 XP",
+            proofLabel: "Notice Board Photo Proof Link (Drive or Social Post URL)",
+            proofPlaceholder: "https://drive.google.com/... or https://instagram.com/p/...",
+            detailsLabel: "Notice Board Location & Campus Department",
+            detailsPlaceholder: "e.g. Main block CS department bulletin board",
             description: "Poster on department's notice board and capture it to post on social media handles.",
             details: "Physical presence meets digital reach. Put up official posters on college noticeboards and tag @levelupofficial.in.",
-            actionText: "Complete & Claim +1,500 XP",
-            instructions: "Place the official Uprise hackathon posters on departmental noticeboards and share the snapshot on social media."
+            actionText: "Submit Photo Proof & Claim +1,500 XP",
+            instructions: "Place official Uprise posters on departmental noticeboards and capture a snapshot. Submit the photo link to verify completion."
         },
         {
             id: 8,
@@ -295,10 +321,14 @@ const ClubActivities = () => {
             xp: 2500,
             xpBadge: "2,500 XP per problem",
             isRepeatable: true,
+            proofLabel: "GitHub Repo or Delivered Project Live URL",
+            proofPlaceholder: "https://github.com/campus-team/project-repo",
+            detailsLabel: "Problem Statement Solved",
+            detailsPlaceholder: "e.g. Built decentralized student verification prototype",
             description: "High rate XPs on delivering project on individual basis during pre hackathon.",
             details: "Individual members delivering standalone prototypes during the pre-hackathon grant massive multiplier XP (+2,500 XP per problem solved) to their parent club.",
-            actionText: "Submit Problem & Claim +2,500 XP",
-            instructions: "Submit standalone problem solution implementations delivered by your campus developers during the pre-hackathon. Each problem grants +2,500 XP!"
+            actionText: "Submit Project & Claim +2,500 XP",
+            instructions: "Submit standalone project solution repositories or prototypes delivered by your campus developers during the pre-hackathon. Each delivered problem grants +2,500 XP!"
         },
         {
             id: 9,
@@ -309,10 +339,14 @@ const ClubActivities = () => {
             xp: 800,
             xpBadge: "800 XP",
             isDraftShare: true,
+            proofLabel: "Broadcast Screenshot Proof Link (Drive or Image URL)",
+            proofPlaceholder: "https://drive.google.com/... or screenshot image link",
+            detailsLabel: "Community Channels Posted To",
+            detailsPlaceholder: "e.g. Sent to 4 batch WhatsApp groups (600+ students)",
             description: "Share the drafted message on all your community channels and share its screenshot with your POC.",
-            details: "Broadcast our official partnership message across your college WhatsApp groups, Discord servers, and Telegram channels. Share the screenshot with your Uprise POC to claim +800 XP.",
-            actionText: "View Drafted Message & Claim +800 XP",
-            instructions: "Copy the official message below, post it across all your student community channels, and share screenshot proof with your POC to claim +800 XP."
+            details: "Broadcast our official partnership message across your college WhatsApp groups, Discord servers, and Telegram channels. Provide screenshot proof to claim +800 XP.",
+            actionText: "View Message & Submit Proof (+800 XP)",
+            instructions: "Copy the official announcement message below, broadcast it across your college channels, and paste your screenshot proof link below to verify completion."
         },
         {
             id: 10,
@@ -325,8 +359,8 @@ const ClubActivities = () => {
             isReferralBoost: true,
             description: "For new clubs: Active for your first 48 hours after registering. For existing clubs: 48-Hour Blitz goes LIVE at 7:00 PM today!",
             details: "Sprint window unlocked! Every student registration with your club's referral code awards +250 XP (5x standard rate) instead of 50 XP. For all existing clubs, your 48-Hour Blitz starts today at 7:00 PM IST and runs until Nov 4, 7:00 PM IST!",
-            actionText: "Copy Referral Code & Activate 5x XP",
-            instructions: "Share your exclusive club invite code! All successful student registrations within this 48-hour sprint automatically award +250 XP each directly to your club total."
+            actionText: "Copy Referral Code & View 5x Boost",
+            instructions: "Share your exclusive club invite code! Every student who registers during this sprint automatically adds +250 XP directly to your club's live leaderboard ranking."
         },
         {
             id: 11,
@@ -336,10 +370,14 @@ const ClubActivities = () => {
             category: "CASE STUDY & TEARDOWN",
             xp: 8000,
             xpBadge: "8,000 XP",
+            proofLabel: "1-Page Solution Document / Teardown Drive Link",
+            proofPlaceholder: "https://docs.google.com/document/d/... or PDF link",
+            detailsLabel: "Startup Analyzed & Structural Flaws Addressed",
+            detailsPlaceholder: "e.g. Quibi unit economics and content distribution breakdown",
             description: "Host an event with listing famous but flawed startups and your members propose 1 page solution to its 3 major flaws.",
             details: "Host a teardown session reviewing iconic but flawed tech startups (e.g. Quibi, Theranos, WeWork, Fast). Student teams propose a 1-page solution tackling its 3 major structural flaws.",
             actionText: "Submit Teardown Proof & Claim +8,000 XP",
-            instructions: "Conduct the startup teardown workshop on campus or online. Document the student 1-page solutions and confirm completion to claim +8,000 XP."
+            instructions: "Conduct the startup teardown workshop. Document student 1-page solutions and provide the document/drive link below to verify completion."
         },
         {
             id: 12,
@@ -353,7 +391,7 @@ const ClubActivities = () => {
             description: "Want to plan a custom campus hackathon or workshop? Contact admin to get sponsored prizes, mentors, and custom XP allocations.",
             details: "Collaborate directly with the LevelUp / Uprise team to organize bespoke campus hackathons, technical bootcamps, or AI meetups on your premises with co-branding and exclusive sponsorship.",
             actionText: "Contact Admin / Pitch Event",
-            instructions: "Get in touch with the core Uprise organising committee to co-host an official collegiate event. Direct Discord / WhatsApp / Email line available."
+            instructions: "Get in touch with the core Uprise organising committee to co-host an official collegiate event. Direct Discord / Email lines available. XP is credited upon event proposal confirmation."
         },
         {
             id: 13,
@@ -377,64 +415,6 @@ const ClubActivities = () => {
             return currentUser.claimed_tasks.some(k => k.startsWith('club_problem_solver'));
         }
         return currentUser.claimed_tasks.includes(actKey);
-    };
-
-    const executeDirectClaim = async (act, count = 1) => {
-        if (!currentUser?.email) {
-            setManualEmail('');
-            setClaimModalData(act);
-            return;
-        }
-
-        setSubmittingActKey(act.key);
-        const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
-
-        try {
-            const bodyPayload = {
-                email: currentUser.email,
-                task_key: act.key,
-            };
-            if (act.isRepeatable) {
-                bodyPayload.count = count;
-            }
-
-            const res = await fetch(`${API_BASE_URL}/api/v1/uprise/claim-task-xp`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(bodyPayload),
-            });
-
-            const data = await res.json();
-            if (data.success) {
-                const awarded = data.xp_awarded ?? act.xp;
-                setCurrentUser(prev => {
-                    const updated = {
-                        ...(prev || {}),
-                        total_xp: data.total_xp,
-                        claimed_tasks: data.claimed_tasks || [...(prev?.claimed_tasks || []), act.key],
-                    };
-                    localStorage.setItem('uprise_user', JSON.stringify(updated));
-                    return updated;
-                });
-
-                if (data.already_claimed) {
-                    setToastMsg(`ℹ️ Task already completed for ${data.club_name || currentUser.full_name || 'your club'}.`);
-                } else {
-                    setToastMsg(`🎉 +${awarded.toLocaleString()} XP CREDITED TO ${data.club_name || currentUser.full_name || 'YOUR CLUB'}! TASK MARKED AS COMPLETED!`);
-                }
-                setClaimModalData(null);
-                setTimeout(() => setToastMsg(null), 5000);
-            } else {
-                setToastMsg(`❌ ${data.message || data.error || 'Failed to claim task XP. Please try again.'}`);
-                setTimeout(() => setToastMsg(null), 5000);
-            }
-        } catch (err) {
-            console.error('Direct claim error:', err);
-            setToastMsg('❌ Network error while crediting XP. Please try again.');
-            setTimeout(() => setToastMsg(null), 4000);
-        } finally {
-            setSubmittingActKey(null);
-        }
     };
 
     const handleQuickClubActivate = async (customVal) => {
@@ -480,52 +460,19 @@ const ClubActivities = () => {
             return;
         }
 
-        // If no club identified yet, open identification modal to select or enter club
+        // Reset proof inputs
+        setProofUrl('');
+        setProofDetails('');
+        setProblemCount(1);
         if (!currentUser?.email) {
             setManualEmail('');
-            setProblemCount(1);
-            setClaimModalData(act);
-            return;
         }
-
-        // If repeatable (The Problem Solver), open modal to specify problem count
-        if (act.isRepeatable) {
-            setProblemCount(1);
-            setClaimModalData(act);
-            return;
-        }
-
-        // If draft message share (Strength Share), open modal to view/copy draft and claim
-        if (act.isDraftShare) {
-            setClaimModalData(act);
-            return;
-        }
-
-        // If contact admin (Plan an Event), open modal to view channels and claim
-        if (act.isContactAdmin) {
-            setClaimModalData(act);
-            return;
-        }
-
-        // If 48-Hour Infiltration, copy referral code and directly complete task
-        if (act.isReferralBoost) {
-            const code = currentUser?.coupon_code || 'YOUR_CLUB_CODE';
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(`Join Uprise 2027 with our club referral code: ${code}\nRegister at https://account.levelupevents.in/events/`);
-            }
-            executeDirectClaim(act);
-            setToastMsg(`🔥 48H INFILTRATION ACTIVATED! Referral code ${code} copied (+250 XP credited to club)!`);
-            setTimeout(() => setToastMsg(null), 5000);
-            return;
-        }
-
-        // For all other activities: DIRECT 1-CLICK COMPLETION & XP AWARD!
-        executeDirectClaim(act);
+        setClaimModalData(act);
     };
 
     const copyDraftedMessage = () => {
         const code = currentUser?.coupon_code || 'YOUR_CLUB_CODE';
-        const msg = `🚀 Big announcement! Our campus club has officially partnered with Uprise 2027 — the ultimate pan-India hackathon and builder gauntlet! 🏆 Compete for cash prizes, developer bounties, and startup access.\n\nRegister your team now with our exclusive campus invite code: ${code}\nRegister here: https://uprise.levelupevents.in`;
+        const msg = `🚀 Big announcement! Our campus club has officially partnered with Uprise 2027 — the ultimate pan-India hackathon and builder gauntlet! 🏆 Compete for cash prizes, developer bounties, and startup access.\n\nRegister your team now with our exclusive campus invite code: ${code}\nRegister here: https://levelupevents.in/pre-hackathon`;
         if (navigator.clipboard) {
             navigator.clipboard.writeText(msg);
             setCopiedMessage(true);
@@ -544,6 +491,26 @@ const ClubActivities = () => {
             return;
         }
 
+        // 1. Client-side Spartan 100 validation
+        if (claimModalData.isSpartan100) {
+            const currentRefs = currentUser?.referral_count || 0;
+            if (currentRefs < 100) {
+                setToastMsg(`❌ 100 Spartan Challenge requires 100 verified member registrations. Your club currently has ${currentRefs}/100.`);
+                setTimeout(() => setToastMsg(null), 5000);
+                return;
+            }
+        }
+
+        // 2. Client-side proof URL validation
+        if (claimModalData.proofLabel) {
+            const cleanUrl = proofUrl.trim();
+            if (!cleanUrl || (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://'))) {
+                setToastMsg('❌ Valid submission proof URL (https://...) is required to verify task completion.');
+                setTimeout(() => setToastMsg(null), 5000);
+                return;
+            }
+        }
+
         setClaimSubmitting(true);
         const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
 
@@ -551,6 +518,8 @@ const ClubActivities = () => {
             const bodyPayload = {
                 email: emailToUse,
                 task_key: claimModalData.key,
+                proof_url: proofUrl.trim(),
+                proof_details: proofDetails.trim(),
             };
             if (claimModalData.isRepeatable) {
                 bodyPayload.count = problemCount;
@@ -577,16 +546,18 @@ const ClubActivities = () => {
                 setCurrentUser(updatedUser);
                 localStorage.setItem('uprise_user', JSON.stringify(updatedUser));
 
-                setToastMsg(`🎉 +${awarded.toLocaleString()} XP CREDITED TO ${data.club_name || 'YOUR CLUB'}! TASK MARKED AS COMPLETED!`);
+                setToastMsg(`🎉 VERIFIED & COMPLETED! +${awarded.toLocaleString()} XP CREDITED TO ${data.club_name || 'YOUR CLUB'}!`);
                 setClaimModalData(null);
+                setProofUrl('');
+                setProofDetails('');
                 setTimeout(() => setToastMsg(null), 5000);
             } else {
-                setToastMsg(`❌ ${data.message || data.error || 'Failed to claim activity XP. Please try again.'}`);
-                setTimeout(() => setToastMsg(null), 5000);
+                setToastMsg(`❌ ${data.message || data.error || 'Failed to claim activity XP. Please complete task and provide proof.'}`);
+                setTimeout(() => setToastMsg(null), 6000);
             }
         } catch (err) {
             console.error('Claim activity error:', err);
-            setToastMsg('❌ Network error while crediting XP. Please try again.');
+            setToastMsg('❌ Network error while verifying task. Please try again.');
             setTimeout(() => setToastMsg(null), 4000);
         } finally {
             setClaimSubmitting(false);
@@ -839,15 +810,10 @@ const ClubActivities = () => {
                                         ) : (
                                             <button
                                                 type="button"
-                                                disabled={submittingActKey === act.key}
                                                 onClick={() => handleActionClick(act)}
-                                                className="w-full py-2.5 px-4 bg-gold/15 hover:bg-gold text-gold hover:text-black border border-gold/40 hover:border-gold font-heading font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(212,175,55,0.15)] hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] disabled:opacity-50"
+                                                className="w-full py-2.5 px-4 bg-black hover:bg-gold/15 text-gold border border-gold font-heading font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(212,175,55,0.2)] hover:shadow-[0_0_20px_rgba(212,175,55,0.45)] cursor-pointer"
                                             >
-                                                {submittingActKey === act.key ? (
-                                                    <span>⚡ CREDITING +{act.xpBadge}...</span>
-                                                ) : (
-                                                    <span>⚡ {act.actionText}</span>
-                                                )}
+                                                <span>⚡ {act.actionText}</span>
                                             </button>
                                         )}
                                     </div>
@@ -925,39 +891,113 @@ const ClubActivities = () => {
                                 {claimModalData.instructions}
                             </p>
 
-                            {/* Strength Share Draft Box */}
-                            {claimModalData.isDraftShare && (
-                                <div className="mb-6 p-4 bg-black/80 border border-gold/30 rounded-none">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <span className="text-[11px] font-mono text-gold uppercase tracking-wider">
-                                            Official Drafted Announcement Message:
-                                        </span>
+                            {/* 1. 100 Spartan Challenge View */}
+                            {claimModalData.isSpartan100 ? (
+                                <div className="space-y-4">
+                                    <div className="p-4 bg-black/90 border border-gold/40">
+                                        <div className="flex items-center justify-between text-xs font-mono mb-2">
+                                            <span className="text-lightgrey uppercase">Verified Spartan Registrations:</span>
+                                            <strong className="text-gold text-sm font-bold">
+                                                {currentUser?.referral_count || 0} / 100
+                                            </strong>
+                                        </div>
+                                        <div className="w-full bg-white/10 h-3 border border-gold/30 overflow-hidden mb-3">
+                                            <div
+                                                className="bg-gold h-full transition-all duration-500 shadow-[0_0_10px_rgba(212,175,55,0.5)]"
+                                                style={{ width: `${Math.min(100, ((currentUser?.referral_count || 0) / 100) * 100)}%` }}
+                                            />
+                                        </div>
+                                        {(currentUser?.referral_count || 0) < 100 ? (
+                                            <div className="text-xs text-amber-300 font-mono space-y-2">
+                                                <p>
+                                                    ⚠️ Milestone locked: Your club currently has <strong>{currentUser?.referral_count || 0}</strong> registrations. You need <strong>{100 - (currentUser?.referral_count || 0)}</strong> more student registrations using your club referral code to unlock +10,000 XP!
+                                                </p>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const code = currentUser?.coupon_code || '';
+                                                        navigator.clipboard.writeText(`Join Uprise 2027 with code ${code}: https://levelupevents.in/pre-hackathon?ref=${code}`);
+                                                        setToastMsg('📋 Club referral link copied to clipboard!');
+                                                        setTimeout(() => setToastMsg(null), 3000);
+                                                    }}
+                                                    className="w-full py-2.5 px-3 bg-gold/15 hover:bg-gold text-gold hover:text-black border border-gold font-heading font-bold text-xs uppercase tracking-wider transition-all cursor-pointer"
+                                                >
+                                                    📋 COPY CLUB INVITE LINK TO SHARE WITH STUDENTS
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="text-xs text-emerald-400 font-bold font-mono">
+                                                ✓ 100 Student registrations verified! Click below to claim your +10,000 XP reward.
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {(currentUser?.referral_count || 0) >= 100 ? (
                                         <button
                                             type="button"
-                                            onClick={copyDraftedMessage}
-                                            className="px-3 py-1 bg-gold/20 hover:bg-gold text-gold hover:text-black font-mono text-[11px] font-bold uppercase transition-all"
+                                            disabled={claimSubmitting}
+                                            onClick={executeClaim}
+                                            className="w-full py-3 bg-gold hover:bg-gold/90 text-black font-heading font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(212,175,55,0.4)] cursor-pointer disabled:opacity-50"
                                         >
-                                            {copiedMessage ? '✓ COPIED!' : '📋 COPY MESSAGE'}
+                                            {claimSubmitting ? 'VERIFYING...' : '✓ CLAIM 100 SPARTAN REWARD (+10,000 XP)'}
                                         </button>
-                                    </div>
-                                    <p className="text-xs text-white/80 font-mono leading-relaxed bg-black/50 p-2.5 border border-white/10 select-all">
-                                        🚀 Big announcement! Our campus club has officially partnered with Uprise 2027 — the ultimate pan-India hackathon and builder gauntlet! 🏆 Compete for cash prizes, developer bounties, and startup access.<br /><br />
-                                        Register your team now with our exclusive campus invite code: <strong className="text-gold">{currentUser?.coupon_code || 'YOUR_CLUB_CODE'}</strong><br />
-                                        Register here: https://uprise.levelupevents.in
-                                    </p>
+                                    ) : (
+                                        <button
+                                            type="button"
+                                            onClick={() => setClaimModalData(null)}
+                                            className="w-full py-2.5 bg-black border border-white/20 text-white font-heading font-bold text-xs uppercase tracking-wider hover:border-gold cursor-pointer"
+                                        >
+                                            CLOSE
+                                        </button>
+                                    )}
                                 </div>
-                            )}
-
-                            {/* Plan an Event Admin Contact Actions */}
-                            {claimModalData.isContactAdmin ? (
+                            ) : claimModalData.isReferralBoost ? (
+                                /* 2. 48-Hour Infiltration Boost View */
                                 <div className="space-y-4">
-                                    <p className="text-xs text-lightgrey">
-                                        Choose your preferred contact channel to pitch your event proposal directly to the core Uprise management:
+                                    <div className="p-4 bg-black/90 border border-gold/40">
+                                        <div className="text-xs text-gold font-mono uppercase tracking-wider mb-2 font-bold">
+                                            🔥 5X SPRINT MULTIPLIER ACTIVE
+                                        </div>
+                                        <p className="text-xs text-lightgrey leading-relaxed mb-4 font-mono">
+                                            This activity is an active referral boost multiplier: every student who registers for Uprise using your club's code awards <strong>+250 XP</strong> directly to your club standing on the live leaderboard! (Standard rate is 50 XP).
+                                        </p>
+                                        <div className="p-3 bg-black border border-gold/30 flex items-center justify-between gap-3 mb-4">
+                                            <div className="flex flex-col">
+                                                <span className="text-[10px] text-gray-400 uppercase font-mono">Your Club Code:</span>
+                                                <strong className="text-gold font-mono text-sm tracking-wider">{currentUser?.coupon_code || 'REGISTERED_CODE'}</strong>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    const code = currentUser?.coupon_code || '';
+                                                    navigator.clipboard.writeText(`Join Uprise 2027 with our club referral code: ${code}\nRegister at https://levelupevents.in/pre-hackathon?ref=${code}`);
+                                                    setToastMsg('📋 Club code & invite link copied!');
+                                                    setTimeout(() => setToastMsg(null), 3000);
+                                                }}
+                                                className="px-3 py-1.5 bg-gold text-black font-heading font-bold text-xs uppercase tracking-wider cursor-pointer"
+                                            >
+                                                COPY INVITE
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => setClaimModalData(null)}
+                                        className="w-full py-2.5 bg-black border border-white/20 text-white font-heading font-bold text-xs uppercase tracking-wider hover:border-gold cursor-pointer"
+                                    >
+                                        CLOSE
+                                    </button>
+                                </div>
+                            ) : claimModalData.isContactAdmin ? (
+                                /* 3. Plan an Event Admin Contact Actions */
+                                <div className="space-y-4">
+                                    <p className="text-xs text-lightgrey leading-relaxed">
+                                        Connect directly with the core Uprise organising committee to pitch your bespoke campus hackathon or AI workshop. XP (+5,000 XP) and sponsored prizes are credited once your event dates are confirmed:
                                     </p>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                                         <a
                                             href="mailto:support@levelupevents.in?subject=Uprise%202027%20-%20Campus%20Event%20Collaboration%20Pitch"
-                                            className="py-3 px-4 bg-gold/15 hover:bg-gold text-gold hover:text-black border border-gold/40 text-center font-bold text-xs uppercase tracking-wider transition-all"
+                                            className="py-3 px-4 bg-black hover:bg-gold/15 text-gold border border-gold/40 hover:border-gold text-center font-bold text-xs uppercase tracking-wider transition-all no-underline"
                                         >
                                             ✉️ Email Committee
                                         </a>
@@ -965,22 +1005,48 @@ const ClubActivities = () => {
                                             href="https://discord.gg/BxkRwU6X5"
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="py-3 px-4 bg-[#5865F2]/20 hover:bg-[#5865F2] text-[#5865F2] hover:text-white border border-[#5865F2]/40 text-center font-bold text-xs uppercase tracking-wider transition-all"
+                                            className="py-3 px-4 bg-black hover:bg-[#5865F2]/20 text-[#5865F2] hover:text-white border border-[#5865F2]/40 text-center font-bold text-xs uppercase tracking-wider transition-all no-underline"
                                         >
                                             💬 Discord Admin POC
                                         </a>
                                     </div>
+                                    <div className="p-3 bg-black/60 border border-white/10 text-[11px] text-lightgrey font-mono mt-2">
+                                        ℹ️ Note: This challenge requires formal admin approval. No XP is granted without verified event scheduling.
+                                    </div>
                                     <button
                                         type="button"
-                                        disabled={claimSubmitting}
-                                        onClick={executeClaim}
-                                        className="w-full mt-4 py-3 bg-gold hover:bg-gold/90 text-black font-heading font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(212,175,55,0.4)] disabled:opacity-50"
+                                        onClick={() => setClaimModalData(null)}
+                                        className="w-full mt-2 py-2.5 bg-black border border-white/20 text-white font-heading font-bold text-xs uppercase tracking-wider hover:border-gold cursor-pointer"
                                     >
-                                        {claimSubmitting ? 'CREDITING XP...' : '✓ CONFIRM EVENT PROPOSAL & COMPLETE TASK (+5,000 XP)'}
+                                        CLOSE
                                     </button>
                                 </div>
                             ) : (
+                                /* 4. All Other Proof-Required Activities */
                                 <form onSubmit={executeClaim} className="space-y-4">
+                                    {/* Strength Share Draft Box */}
+                                    {claimModalData.isDraftShare && (
+                                        <div className="p-3.5 bg-black/90 border border-gold/30">
+                                            <div className="flex items-center justify-between mb-2">
+                                                <span className="text-[11px] font-mono text-gold uppercase tracking-wider">
+                                                    Drafted Announcement Message:
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    onClick={copyDraftedMessage}
+                                                    className="px-2.5 py-1 bg-gold/20 hover:bg-gold text-gold hover:text-black font-mono text-[10px] font-bold uppercase transition-all cursor-pointer"
+                                                >
+                                                    {copiedMessage ? '✓ COPIED!' : '📋 COPY MESSAGE'}
+                                                </button>
+                                            </div>
+                                            <p className="text-xs text-white/80 font-mono leading-relaxed bg-black/60 p-2 border border-white/10 select-all">
+                                                🚀 Big announcement! Our campus club has officially partnered with Uprise 2027 — the ultimate pan-India hackathon and builder gauntlet! 🏆 Compete for cash prizes, developer bounties, and startup access.<br /><br />
+                                                Register your team now with our exclusive campus invite code: <strong className="text-gold">{currentUser?.coupon_code || 'YOUR_CLUB_CODE'}</strong><br />
+                                                Register here: https://levelupevents.in/pre-hackathon
+                                            </p>
+                                        </div>
+                                    )}
+
                                     {/* Club Dropdown / Email */}
                                     {!currentUser?.email && registeredClubs.length > 0 && (
                                         <div>
@@ -997,7 +1063,7 @@ const ClubActivities = () => {
                                                         }
                                                     }
                                                 }}
-                                                className="w-full px-3 py-2.5 bg-black/80 border border-gold/30 text-gold text-xs outline-none font-mono"
+                                                className="w-full px-3 py-2.5 bg-black border border-gold/30 text-gold text-xs outline-none font-mono"
                                             >
                                                 <option value="">-- Choose from registered college clubs --</option>
                                                 {registeredClubs.map((c, i) => (
@@ -1009,7 +1075,7 @@ const ClubActivities = () => {
                                         </div>
                                     )}
 
-                                    {/* Club Email */}
+                                    {/* Club Identifier */}
                                     <div>
                                         <label className="block text-xs font-mono uppercase tracking-wider text-gold mb-1.5">
                                             {currentUser?.email ? 'Active Club' : 'Registered Club Email or Referral Code'}
@@ -1021,11 +1087,8 @@ const ClubActivities = () => {
                                             disabled={!!currentUser?.email}
                                             onChange={(e) => setManualEmail(e.target.value)}
                                             placeholder="e.g. acm@college.edu or UPRISEGDSC"
-                                            className="w-full px-4 py-3 bg-black/60 border border-gold/30 focus:border-gold text-white text-sm outline-none transition-colors font-mono disabled:opacity-75 disabled:border-emerald-500/50"
+                                            className="w-full px-4 py-2.5 bg-black border border-gold/30 focus:border-gold text-white text-xs outline-none transition-colors font-mono disabled:opacity-75 disabled:border-emerald-500/50"
                                         />
-                                        <p className="text-[11px] text-white/50 mt-1">
-                                            {currentUser?.email ? 'XP will be credited directly to your active club.' : 'Enter the email registered on Join as Club or club referral code.'}
-                                        </p>
                                     </div>
 
                                     {/* Problem Solver Count Field */}
@@ -1041,7 +1104,7 @@ const ClubActivities = () => {
                                                     max="100"
                                                     value={problemCount}
                                                     onChange={(e) => setProblemCount(Math.max(1, parseInt(e.target.value) || 1))}
-                                                    className="w-24 px-4 py-2.5 bg-black/60 border border-gold/30 focus:border-gold text-white text-sm outline-none font-mono font-bold"
+                                                    className="w-24 px-4 py-2 bg-black border border-gold/30 focus:border-gold text-white text-sm outline-none font-mono font-bold"
                                                 />
                                                 <span className="text-sm font-bold text-emerald-400">
                                                     = +{(problemCount * 2500).toLocaleString()} XP Total
@@ -1050,20 +1113,52 @@ const ClubActivities = () => {
                                         </div>
                                     )}
 
-                                    <div className="pt-4 flex items-center justify-end gap-3">
+                                    {/* Mandatory Proof URL */}
+                                    <div>
+                                        <label className="block text-xs font-mono uppercase tracking-wider text-gold mb-1.5">
+                                            {claimModalData.proofLabel || "Submission Proof URL (Drive / Post / Repo Link)"} <span className="text-red-400">*</span>
+                                        </label>
+                                        <input
+                                            type="url"
+                                            required
+                                            value={proofUrl}
+                                            onChange={(e) => setProofUrl(e.target.value)}
+                                            placeholder={claimModalData.proofPlaceholder || "https://..."}
+                                            className="w-full px-4 py-2.5 bg-black border border-gold/40 focus:border-gold text-white text-xs outline-none transition-colors font-mono"
+                                        />
+                                        <p className="text-[11px] text-white/50 mt-1 font-mono">
+                                            Evidence link is required to verify that the task has been completed before XP is credited.
+                                        </p>
+                                    </div>
+
+                                    {/* Optional Details / Summary */}
+                                    <div>
+                                        <label className="block text-xs font-mono uppercase tracking-wider text-lightgrey mb-1.5">
+                                            {claimModalData.detailsLabel || "Additional Details / Summary"} (Optional)
+                                        </label>
+                                        <textarea
+                                            rows={2}
+                                            value={proofDetails}
+                                            onChange={(e) => setProofDetails(e.target.value)}
+                                            placeholder={claimModalData.detailsPlaceholder || "e.g. Brief summary of completion, date, or members involved"}
+                                            className="w-full px-4 py-2 bg-black border border-white/20 focus:border-gold text-white text-xs outline-none transition-colors font-mono resize-none"
+                                        />
+                                    </div>
+
+                                    <div className="pt-3 flex items-center justify-end gap-3">
                                         <button
                                             type="button"
                                             onClick={() => setClaimModalData(null)}
-                                            className="px-5 py-2.5 bg-transparent border border-white/20 text-white/80 hover:text-white text-xs font-bold uppercase tracking-wider"
+                                            className="px-4 py-2.5 bg-black border border-white/20 text-white/80 hover:text-white text-xs font-bold uppercase tracking-wider cursor-pointer"
                                         >
                                             Cancel
                                         </button>
                                         <button
                                             type="submit"
                                             disabled={claimSubmitting}
-                                            className="px-6 py-2.5 bg-gold hover:bg-gold/90 text-black font-heading font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(212,175,55,0.4)] disabled:opacity-50"
+                                            className="px-6 py-2.5 bg-gold hover:bg-gold/90 text-black font-heading font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(212,175,55,0.4)] disabled:opacity-50 cursor-pointer"
                                         >
-                                            {claimSubmitting ? 'CREDITING XP...' : '✓ CONFIRM & CLAIM XP'}
+                                            {claimSubmitting ? 'VERIFYING...' : `✓ SUBMIT PROOF & CLAIM XP`}
                                         </button>
                                     </div>
                                 </form>
