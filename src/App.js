@@ -17,6 +17,7 @@ import PreHackathonPage from "./pages/PreHackathonPage";
 import ClubActivities from "./pages/ClubActivities";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import UpriseProfilePage from "./pages/UpriseProfilePage";
+import PreHackathonTasksPage from "./pages/PreHackathonTasksPage";
 import NotFoundWinner from "./pages/NotFoundWinner";
 
 const AppContent = () => {
@@ -28,7 +29,11 @@ const AppContent = () => {
                    location.pathname === '/uprise/leaderboard' ||
                    location.pathname === '/uprise-leaderboard' ||
                    location.pathname === '/uprise/profile' ||
-                   location.pathname === '/uprise-profile';
+                   location.pathname === '/uprise-profile' ||
+                   location.pathname === '/tasks' ||
+                   location.pathname === '/missions' ||
+                   location.pathname === '/pre-hackathon/tasks' ||
+                   location.pathname === '/pre-hackathon-tasks';
 
   return (
     <>
@@ -53,6 +58,10 @@ const AppContent = () => {
         <Route path="/uprise-leaderboard" element={<LeaderboardPage />} />
         <Route path="/uprise/profile" element={<UpriseProfilePage />} />
         <Route path="/uprise-profile" element={<UpriseProfilePage />} />
+        <Route path="/tasks" element={<PreHackathonTasksPage />} />
+        <Route path="/missions" element={<PreHackathonTasksPage />} />
+        <Route path="/pre-hackathon/tasks" element={<PreHackathonTasksPage />} />
+        <Route path="/pre-hackathon-tasks" element={<PreHackathonTasksPage />} />
         <Route path="/404-winner" element={<NotFoundWinner />} />
         <Route path="/404" element={<NotFoundWinner />} />
         <Route path="/team/pratik-linkedin" element={<NotFoundWinner />} />
