@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import UserProfileModal from './UserProfileModal';
 
 const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
     const [copied, setCopied] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
     const handleCopyCoupon = () => {
         if (user?.coupon_code) {
@@ -191,6 +193,42 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                         {/* User / Authentication State */}
                         {user ? (
                             <div className="flex items-center gap-2">
+                                {/* Profile Dashboard Button */}
+                                <button
+                                    type="button"
+                                    onClick={() => setIsProfileModalOpen(true)}
+                                    style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '6px',
+                                        padding: '6px 12px',
+                                        backgroundColor: '#050505',
+                                        border: '1px solid #D4AF37',
+                                        color: '#D4AF37',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s ease',
+                                        outline: 'none',
+                                        boxShadow: '0 0 12px rgba(212, 175, 55, 0.25)',
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.borderColor = '#FFFFFF';
+                                        e.currentTarget.style.color = '#FFFFFF';
+                                        e.currentTarget.style.boxShadow = '0 0 18px rgba(212, 175, 55, 0.45)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.borderColor = '#D4AF37';
+                                        e.currentTarget.style.color = '#D4AF37';
+                                        e.currentTarget.style.boxShadow = '0 0 12px rgba(212, 175, 55, 0.25)';
+                                    }}
+                                    title="Open Profile & Referral Dashboard"
+                                >
+                                    <svg style={{ width: '14px', height: '14px' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                    <span style={{ fontSize: '10px', fontWeight: '800', letterSpacing: '1px' }}>PROFILE</span>
+                                </button>
+
                                 {/* Coupon Pill with Copy */}
                                 {user.coupon_code && (
                                     <button
@@ -403,6 +441,36 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
 
                     {/* Right: Sign In Quick Button & Menu Button */}
                     <div className="flex items-center gap-2">
+                        {user && (
+                            <button
+                                type="button"
+                                onClick={() => setIsProfileModalOpen(true)}
+                                aria-label="Open Profile Dashboard"
+                                style={{
+                                    height: '38px',
+                                    padding: '0 10px',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '5px',
+                                    backgroundColor: '#000000',
+                                    border: '1px solid #D4AF37',
+                                    color: '#D4AF37',
+                                    cursor: 'pointer',
+                                    boxShadow: '0 0 10px rgba(212, 175, 55, 0.2)',
+                                    fontSize: '10px',
+                                    fontWeight: '800',
+                                    letterSpacing: '1px',
+                                }}
+                                title="Open Profile & Referral Dashboard"
+                            >
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '15px', height: '15px' }}>
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                <span className="hidden sm:inline">PROFILE</span>
+                            </button>
+                        )}
+
                         {!user && (
                             <button
                                 type="button"
@@ -502,6 +570,22 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                                             🏆 {user.total_xp || 0} XP
                                         </div>
                                     </div>
+
+                                    {/* Open Profile Dashboard Button */}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setIsMobileMenuOpen(false);
+                                            setIsProfileModalOpen(true);
+                                        }}
+                                        className="w-full py-2.5 px-3 bg-[#050505] hover:bg-[#D4AF37]/15 border border-[#D4AF37] text-[#D4AF37] flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-wider shadow-[0_0_12px_rgba(212,175,55,0.2)] transition-all cursor-pointer"
+                                    >
+                                        <svg style={{ width: '15px', height: '15px' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="12" cy="7" r="4"></circle>
+                                        </svg>
+                                        <span>VIEW PROFILE & REFERRAL DASHBOARD</span>
+                                    </button>
 
                                     {/* Coupon Card with Copy */}
                                     {user.coupon_code && (
@@ -624,6 +708,13 @@ const UpriseNavbar = ({ user, onOpenLogin, onLogout }) => {
                     </motion.div>
                 )}
             </AnimatePresence>
+            {/* Profile & Referral Dashboard Modal */}
+            <UserProfileModal
+                isOpen={isProfileModalOpen}
+                onClose={() => setIsProfileModalOpen(false)}
+                user={user}
+                onLogout={onLogout}
+            />
         </header>
     );
 };
