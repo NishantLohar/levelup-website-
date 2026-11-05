@@ -63,7 +63,6 @@ const UpriseProfilePage = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [copiedCoupon, setCopiedCoupon] = useState(false);
-  const [copiedLink, setCopiedLink] = useState(false);
   const [activeTab, setActiveTab] = useState('missions'); // 'missions' | 'referrals' | 'overview'
 
   const handleLogout = () => {
@@ -153,11 +152,6 @@ const UpriseProfilePage = () => {
     };
   });
 
-  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://levelupevents.in';
-  const referralInviteLink = couponCode 
-    ? `${origin}/pre-hackathon?ref=${encodeURIComponent(couponCode)}` 
-    : `${origin}/pre-hackathon`;
-
   const handleCopyCoupon = () => {
     if (couponCode) {
       navigator.clipboard.writeText(couponCode);
@@ -165,14 +159,6 @@ const UpriseProfilePage = () => {
       setTimeout(() => setCopiedCoupon(false), 2000);
     }
   };
-
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(referralInviteLink);
-    setCopiedLink(true);
-    setTimeout(() => setCopiedLink(false), 2000);
-  };
-
-  const shareWhatsappText = `🔥 Hey! Join me in the LevelUp Uprise Gauntlet Hackathon & Missions! Use my referral code: *${couponCode}* to get instant access and bonus XP:\n${referralInviteLink}`;
 
   return (
     <div className="bg-obsidian min-h-screen text-white font-grotesk overflow-x-hidden relative selection:bg-gold/30 selection:text-gold flex flex-col justify-between">
@@ -347,16 +333,16 @@ const UpriseProfilePage = () => {
 
             {/* 3. Exclusive Referral Hub */}
             <div className="p-6 sm:p-8 bg-pitchblack border-2 border-gold/60 shadow-[0_0_35px_rgba(212,175,55,0.2)]">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-gold/20">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2">
                     <span className="text-gold text-lg">✨</span>
                     <h2 className="text-lg sm:text-xl font-heading font-black text-white uppercase tracking-wider">
-                      YOUR EXCLUSIVE REFERRAL CODE & INVITE LINK
+                      YOUR EXCLUSIVE REFERRAL CODE
                     </h2>
                   </div>
                   <p className="text-xs sm:text-sm text-lightgrey font-mono mt-1">
-                    Share your unique code with developers, classmates, and clubs. Climb the leaderboard together!
+                    Share your unique referral code with developers, classmates, and clubs. Climb the leaderboard together!
                   </p>
                 </div>
 
@@ -367,39 +353,11 @@ const UpriseProfilePage = () => {
                   </div>
                   <button
                     onClick={handleCopyCoupon}
-                    className="py-2.5 px-4 bg-gold hover:bg-gold-light text-black font-heading font-black text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+                    className="py-2.5 px-5 bg-gold hover:bg-gold-light text-black font-heading font-black text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_15px_rgba(212,175,55,0.3)]"
                   >
                     {copiedCoupon ? 'COPIED!' : 'COPY CODE'}
                   </button>
                 </div>
-              </div>
-
-              {/* Shareable Invite Link & WhatsApp */}
-              <div className="pt-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div className="flex-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                  <input
-                    type="text"
-                    readOnly
-                    value={referralInviteLink}
-                    className="flex-1 bg-black/90 border border-gold/40 text-lightgrey px-4 py-2.5 text-xs font-mono select-all focus:outline-none focus:border-gold"
-                  />
-                  <button
-                    onClick={handleCopyLink}
-                    className="py-2.5 px-5 bg-black hover:bg-gold/15 border border-gold text-gold font-heading font-bold text-xs uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap"
-                  >
-                    {copiedLink ? '✓ LINK COPIED!' : 'COPY LINK'}
-                  </button>
-                </div>
-
-                <a
-                  href={`https://wa.me/?text=${encodeURIComponent(shareWhatsappText)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="py-2.5 px-5 bg-[#25D366] hover:bg-[#20ba59] text-black font-heading font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(37,211,102,0.3)] transition-all cursor-pointer no-underline whitespace-nowrap"
-                >
-                  <span>SHARE ON WHATSAPP</span>
-                  <span className="text-sm">↗</span>
-                </a>
               </div>
             </div>
 
@@ -520,10 +478,10 @@ const UpriseProfilePage = () => {
                       Share your referral code <strong className="text-gold font-mono">{couponCode}</strong> with friends. When they register for the hackathon, their registrations will appear here!
                     </p>
                     <button
-                      onClick={handleCopyLink}
+                      onClick={handleCopyCoupon}
                       className="py-3 px-6 bg-gold hover:bg-gold-light text-black font-heading font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(212,175,55,0.4)] cursor-pointer"
                     >
-                      COPY INVITE LINK →
+                      {copiedCoupon ? 'COPIED!' : 'COPY REFERRAL CODE →'}
                     </button>
                   </div>
                 ) : (
