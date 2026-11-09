@@ -210,22 +210,6 @@ const socialTasks = [
             )
         },
         {
-            key: "study_along",
-            title: "Study Along",
-            action: "Join the Study Along activity in the Uprise Discord server. Your presence will give you 100 XP!",
-            xp: "100 XP",
-            link: "https://discord.gg/BxkRwU6X5",
-            btnText: "Join Study Along",
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                    <path d="M9 7h6"></path>
-                    <path d="M9 11h6"></path>
-                </svg>
-            )
-        },
-        {
             key: "bounty_hunter",
             title: "The Bounty Hunter",
             action: "Complete 50 referrals successfully to unlock this legendary badge.",
@@ -403,6 +387,22 @@ const socialTasks = [
                     <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
                     <line x1="9" y1="9" x2="9.01" y2="9"></line>
                     <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                </svg>
+            )
+        },
+        {
+            key: "study_along",
+            title: "Study Along",
+            action: "Join the Study Along activity in the Uprise Discord server. Your presence will give you 100 XP!",
+            xp: "100 XP",
+            link: "https://discord.gg/BxkRwU6X5",
+            btnText: "Join Study Along",
+            icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    <path d="M9 7h6"></path>
+                    <path d="M9 11h6"></path>
                 </svg>
             )
         }
