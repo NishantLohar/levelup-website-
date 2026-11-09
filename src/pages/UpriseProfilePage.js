@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import UpriseNavbar from './uprise_components/UpriseNavbar';
 import UpriseLoginModal from './uprise_components/UpriseLoginModal';
+import UpriseProfileShareModal from './uprise_components/UpriseProfileShareModal';
 import './Uprise.css';
 
 // Mapping of task keys to human-friendly titles, categories, and default XP values
@@ -61,6 +62,7 @@ const UpriseProfilePage = () => {
   });
 
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [copiedCoupon, setCopiedCoupon] = useState(false);
   const [activeTab, setActiveTab] = useState('missions'); // 'missions' | 'referrals' | 'overview'
@@ -120,6 +122,7 @@ const UpriseProfilePage = () => {
     return () => {
       isMounted = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser?.email]);
 
   const couponCode = currentUser?.coupon_code || '';
@@ -188,7 +191,27 @@ const UpriseProfilePage = () => {
             <span>←</span>
             <span>BACK TO UPRISE SUMMIT</span>
           </Link>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
+            <button 
+              type="button"
+              onClick={() => {
+                if (!currentUser) {
+                  setIsLoginModalOpen(true);
+                } else {
+                  setIsShareModalOpen(true);
+                }
+              }}
+              className="inline-flex items-center gap-2 text-xs font-heading font-black text-black hover:text-black uppercase tracking-widest transition-all py-2 px-4 bg-gold hover:bg-gold-light border border-gold shadow-[0_0_15px_rgba(212,175,55,0.4)] cursor-pointer"
+            >
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+              </svg>
+              <span>SHARE PROFILE</span>
+            </button>
             <Link 
               to="/pre-hackathon" 
               className="inline-flex items-center gap-2 text-xs font-heading font-bold text-lightgrey hover:text-gold uppercase tracking-widest transition-colors py-2 px-4 border border-gold/30 hover:border-gold bg-black shadow-[0_0_10px_rgba(0,0,0,0.5)]"
@@ -262,7 +285,21 @@ const UpriseProfilePage = () => {
               </div>
 
               {/* Quick Actions */}
-              <div className="flex items-center gap-3 self-start md:self-auto">
+              <div className="flex items-center gap-3 self-start md:self-auto flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => setIsShareModalOpen(true)}
+                  className="py-2.5 px-4 bg-gold/15 hover:bg-gold text-gold hover:text-black border border-gold text-xs font-heading font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 shadow-[0_0_12px_rgba(212,175,55,0.25)]"
+                >
+                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                  </svg>
+                  <span>SHARE CARD</span>
+                </button>
                 <button
                   onClick={handleLogout}
                   className="py-2.5 px-4 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white border border-red-500/40 text-xs font-heading font-bold uppercase tracking-wider transition-all cursor-pointer"
@@ -593,6 +630,14 @@ const UpriseProfilePage = () => {
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
         onLoginSuccess={handleLoginSuccess}
+      />
+
+      {/* Share Profile & Download PNG Modal */}
+      <UpriseProfileShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        currentUser={currentUser}
+        completedTasksCount={completedTaskList.length}
       />
     </div>
   );
