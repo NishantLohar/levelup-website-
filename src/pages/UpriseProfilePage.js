@@ -22,6 +22,7 @@ export const TASK_INFO_MAP = {
   'student_profile': { title: 'Complete Student Profile on LevelUp SaaS', xp: 20, category: 'Platform' },
   'hunt_404': { title: '404 Cyber Hunt Mission Discovered', xp: 70, category: 'Easter Egg' },
   'discord_rollcall': { title: 'Discord Rollcall Verified Check-in', xp: 100, category: 'Discord' },
+  'study_along': { title: 'Study Along Activity on Discord', xp: 100, category: 'Discord' },
   'bounty_hunter': { title: 'Bounty Hunter Feature / Bug Submission', xp: 500, category: 'Bounty' },
   'the_veteran': { title: 'The Veteran Event Participation', xp: 50, category: 'Milestone' },
   'architects_review': { title: "Architect's System Architecture Review", xp: 50, category: 'Milestone' },
