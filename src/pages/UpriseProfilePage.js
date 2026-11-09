@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import UpriseNavbar from './uprise_components/UpriseNavbar';
 import UpriseLoginModal from './uprise_components/UpriseLoginModal';
 import UpriseProfileShareModal from './uprise_components/UpriseProfileShareModal';
@@ -52,7 +52,13 @@ export const TASK_INFO_MAP = {
 };
 
 const UpriseProfilePage = () => {
-  const [currentUser, setCurrentUser] = useState(() => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const queryCoupon = searchParams.get('ref') || searchParams.get('coupon') || searchParams.get('code') || searchParams.get('user');
+  const queryEmail = searchParams.get('email');
+
+  // Currently logged-in account
+  const [authUser, setAuthUser] = useState(() => {
     try {
       const stored = localStorage.getItem('uprise_user') || sessionStorage.getItem('uprise_user');
       return stored ? JSON.parse(stored) : null;
@@ -61,6 +67,23 @@ const UpriseProfilePage = () => {
     }
   });
 
+  // Profile data being displayed
+  const [profileUser, setProfileUser] = useState(() => {
+    try {
+      const stored = localStorage.getItem('uprise_user') || sessionStorage.getItem('uprise_user');
+      const parsed = stored ? JSON.parse(stored) : null;
+      if (!queryCoupon && !queryEmail) return parsed;
+      if (parsed) {
+        if (queryCoupon && parsed.coupon_code?.toUpperCase() === queryCoupon.toUpperCase()) return parsed;
+        if (queryEmail && parsed.email?.toLowerCase() === queryEmail.toLowerCase()) return parsed;
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  const [profileNotFound, setProfileNotFound] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -72,38 +95,93 @@ const UpriseProfilePage = () => {
     sessionStorage.removeItem('uprise_user');
     localStorage.removeItem('uprise_remember_me');
     localStorage.removeItem('uprise_remembered_email');
-    setCurrentUser(null);
+    setAuthUser(null);
+    if (!queryCoupon && !queryEmail) {
+      setProfileUser(null);
+    }
   };
 
   const handleLoginSuccess = (userData) => {
-    setCurrentUser(userData);
+    setAuthUser(userData);
     setIsLoginModalOpen(false);
+    if (!queryCoupon && !queryEmail) {
+      setProfileUser(userData);
+    }
   };
 
-  // Live Sync with Backend
+  // Sync profile with backend
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    if (!currentUser?.email) return;
-
-    let isMounted = true;
-    setLoading(true);
-
     const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
-    fetch(`${API_BASE_URL}/api/v1/uprise/user-status?email=${encodeURIComponent(currentUser.email)}`)
+    let isMounted = true;
+
+    // 1. If viewing via query parameter (?ref= or ?coupon= or ?email=)
+    if (queryCoupon || queryEmail) {
+      setLoading(true);
+      setProfileNotFound(false);
+      const queryStr = queryEmail 
+        ? `email=${encodeURIComponent(queryEmail)}` 
+        : `coupon=${encodeURIComponent(queryCoupon)}`;
+
+      fetch(`${API_BASE_URL}/api/v1/uprise/user-status?${queryStr}`)
+        .then(res => res.json())
+        .then(data => {
+          if (!isMounted) return;
+          if (data.success && data.user) {
+            setProfileUser(data.user);
+            setProfileNotFound(false);
+
+            // If viewer happens to be this user, sync authUser
+            if (authUser && (authUser.email?.toLowerCase() === data.user.email?.toLowerCase() || (authUser.coupon_code && authUser.coupon_code.toUpperCase() === data.user.coupon_code?.toUpperCase()))) {
+              const merged = { ...authUser, ...data.user };
+              setAuthUser(merged);
+              try {
+                if (localStorage.getItem('uprise_user')) {
+                  localStorage.setItem('uprise_user', JSON.stringify(merged));
+                } else if (sessionStorage.getItem('uprise_user')) {
+                  sessionStorage.setItem('uprise_user', JSON.stringify(merged));
+                }
+              } catch (e) {}
+            }
+          } else {
+            setProfileNotFound(true);
+          }
+        })
+        .catch(err => {
+          console.error('Profile fetch error:', err);
+          if (isMounted) setProfileNotFound(true);
+        })
+        .finally(() => {
+          if (isMounted) setLoading(false);
+        });
+
+      return () => { isMounted = false; };
+    }
+
+    // 2. If viewing own profile without query param
+    if (!authUser?.email) {
+      setProfileUser(null);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    fetch(`${API_BASE_URL}/api/v1/uprise/user-status?email=${encodeURIComponent(authUser.email)}`)
       .then(res => res.json())
       .then(data => {
         if (isMounted && data.success && data.user) {
           const merged = {
-            ...currentUser,
+            ...authUser,
             ...data.user,
-            claimed_tasks: data.user.claimed_tasks || currentUser.claimed_tasks || [],
-            claimed_tasks_details: data.user.claimed_tasks_details || currentUser.claimed_tasks_details || [],
-            referral_count: data.user.referral_count ?? currentUser.referral_count ?? 0,
-            referrals_list: data.user.referrals_list || currentUser.referrals_list || [],
-            rank: data.user.rank || currentUser.rank || '—'
+            claimed_tasks: data.user.claimed_tasks || authUser.claimed_tasks || [],
+            claimed_tasks_details: data.user.claimed_tasks_details || authUser.claimed_tasks_details || [],
+            referral_count: data.user.referral_count ?? authUser.referral_count ?? 0,
+            referrals_list: data.user.referrals_list || authUser.referrals_list || [],
+            rank: data.user.rank || authUser.rank || '—'
           };
-          setCurrentUser(merged);
+          setAuthUser(merged);
+          setProfileUser(merged);
 
           try {
             if (localStorage.getItem('uprise_user')) {
@@ -123,17 +201,26 @@ const UpriseProfilePage = () => {
       isMounted = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser?.email]);
+  }, [queryCoupon, queryEmail, authUser?.email]);
 
-  const couponCode = currentUser?.coupon_code || '';
-  const totalXp = currentUser?.total_xp ?? 0;
-  const liveRank = currentUser?.rank ?? '—';
-  const referralCount = currentUser?.referral_count ?? 0;
-  const referralsList = currentUser?.referrals_list || [];
+  const isViewingQuery = Boolean(queryCoupon || queryEmail);
+  const isOwnProfile = Boolean(
+    !isViewingQuery || 
+    (authUser && profileUser && (
+      (authUser.email && profileUser.email && authUser.email.toLowerCase() === profileUser.email.toLowerCase()) ||
+      (authUser.coupon_code && profileUser.coupon_code && authUser.coupon_code.toUpperCase() === profileUser.coupon_code.toUpperCase())
+    ))
+  );
+
+  const couponCode = profileUser?.coupon_code || '';
+  const totalXp = profileUser?.total_xp ?? 0;
+  const liveRank = profileUser?.rank ?? '—';
+  const referralCount = profileUser?.referral_count ?? 0;
+  const referralsList = profileUser?.referrals_list || [];
 
   // Parse claimed tasks
-  const rawClaimed = currentUser?.claimed_tasks || [];
-  const detailedClaims = currentUser?.claimed_tasks_details || [];
+  const rawClaimed = profileUser?.claimed_tasks || [];
+  const detailedClaims = profileUser?.claimed_tasks_details || [];
   const detailedMap = new Map();
   detailedClaims.forEach(item => {
     if (item && item.task_key) detailedMap.set(item.task_key, item);
@@ -175,7 +262,7 @@ const UpriseProfilePage = () => {
 
       {/* Top Navbar */}
       <UpriseNavbar 
-        user={currentUser} 
+        user={authUser} 
         onOpenLogin={() => setIsLoginModalOpen(true)} 
         onLogout={handleLogout} 
       />
@@ -195,7 +282,7 @@ const UpriseProfilePage = () => {
             <button 
               type="button"
               onClick={() => {
-                if (!currentUser) {
+                if (!profileUser && !authUser) {
                   setIsLoginModalOpen(true);
                 } else {
                   setIsShareModalOpen(true);
@@ -229,8 +316,55 @@ const UpriseProfilePage = () => {
           </div>
         </div>
 
-        {/* User Not Logged In State */}
-        {!currentUser ? (
+        {/* State 1: Loading Shared Profile */}
+        {loading && !profileUser ? (
+          <div className="p-12 border border-gold/30 bg-pitchblack/80 text-center max-w-xl mx-auto shadow-[0_0_50px_rgba(212,175,55,0.15)]">
+            <div className="text-3xl text-gold mb-3 animate-spin inline-block">⟳</div>
+            <h2 className="text-xl font-heading font-black text-white uppercase tracking-wider mb-2">
+              Loading Participant Profile...
+            </h2>
+            <p className="text-xs text-lightgrey font-mono">
+              Retrieving hacker stats, arena rank & verified missions from LevelUp Gauntlet.
+            </p>
+          </div>
+        ) : profileNotFound ? (
+          /* State 2: Profile Not Found (Invalid Code/Email) */
+          <div className="p-10 sm:p-14 border border-red-500/40 bg-pitchblack/80 text-center max-w-xl mx-auto shadow-[0_0_50px_rgba(230,57,70,0.15)]">
+            <div className="w-16 h-16 rounded-full border-2 border-red-500/50 bg-red-500/10 text-red-400 flex items-center justify-center mx-auto mb-6 text-2xl shadow-[0_0_20px_rgba(230,57,70,0.3)]">
+              ⚠️
+            </div>
+            <h2 className="text-2xl font-heading font-black text-white uppercase tracking-wider mb-3">
+              Participant Profile Not Found
+            </h2>
+            <p className="text-sm text-lightgrey leading-relaxed mb-8 font-mono">
+              We could not find an active participant with the referral code or email <strong className="text-gold font-mono">{queryCoupon || queryEmail}</strong>.
+            </p>
+            <div className="flex items-center justify-center gap-4 flex-wrap">
+              {authUser ? (
+                <Link
+                  to="/uprise/profile"
+                  className="py-3 px-6 bg-gold hover:bg-gold-light text-black font-heading font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(212,175,55,0.4)] no-underline"
+                >
+                  VIEW MY DASHBOARD →
+                </Link>
+              ) : (
+                <button
+                  onClick={() => setIsLoginModalOpen(true)}
+                  className="py-3 px-6 bg-gold hover:bg-gold-light text-black font-heading font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(212,175,55,0.4)] cursor-pointer"
+                >
+                  SIGN IN TO YOUR PROFILE →
+                </button>
+              )}
+              <Link
+                to="/pre-hackathon"
+                className="py-3 px-6 bg-black border border-gold text-gold hover:text-white text-xs font-heading font-bold uppercase tracking-widest transition-all no-underline"
+              >
+                EXPLORE GAUNTLET
+              </Link>
+            </div>
+          </div>
+        ) : !profileUser && !authUser ? (
+          /* State 3: User Not Logged In & No Shared Profile */
           <div className="p-10 sm:p-14 border border-gold/30 bg-pitchblack/80 text-center max-w-xl mx-auto shadow-[0_0_50px_rgba(212,175,55,0.15)]">
             <div className="w-16 h-16 rounded-full border-2 border-gold/50 bg-gold/10 text-gold flex items-center justify-center mx-auto mb-6 text-2xl shadow-[0_0_20px_rgba(212,175,55,0.3)]">
               🔒
@@ -249,7 +383,27 @@ const UpriseProfilePage = () => {
             </button>
           </div>
         ) : (
-          <div className="flex flex-col gap-8">
+          /* State 4: Valid Profile Display (Own or Shared Public) */
+          <div className="flex flex-col gap-6">
+            {/* Public Profile View Notification Banner */}
+            {!isOwnProfile && profileUser && (
+              <div className="p-3.5 px-5 bg-gold/10 border border-gold/40 flex items-center justify-between flex-wrap gap-3 shadow-[0_0_15px_rgba(212,175,55,0.15)]">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-gold text-lg">🌐</span>
+                  <span className="text-xs font-heading font-bold text-white uppercase tracking-wider">
+                    Viewing Public Hacker Profile • {profileUser.full_name || profileUser.name || profileUser.email?.split('@')[0]}
+                  </span>
+                </div>
+                <Link
+                  to={`/pre-hackathon?ref=${encodeURIComponent(couponCode || '')}`}
+                  className="text-xs font-heading font-black text-gold hover:text-white uppercase tracking-wider flex items-center gap-1.5 no-underline"
+                >
+                  <span>JOIN GAUNTLET WITH THIS CODE</span>
+                  <span>→</span>
+                </Link>
+              </div>
+            )}
+
             {/* 1. Header Profile Banner */}
             <div className="p-6 sm:p-8 bg-pitchblack/80 border border-gold/40 shadow-[0_0_40px_rgba(212,175,55,0.15)] flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
               <div className="flex items-center gap-4 sm:gap-6">
@@ -262,10 +416,10 @@ const UpriseProfilePage = () => {
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2.5 flex-wrap">
                     <h1 className="text-2xl sm:text-3xl font-heading font-black text-white uppercase tracking-wider">
-                      {currentUser.full_name || currentUser.email?.split('@')[0]}
+                      {profileUser.full_name || profileUser.name || profileUser.email?.split('@')[0]}
                     </h1>
                     <span className="text-[10px] font-heading font-bold px-2.5 py-1 border border-gold text-gold bg-gold/10 tracking-widest uppercase">
-                      {currentUser.role === 'club' ? 'COLLEGE CLUB' : 'UPRISE HACKER'}
+                      {profileUser.role === 'club' ? 'COLLEGE CLUB' : 'UPRISE HACKER'}
                     </span>
                     {loading && (
                       <span className="text-xs text-gold/80 font-mono animate-pulse flex items-center gap-1">
@@ -274,11 +428,11 @@ const UpriseProfilePage = () => {
                     )}
                   </div>
                   <span className="text-xs sm:text-sm text-lightgrey font-mono tracking-wider mt-1">
-                    {currentUser.email}
+                    {profileUser.email}
                   </span>
-                  {currentUser.organization && (
+                  {profileUser.organization && (
                     <span className="text-xs text-gold/80 font-mono tracking-wide mt-1">
-                      🏛️ {currentUser.organization}
+                      🏛️ {profileUser.organization}
                     </span>
                   )}
                 </div>
@@ -300,12 +454,40 @@ const UpriseProfilePage = () => {
                   </svg>
                   <span>SHARE CARD</span>
                 </button>
-                <button
-                  onClick={handleLogout}
-                  className="py-2.5 px-4 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white border border-red-500/40 text-xs font-heading font-bold uppercase tracking-wider transition-all cursor-pointer"
-                >
-                  SIGN OUT
-                </button>
+
+                {isOwnProfile ? (
+                  <button
+                    onClick={handleLogout}
+                    className="py-2.5 px-4 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white border border-red-500/40 text-xs font-heading font-bold uppercase tracking-wider transition-all cursor-pointer"
+                  >
+                    SIGN OUT
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <Link
+                      to={`/pre-hackathon?ref=${encodeURIComponent(couponCode || '')}`}
+                      className="py-2.5 px-4 bg-gold hover:bg-gold-light text-black border border-gold text-xs font-heading font-black uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_15px_rgba(212,175,55,0.3)] no-underline flex items-center gap-1.5"
+                    >
+                      <span>REGISTER WITH CODE</span>
+                      <span>→</span>
+                    </Link>
+                    {authUser ? (
+                      <Link
+                        to="/uprise/profile"
+                        className="py-2.5 px-3 bg-black hover:bg-gold/20 text-gold border border-gold text-xs font-heading font-bold uppercase tracking-wider transition-all no-underline"
+                      >
+                        MY PROFILE
+                      </Link>
+                    ) : (
+                      <button
+                        onClick={() => setIsLoginModalOpen(true)}
+                        className="py-2.5 px-3 bg-black hover:bg-gold/20 text-gold border border-gold text-xs font-heading font-bold uppercase tracking-wider transition-all cursor-pointer"
+                      >
+                        SIGN IN
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -375,16 +557,18 @@ const UpriseProfilePage = () => {
                   <div className="flex items-center gap-2">
                     <span className="text-gold text-lg">✨</span>
                     <h2 className="text-lg sm:text-xl font-heading font-black text-white uppercase tracking-wider">
-                      YOUR EXCLUSIVE REFERRAL CODE
+                      {isOwnProfile ? 'YOUR EXCLUSIVE REFERRAL CODE' : `REFERRAL CODE FROM ${(profileUser.full_name || profileUser.name || 'HACKER').toUpperCase()}`}
                     </h2>
                   </div>
                   <p className="text-xs sm:text-sm text-lightgrey font-mono mt-1">
-                    Share your unique referral code with developers, classmates, and clubs. Climb the leaderboard together!
+                    {isOwnProfile
+                      ? 'Share your unique referral code with developers, classmates, and clubs. Climb the leaderboard together!'
+                      : 'Use this referral code when registering for UPRISE 2027 to unlock bonus XP and rewards on the Gauntlet!'}
                   </p>
                 </div>
 
                 {/* Big Coupon Display & Copy */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 flex-wrap">
                   <div className="px-5 py-2.5 bg-black border-2 border-gold text-gold font-mono font-bold text-lg sm:text-xl tracking-widest shadow-[0_0_15px_rgba(212,175,55,0.3)] select-all">
                     {couponCode || 'N/A'}
                   </div>
@@ -394,6 +578,14 @@ const UpriseProfilePage = () => {
                   >
                     {copiedCoupon ? 'COPIED!' : 'COPY CODE'}
                   </button>
+                  {!isOwnProfile && (
+                    <Link
+                      to={`/pre-hackathon?ref=${encodeURIComponent(couponCode || '')}`}
+                      className="py-2.5 px-5 bg-white hover:bg-gold text-black font-heading font-black text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_15px_rgba(255,255,255,0.3)] no-underline"
+                    >
+                      APPLY & JOIN →
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
@@ -636,7 +828,7 @@ const UpriseProfilePage = () => {
       <UpriseProfileShareModal
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
-        currentUser={currentUser}
+        currentUser={profileUser}
         completedTasksCount={completedTaskList.length}
       />
     </div>

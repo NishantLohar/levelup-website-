@@ -454,12 +454,12 @@ const UpriseProfileShareModal = ({
   const couponCode = currentUser?.coupon_code || '';
   const fullName = currentUser?.full_name || currentUser?.name || 'Hacker';
 
-  // Base share URL
+  // Base profile share URL (opens this user's profile page)
   const origin = typeof window !== 'undefined' ? window.location.origin : 'https://levelupevents.in';
-  const shareUrl = `${origin}/pre-hackathon${couponCode ? `?ref=${encodeURIComponent(couponCode)}` : ''}`;
+  const profileUrl = `${origin}/uprise/profile?ref=${encodeURIComponent(couponCode || currentUser?.email || '')}`;
 
   // Pre-filled social message
-  const shareMessage = `🔥 I'm participating in UPRISE 2027 by LevelUp! Check out my participant profile, join the Gauntlet, and use my referral code "${couponCode || 'UPRISE'}" to get started: ${shareUrl}`;
+  const shareMessage = `🔥 Check out my Participant Profile on UPRISE 2027 by LevelUp! View my Arena rank, XP, and completed missions here: ${profileUrl}`;
 
   // Generate card preview on open
   useEffect(() => {
@@ -477,11 +477,37 @@ const UpriseProfileShareModal = ({
 
   if (!isOpen) return null;
 
+  const copyToClipboard = (text) => {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text);
+    } else {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      textArea.style.top = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        textArea.remove();
+        return Promise.resolve();
+      } catch (e) {
+        textArea.remove();
+        return Promise.reject(e);
+      }
+    }
+  };
+
   const handleCopyLink = () => {
-    if (navigator.clipboard && shareUrl) {
-      navigator.clipboard.writeText(shareUrl);
-      setCopiedLink(true);
-      setTimeout(() => setCopiedLink(false), 2200);
+    if (profileUrl) {
+      copyToClipboard(profileUrl).then(() => {
+        setCopiedLink(true);
+        setTimeout(() => setCopiedLink(false), 2200);
+      }).catch(err => {
+        console.error('Copy error:', err);
+      });
     }
   };
 
@@ -517,7 +543,7 @@ const UpriseProfileShareModal = ({
   const socialLinks = {
     whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(shareMessage)}`,
     twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareMessage)}`,
-    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(profileUrl)}`
   };
 
   return createPortal(
@@ -601,31 +627,8 @@ const UpriseProfileShareModal = ({
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
             </svg>
-            <span>{copiedLink ? 'COPIED TO CLIPBOARD! ✓' : 'COPY SHARE LINK'}</span>
+            <span>{copiedLink ? 'PROFILE LINK COPIED! ✓' : 'COPY SHARE LINK'}</span>
           </button>
-        </div>
-
-        {/* Share Link Input Box */}
-        <div className="mb-5">
-          <label className="block text-[11px] font-mono text-gold uppercase tracking-wider mb-1.5">
-            YOUR UNIQUE REFERRAL URL:
-          </label>
-          <div className="flex items-center gap-2">
-            <input
-              type="text"
-              readOnly
-              value={shareUrl}
-              onClick={(e) => e.target.select()}
-              className="flex-1 bg-pitchblack border border-gold/40 px-3 py-2 text-xs font-mono text-white tracking-wider outline-none focus:border-gold selection:bg-gold/40 select-all"
-            />
-            <button
-              type="button"
-              onClick={handleCopyLink}
-              className="px-3.5 py-2 bg-gold/20 hover:bg-gold text-gold hover:text-black border border-gold text-xs font-heading font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap"
-            >
-              {copiedLink ? 'COPIED!' : 'COPY'}
-            </button>
-          </div>
         </div>
 
         {/* Quick Social Share Buttons */}
