@@ -1,242 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-// --- CURATED PROBLEM STATEMENTS ---
-const PROBLEM_STATEMENTS = [
-    // Category A: Standard Problem Statements (Earning Track)
-    {
-        id: 'STD-01',
-        category: 'standard',
-        categoryLabel: 'Category A: Standard (Earning Track)',
-        title: 'Real-Time Distributed API Fraud & Volumetric Attack Sentinel',
-        domain: 'Backend Systems / Cybersecurity / FinTech',
-        difficulty: 'Hardcore',
-        duration: '45 Days',
-        blueprintHours: 48,
-        blueprintChances: 3,
-        productChances: 2,
-        maxParticipants: 2,
-        compensationType: 'Variable Valuation (Earning Track)',
-        reward: 'Direct Final Hackathon Qualification + Discretionary Financial Payout',
-        summary: 'Architect a sub-5ms reverse proxy engine that dynamically calculates multi-dimensional risk scores, identifies distributed API scraping bots, and enforces adaptive sliding-window token bucket throttles across millions of concurrent requests.',
-        deliverables: [
-            'Reverse proxy service with sub-5ms latency overhead under 50k RPS load',
-            'In-memory sliding window algorithm with distributed Redis/KeyDB cluster sync',
-            'Live telemetry dashboard showing anomaly spikes, CIDR blocklists, and bypass rate',
-            'Automated chaos-test script simulating DDoS, credential stuffing, and slowloris'
-        ],
-        techStack: 'Go / Rust / Node.js, Redis, eBPF / Envoy / NGINX, Grafana / Prometheus'
-    },
-    {
-        id: 'STD-02',
-        category: 'standard',
-        categoryLabel: 'Category A: Standard (Earning Track)',
-        title: 'Event-Driven Financial Multi-Ledger Reconciliation & Settlement Engine',
-        domain: 'FinTech / Distributed Systems / Database',
-        difficulty: 'Extreme',
-        duration: '45 Days',
-        blueprintHours: 48,
-        blueprintChances: 3,
-        productChances: 2,
-        maxParticipants: 2,
-        compensationType: 'Variable Valuation (Earning Track)',
-        reward: 'Direct Final Hackathon Qualification + Discretionary Financial Payout',
-        summary: 'Design an idempotent, immutable double-entry ledger that consumes disparate bank webhooks, settlement logs, and gateway payouts, auto-reconciles broken transactions, and guarantees zero-loss cryptographic audit trails.',
-        deliverables: [
-            'Idempotent transaction ingestion pipeline handling out-of-order and duplicated webhooks',
-            'Dual-entry balance integrity verification engine with automated rollback mechanics',
-            'Discrepancy alert engine detecting phantom transactions, fee skims, and gateway delay',
-            'Auditor-grade CSV/PDF report generator with cryptographic hash chain verification'
-        ],
-        techStack: 'PostgreSQL / CockroachDB, Kafka / RabbitMQ, Python / Go / Java, Docker'
-    },
-    {
-        id: 'STD-03',
-        category: 'standard',
-        categoryLabel: 'Category A: Standard (Earning Track)',
-        title: 'HIPAA-Compliant Unstructured Clinical Record Extraction & Anonymizer',
-        domain: 'HealthTech / NLP / Data Privacy',
-        difficulty: 'Advanced',
-        duration: '45 Days',
-        blueprintHours: 48,
-        blueprintChances: 3,
-        productChances: 2,
-        maxParticipants: 2,
-        compensationType: 'Variable Valuation (Earning Track)',
-        reward: 'Direct Final Hackathon Qualification + Discretionary Financial Payout',
-        summary: 'Build an automated pipeline to ingest messy scanned medical prescriptions, clinical pathology charts, and doctor notes; scrub all 18 HIPAA PHI identifiers with >99.5% accuracy; and export structured FHIR JSON health records.',
-        deliverables: [
-            'High-accuracy OCR pipeline handling skewed, handwritten, and low-res clinical scans',
-            'Context-aware Named Entity Recognition (NER) for multi-language PHI anonymization',
-            'Interoperable Fast Healthcare Interoperability Resources (FHIR) standard JSON converter',
-            'Redaction audit report highlighting confidence bounds and manual review queues'
-        ],
-        techStack: 'Python (FastAPI), Tesseract / LayoutLM, Spacy / RoBERTa, Docker, FHIR Tools'
-    },
-    {
-        id: 'STD-04',
-        category: 'standard',
-        categoryLabel: 'Category A: Standard (Earning Track)',
-        title: 'Autonomous Multi-Cloud Kubernetes FinOps Sentinel & Cost Shrinker',
-        domain: 'DevOps / Cloud Architecture / FinOps',
-        difficulty: 'Hardcore',
-        duration: '45 Days',
-        blueprintHours: 48,
-        blueprintChances: 3,
-        productChances: 2,
-        maxParticipants: 2,
-        compensationType: 'Variable Valuation (Earning Track)',
-        reward: 'Direct Final Hackathon Qualification + Discretionary Financial Payout',
-        summary: 'Construct an intelligent cluster agent that continuously inspects multi-cloud workloads, identifies zombie pods, unattached volumes, and over-provisioned CPU requests, and generates automated, zero-downtime downsizing pull requests.',
-        deliverables: [
-            'Lightweight in-cluster daemonset collecting memory/CPU variance and node saturation',
-            'Rule & ML predictive heuristic engine calculating idle waste across AWS/GCP/Azure tiers',
-            'Automated GitOps pull request generator for Kubernetes Helm/Terraform manifests',
-            'Real-time savings simulator showing projected monthly cost reductions'
-        ],
-        techStack: 'Go / Python, Kubernetes API, Prometheus, OpenCost, Terraform'
-    },
-    {
-        id: 'STD-05',
-        category: 'standard',
-        categoryLabel: 'Category A: Standard (Earning Track)',
-        title: 'High-Throughput Edge IoT Fleet Diagnostics & Predictive Telemetry Hub',
-        domain: 'IoT / Edge Systems / Predictive AI',
-        difficulty: 'Advanced',
-        duration: '45 Days',
-        blueprintHours: 48,
-        blueprintChances: 3,
-        productChances: 2,
-        maxParticipants: 2,
-        compensationType: 'Variable Valuation (Earning Track)',
-        reward: 'Direct Final Hackathon Qualification + Discretionary Financial Payout',
-        summary: 'Create a resilient telemetry ingestion gateway that aggregates high-frequency vibration, thermal, and voltage telemetry from thousands of simulated hardware sensors over MQTT/WebSocket and predicts mechanical failure 72 hours before breakdown.',
-        deliverables: [
-            'High-concurrency MQTT broker gateway handling 20k msgs/sec with buffer backpressure',
-            'Time-series anomaly detector for continuous wear-and-tear degradation patterns',
-            'Emergency threshold circuit breaker triggering physical relay shutoffs / webhooks',
-            'Fleet topology map showing live operational health and diagnostic logs'
-        ],
-        techStack: 'EMQX / Mosquitto MQTT, TimescaleDB / InfluxDB, Node.js / Rust, WebSockets'
-    },
-
-    // Category B: Corporate Partner Problem Statements (Corporate / Trending Track)
-    {
-        id: 'CORP-01',
-        category: 'corporate',
-        categoryLabel: 'Category B: Corporate Partner Track',
-        title: 'Autonomous Multi-Agent PR Reviewer, Sandbox Tester & Zero-Day Patcher',
-        domain: 'Corporate Partner / AI Agents / AppSec / DevTools',
-        difficulty: 'Extreme',
-        duration: '45 Days',
-        blueprintHours: 48,
-        blueprintChances: 3,
-        productChances: 2,
-        maxParticipants: 2,
-        compensationType: 'Portfolio Authorization Track (No Assured Payout)',
-        reward: 'Direct Final Hackathon Qualification + Official Partner Portfolio Authorization',
-        summary: 'Build an orchestration network of specialized AI agents (Security Auditor, Performance Profiler, Architecture Reviewer) that review incoming GitHub PRs, spin up sandboxed environments to verify vulnerabilities, and auto-submit verified code patches.',
-        deliverables: [
-            'Multi-agent debate & consensus pipeline (Security, Speed, Architecture agents)',
-            'Sandboxed test runner (Docker/Firecracker microVM) executing untrusted PR code',
-            'GitHub App bot posting diff line comments, risk scores, and ready-to-merge patch branches',
-            'False-positive benchmark evaluation against known OWASP CVE vulnerability datasets'
-        ],
-        techStack: 'LangGraph / CrewAI, Python, Docker SDK, GitHub Webhooks, Anthropic/OpenAI API'
-    },
-    {
-        id: 'CORP-02',
-        category: 'corporate',
-        categoryLabel: 'Category B: Corporate Partner Track',
-        title: 'Real-Time Multimodal Meeting Copilot with Speaker Diarization & Action Hub',
-        domain: 'Corporate Partner / Multimodal AI / Real-Time Audio',
-        difficulty: 'Hardcore',
-        duration: '45 Days',
-        blueprintHours: 48,
-        blueprintChances: 3,
-        productChances: 2,
-        maxParticipants: 2,
-        compensationType: 'Portfolio Authorization Track (No Assured Payout)',
-        reward: 'Direct Final Hackathon Qualification + Official Partner Portfolio Authorization',
-        summary: 'Develop a low-latency meeting companion that taps into live WebRTC audio streams, separates overlapping speaker voices in real time, extracts technical action items, and generates sync-ready Jira/Linear tickets with assignee tags.',
-        deliverables: [
-            'WebRTC / WebSocket low-latency audio capture pipeline (<250ms packet chunking)',
-            'Speaker diarization model accurately tracking 5+ distinct participants simultaneously',
-            'Contextual extraction engine categorizing decisions, blockers, deadlines, and owners',
-            'Instant 1-click Linear, Jira, and GitHub Issue sync webhook dispatch'
-        ],
-        techStack: 'WebRTC, Whisper / Deepgram, PyAnnote Audio, Node.js / Python, React'
-    },
-    {
-        id: 'CORP-03',
-        category: 'corporate',
-        categoryLabel: 'Category B: Corporate Partner Track',
-        title: 'Decentralized P2P Compute & Bandwidth Sharing Sentinel (DePIN Protocol)',
-        domain: 'Corporate Partner / Web3 / DePIN / P2P Networks',
-        difficulty: 'Extreme',
-        duration: '45 Days',
-        blueprintHours: 48,
-        blueprintChances: 3,
-        productChances: 2,
-        maxParticipants: 2,
-        compensationType: 'Portfolio Authorization Track (No Assured Payout)',
-        reward: 'Direct Final Hackathon Qualification + Official Partner Portfolio Authorization',
-        summary: 'Build a peer-to-peer compute and bandwidth sharing protocol where users contribute spare GPU compute or bandwidth, receive cryptographic Proof-of-Uptime verification, and earn micro-settlement rewards with zero central intermediaries.',
-        deliverables: [
-            'Lightweight desktop or CLI client daemon for peer discovery and packet relaying',
-            'Cryptographic Proof-of-Bandwidth / Proof-of-Compute validation challenge protocol',
-            'Smart contract or escrow module tracking node uptime, slashing, and payout distribution',
-            'Live decentralized network explorer visualizing peer nodes, ping latency, and throughput'
-        ],
-        techStack: 'libp2p / WebRTC, Rust / Go / Node.js, Solidity / EVM, React Canvas/Three.js'
-    },
-    {
-        id: 'CORP-04',
-        category: 'corporate',
-        categoryLabel: 'Category B: Corporate Partner Track',
-        title: 'Spatial Vision-Language Assistant for Hardware Assembly & Repair Guidance',
-        domain: 'Corporate Partner / Computer Vision / Vision-Language / AR Guidance',
-        difficulty: 'Hardcore',
-        duration: '45 Days',
-        blueprintHours: 48,
-        blueprintChances: 3,
-        productChances: 2,
-        maxParticipants: 2,
-        compensationType: 'Portfolio Authorization Track (No Assured Payout)',
-        reward: 'Direct Final Hackathon Qualification + Official Partner Portfolio Authorization',
-        summary: 'Harness vision-language models to analyze real-time video feeds of complex circuit boards, PC components, or machinery; detect misplaced wires or incorrect screws; and project step-by-step visual bounding cues directly on the technician’s screen.',
-        deliverables: [
-            'Real-time frame ingestion worker running object detection and spatial tracking',
-            'VLM integration identifying missing jumpers, reversed polarity, or unseated RAM modules',
-            'Interactive video overlay HUD highlighting exact component coordinates and warning badges',
-            'Step-by-step interactive workflow builder with voice-controlled next/previous handsfree navigation'
-        ],
-        techStack: 'OpenCV, YOLOv10 / Gemini 1.5 Flash Vision, WebSockets, WebRTC, React'
-    },
-    {
-        id: 'CORP-05',
-        category: 'corporate',
-        categoryLabel: 'Category B: Corporate Partner Track',
-        title: 'Autonomous Self-Healing Microservices Sentinel with Chaos Outage Simulation',
-        domain: 'Corporate Partner / AI SRE / Chaos Engineering / Cloud Resiliency',
-        difficulty: 'Extreme',
-        duration: '45 Days',
-        blueprintHours: 48,
-        blueprintChances: 3,
-        productChances: 2,
-        maxParticipants: 2,
-        compensationType: 'Portfolio Authorization Track (No Assured Payout)',
-        reward: 'Direct Final Hackathon Qualification + Official Partner Portfolio Authorization',
-        summary: 'Design an autonomous site reliability agent that routinely fires chaos engineering probes into Dockerized microservices, pinpoints cascading root causes across distributed OpenTelemetry traces, and automatically applies and validates configuration hotfixes.',
-        deliverables: [
-            'Chaos injection worker simulating network packet drops, disk stalls, and memory leaks',
-            'Distributed OpenTelemetry and Jaeger trace analyzer detecting latency degradation spikes',
-            'Automated remediation engine rolling back corrupt deployments or patching nginx/k8s configs',
-            'Complete post-mortem incident report synthesizer with root-cause timeline analysis'
-        ],
-        techStack: 'Docker, OpenTelemetry, Jaeger, Python / Go, LLM Diagnostic Agent, Prometheus'
-    }
-];
+// --- OFFICIAL PROBLEM STATEMENTS ---
+// Sample problem statements removed per client directive. Real statements will be populated upon official release.
+const PROBLEM_STATEMENTS = [];
 
 const ProblemStatementRegistrationModal = ({
     isOpen,
@@ -257,6 +24,17 @@ const ProblemStatementRegistrationModal = ({
         master_agreement: false
     });
 
+    // Registered for Release State
+    const userEmail = currentUser?.email || 'guest';
+    const storageRegistrationKey = `uprise_ps_registered_${userEmail}`;
+    const [isRegisteredForRelease, setIsRegisteredForRelease] = useState(() => {
+        try {
+            return localStorage.getItem(storageRegistrationKey) === 'true';
+        } catch (e) {
+            return false;
+        }
+    });
+
     // Blueprint Submission Form state inside HUD
     const [blueprintUrl, setBlueprintUrl] = useState('');
     const [blueprintNotes, setBlueprintNotes] = useState('');
@@ -264,7 +42,6 @@ const ProblemStatementRegistrationModal = ({
     const [submissionSuccessMsg, setSubmissionSuccessMsg] = useState(null);
 
     // Active User Claim State
-    const userEmail = currentUser?.email || 'guest';
     const storageClaimKey = `uprise_ps_claim_${userEmail}`;
     const [activeClaim, setActiveClaim] = useState(() => {
         try {
@@ -275,22 +52,11 @@ const ProblemStatementRegistrationModal = ({
         }
     });
 
-    // Global Slots Mapping: { [problemId]: number of participants (0, 1, or 2) }
+    // Global Slots Mapping
     const [slotsData, setSlotsData] = useState(() => {
         try {
             const saved = localStorage.getItem('uprise_ps_global_slots');
-            return saved ? JSON.parse(saved) : {
-                'STD-01': 1,
-                'STD-02': 0,
-                'STD-03': 1,
-                'STD-04': 0,
-                'STD-05': 0,
-                'CORP-01': 1,
-                'CORP-02': 0,
-                'CORP-03': 1,
-                'CORP-04': 0,
-                'CORP-05': 0
-            };
+            return saved ? JSON.parse(saved) : {};
         } catch (e) {
             return {};
         }
@@ -309,6 +75,8 @@ const ProblemStatementRegistrationModal = ({
                     setActiveClaim(null);
                     setCurrentStep('track');
                 }
+                const reg = localStorage.getItem(`uprise_ps_registered_${currentUser.email}`) === 'true';
+                setIsRegisteredForRelease(reg);
             } catch (e) {}
         }
     }, [currentUser?.email]);
@@ -372,7 +140,29 @@ const ProblemStatementRegistrationModal = ({
         });
     };
 
-    // Handle Claiming a Problem Statement
+    // Handle Confirming Registration for Statement Release
+    const handleRegisterForRelease = () => {
+        if (!currentUser?.email) {
+            onClose();
+            if (onOpenLogin) onOpenLogin();
+            return;
+        }
+
+        if (!allTermsAccepted) {
+            alert('Security Alert: You must review and agree to the Terms and Conditions before registering.');
+            setCurrentStep('terms');
+            return;
+        }
+
+        try {
+            localStorage.setItem(storageRegistrationKey, 'true');
+            localStorage.setItem(`uprise_ps_registered_track_${userEmail}`, selectedTrack);
+            localStorage.setItem(`uprise_ps_registered_date_${userEmail}`, new Date().toISOString());
+            setIsRegisteredForRelease(true);
+        } catch (e) {}
+    };
+
+    // Handle Claiming a Problem Statement (for when real statements are active)
     const handleClaimProblem = (problem) => {
         if (!currentUser?.email) {
             onClose();
@@ -380,7 +170,6 @@ const ProblemStatementRegistrationModal = ({
             return;
         }
 
-        // Strict server/client guard: Terms must be accepted
         if (!allTermsAccepted) {
             alert('Security Alert: You cannot claim a problem statement without accepting the official Terms and Conditions.');
             setCurrentStep('terms');
@@ -406,8 +195,8 @@ const ProblemStatementRegistrationModal = ({
             techStack: problem.techStack,
             compensationType: problem.compensationType,
             claimedAt: now,
-            blueprintDeadline: now + (48 * 60 * 60 * 1000), // exactly 48 hours
-            sprintDeadline: now + (45 * 24 * 60 * 60 * 1000), // exactly 45 days
+            blueprintDeadline: now + (48 * 60 * 60 * 1000),
+            sprintDeadline: now + (45 * 24 * 60 * 60 * 1000),
             blueprintChancesTotal: 3,
             blueprintChancesRemaining: 3,
             productChancesTotal: 2,
@@ -440,7 +229,7 @@ const ProblemStatementRegistrationModal = ({
             };
             saveClaim(updated);
             setIsSubmittingBlueprint(false);
-            setSubmissionSuccessMsg('Blueprint submitted for review! Mentors will evaluate within 24 hours.');
+            setSubmissionSuccessMsg('Blueprint submitted for review. The LevelUp Technical Committee will evaluate within 24 hours.');
             setTimeout(() => setSubmissionSuccessMsg(null), 5000);
         }, 1200);
     };
@@ -512,7 +301,7 @@ const ProblemStatementRegistrationModal = ({
                                     : 'bg-pitchblack border border-gold/50 text-gold hover:bg-gold hover:text-pitchblack font-bold shadow-[0_0_8px_rgba(212,175,55,0.15)]'
                             }`}
                         >
-                            <span>2.</span> Terms & Conditions {!allTermsAccepted && <span className={`${currentStep === 'terms' ? 'text-red-700' : 'text-[#E63946]'} font-bold`}>(!)</span>}
+                            <span>2.</span> Terms & Conditions {!allTermsAccepted && <span className={`${currentStep === 'terms' ? 'text-red-700' : 'text-[#E63946]'} font-bold`}>[REQUIRED]</span>}
                         </button>
                         <span className="text-gold/50 font-bold">→</span>
                         <button
@@ -528,9 +317,9 @@ const ProblemStatementRegistrationModal = ({
                                     ? 'bg-pitchblack border border-gold/50 text-gold hover:bg-gold hover:text-pitchblack font-bold shadow-[0_0_8px_rgba(212,175,55,0.15)]'
                                     : 'bg-pitchblack/90 border border-gold/40 text-gold/60 hover:bg-gold/15 hover:text-gold hover:border-gold'
                             }`}
-                            title={!allTermsAccepted ? 'Click to view (requires accepting terms in Step 2)' : ''}
+                            title={!allTermsAccepted ? 'Requires accepting terms in Step 2' : ''}
                         >
-                            <span>3.</span> Browse Statements {!allTermsAccepted ? '🔒' : ''}
+                            <span>3.</span> Statements Allocation
                         </button>
                     </div>
                 )}
@@ -548,7 +337,7 @@ const ProblemStatementRegistrationModal = ({
                                     STEP 1: SELECT YOUR PROBLEM STATEMENT CATEGORY
                                 </h3>
                                 <p className="text-sm text-lightgrey leading-relaxed">
-                                    Choose between Category A (Earning Track with variable financial valuation) or Category B (Corporate Partner Track with official portfolio authorization).
+                                    Choose between Category A (Earning Track with variable financial valuation) or Category B (Corporate Partner Track with official developer portfolio authorization).
                                 </p>
                             </div>
 
@@ -572,21 +361,24 @@ const ProblemStatementRegistrationModal = ({
                                             STANDARD PROBLEM STATEMENTS
                                         </h4>
                                         <p className="text-xs text-lightgrey leading-relaxed mb-4">
-                                            High-scale enterprise, distributed ledgers, API sentinels, and infrastructure challenges with an opportunity to earn financial compensation upon final build evaluation.
+                                            High-scale enterprise, distributed systems, resilient financial ledgers, and cloud infrastructure challenges with an opportunity to earn financial compensation upon final build evaluation.
                                         </p>
                                         
                                         <div className="space-y-2 text-xs font-mono text-white/90 border-t border-white/10 pt-3">
                                             <div className="flex items-center gap-2">
-                                                <span className="text-gold font-bold">💰 Compensation:</span> Variable Valuation (Evaluation Panel)
+                                                <span className="text-gold font-bold">Compensation:</span> Variable Valuation (Evaluation Panel Discretion)
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <span className="text-[#E63946] font-bold">⏱ 48-Hour Rule:</span> Initial Blueprint Submission Required
+                                                <span className="text-[#E63946] font-bold">48-Hour Rule:</span> Mandatory Initial Blueprint Submission
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <span className="text-gold font-bold">📅 Dev Cycle:</span> 45 Days post-blueprint approval
+                                                <span className="text-gold font-bold">Development Cycle:</span> 45 Days post-blueprint approval
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <span className="text-gold font-bold">🛡️ Rejection Limit:</span> Max 3 Blueprint Rejections
+                                                <span className="text-gold font-bold">Rejection Limit:</span> Maximum 3 Blueprint Rejections
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-gold font-bold">Team Capacity:</span> Maximum 2 Coders Per Statement
                                             </div>
                                         </div>
                                     </div>
@@ -609,7 +401,7 @@ const ProblemStatementRegistrationModal = ({
                                     className={`p-6 border transition-all cursor-pointer sharp relative flex flex-col justify-between ${selectedTrack === 'corporate' ? 'border-gold bg-gold/10 shadow-[0_0_25px_rgba(212,175,55,0.25)]' : 'border-white/10 bg-pitchblack/60 hover:border-gold/50'}`}
                                 >
                                     {selectedTrack === 'corporate' && (
-                                        <div className="absolute top-3 right-3 text-[10px] font-heading font-black bg-cyan-400 text-pitchblack px-2.5 py-1 tracking-widest uppercase sharp">
+                                        <div className="absolute top-3 right-3 text-[10px] font-heading font-black bg-gold text-pitchblack px-2.5 py-1 tracking-widest uppercase sharp">
                                             SELECTED
                                         </div>
                                     )}
@@ -622,21 +414,24 @@ const ProblemStatementRegistrationModal = ({
                                             CORPORATE PARTNER STATEMENTS
                                         </h4>
                                         <p className="text-xs text-lightgrey leading-relaxed mb-4">
-                                            Challenges provided directly by popular tech companies and corporate partners with official authorization to add to your professional developer portfolio.
+                                            Problem statements provided directly by popular tech companies and corporate partners with official authorization to add the completed project to your developer portfolio.
                                         </p>
                                         
                                         <div className="space-y-2 text-xs font-mono text-white/90 border-t border-white/10 pt-3">
                                             <div className="flex items-center gap-2">
-                                                <span className="text-cyan-400 font-bold">💼 Authorization:</span> Add to Developer Portfolio & Resume
+                                                <span className="text-cyan-400 font-bold">Portfolio Authorization:</span> Explicit Partner Project Attribution
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <span className="text-lightgrey font-bold">ℹ️ Payout/Jobs:</span> Strictly Circumstantial / Not Guaranteed
+                                                <span className="text-lightgrey font-bold">Compensation & Hiring:</span> Strictly Circumstantial / Not Guaranteed
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <span className="text-[#E63946] font-bold">⏱ 48-Hour Rule:</span> Initial Blueprint Submission Required
+                                                <span className="text-[#E63946] font-bold">48-Hour Rule:</span> Mandatory Initial Blueprint Submission
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <span className="text-gold font-bold">📅 Dev Cycle:</span> 45 Days post-blueprint approval
+                                                <span className="text-gold font-bold">Development Cycle:</span> 45 Days post-blueprint approval
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-gold font-bold">Team Capacity:</span> Maximum 2 Coders Per Statement
                                             </div>
                                         </div>
                                     </div>
@@ -676,7 +471,7 @@ const ProblemStatementRegistrationModal = ({
                                     onClick={toggleAllTerms}
                                     className="text-xs text-gold hover:text-white border border-gold/40 hover:border-gold px-3.5 py-1.5 font-mono tracking-wider sharp cursor-pointer transition-colors whitespace-nowrap"
                                 >
-                                    {allTermsAccepted ? 'DESELECT ALL' : '✓ CHECK ALL BOXES'}
+                                    {allTermsAccepted ? '[ DESELECT ALL ]' : '[ SELECT ALL ]'}
                                 </button>
                             </div>
 
@@ -843,7 +638,7 @@ const ProblemStatementRegistrationModal = ({
                                             I HAVE READ, UNDERSTOOD, AND IRREVOCABLY AGREE TO ALL TERMS AND CONDITIONS *
                                         </span>
                                         <p className="text-[11px] text-lightgrey mt-0.5">
-                                            I agree that failure to comply with the 48-hour blueprint or 45-day deadline will forfeit my claim, and all IP rights belong exclusively to LevelUp Events Private Limited.
+                                            I acknowledge that failure to submit the blueprint within 48 hours forfeits the claim, and all IP rights belong exclusively to LevelUp Events Private Limited.
                                         </p>
                                     </div>
                                 </label>
@@ -852,7 +647,7 @@ const ProblemStatementRegistrationModal = ({
                             {/* Warning when disabled */}
                             {!allTermsAccepted && (
                                 <div className="p-3 bg-red-500/10 border border-red-500/40 text-[#E63946] text-xs font-mono text-center">
-                                    ⚠️ You cannot proceed without ticking the Terms and Conditions agreement checkboxes.
+                                    Notice: You must tick the Terms and Conditions agreement checkboxes above to proceed.
                                 </div>
                             )}
 
@@ -878,26 +673,25 @@ const ProblemStatementRegistrationModal = ({
                                     }}
                                     className={`py-3.5 px-8 font-heading font-bold text-xs uppercase tracking-widest sharp transition-all ${allTermsAccepted ? 'bg-gold text-pitchblack hover:bg-white cursor-pointer shadow-[0_0_25px_rgba(212,175,55,0.5)]' : 'bg-white/10 text-white/30 cursor-not-allowed border border-white/10'}`}
                                 >
-                                    {allTermsAccepted ? 'AGREE & PROCEED TO PROBLEM STATEMENTS →' : '🔒 ACCEPT TERMS TO UNLOCK STATEMENTS'}
+                                    {allTermsAccepted ? 'AGREE & PROCEED TO STATEMENTS →' : 'ACCEPT TERMS TO UNLOCK STATEMENTS'}
                                 </button>
                             </div>
                         </div>
                     )}
 
                     {/* ========================================================
-                        STEP 3: LISTS OF PROBLEM STATEMENTS
+                        STEP 3: PROBLEM STATEMENTS ALLOCATION (Sample PS Removed)
                        ======================================================== */}
                     {currentStep === 'list' && !activeClaim && (
                         <div className="space-y-6">
-                            {/* Security Guard: If somehow on Step 3 without terms */}
                             {!allTermsAccepted ? (
                                 <div className="p-6 bg-pitchblack/90 border-2 border-red-500/60 text-center space-y-4 sharp">
-                                    <div className="text-3xl">🔒</div>
+                                    <div className="text-xs font-mono font-bold text-red-400 uppercase tracking-widest">[ ACCESS RESTRICTED ]</div>
                                     <h4 className="text-lg font-heading uppercase text-white font-bold">
-                                        ACCESS RESTRICTED: TERMS NOT ACCEPTED
+                                        TERMS AND CONDITIONS NOT ACCEPTED
                                     </h4>
                                     <p className="text-xs text-lightgrey max-w-md mx-auto">
-                                        You must review and accept the official Uprise 2027 Terms and Conditions before viewing and claiming problem statements.
+                                        You must review and accept the official Uprise 2027 Terms and Conditions before viewing problem statements.
                                     </p>
                                     <button
                                         type="button"
@@ -913,10 +707,10 @@ const ProblemStatementRegistrationModal = ({
                                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
                                         <div>
                                             <span className="text-[10px] font-mono tracking-widest uppercase text-gold block">
-                                                STEP 3 // BROWSE CHALLENGES (MAX 2 HACKERS / PS)
+                                                STEP 3 // ALLOCATION STATUS (MAX 2 HACKERS / PS)
                                             </span>
                                             <h3 className="text-xl sm:text-2xl font-bold font-heading uppercase text-white">
-                                                SELECT YOUR PROBLEM STATEMENT
+                                                PROBLEM STATEMENTS ALLOCATION
                                             </h3>
                                         </div>
 
@@ -927,122 +721,171 @@ const ProblemStatementRegistrationModal = ({
                                                 onClick={() => setSelectedTrack('standard')}
                                                 className={`px-3 py-1.5 text-xs font-heading uppercase tracking-wider sharp transition-colors ${selectedTrack === 'standard' ? 'bg-gold text-pitchblack font-bold' : 'text-lightgrey hover:text-white'}`}
                                             >
-                                                Category A: Standard (5)
+                                                Category A: Standard
                                             </button>
                                             <button
                                                 type="button"
                                                 onClick={() => setSelectedTrack('corporate')}
-                                                className={`px-3 py-1.5 text-xs font-heading uppercase tracking-wider sharp transition-colors ${selectedTrack === 'corporate' ? 'bg-cyan-400 text-pitchblack font-bold' : 'text-lightgrey hover:text-white'}`}
+                                                className={`px-3 py-1.5 text-xs font-heading uppercase tracking-wider sharp transition-colors ${selectedTrack === 'corporate' ? 'bg-gold text-pitchblack font-bold' : 'text-lightgrey hover:text-white'}`}
                                             >
-                                                Category B: Corporate (5)
+                                                Category B: Corporate
                                             </button>
                                         </div>
                                     </div>
 
-                                    {/* Terms Acknowledged Banner */}
+                                    {/* Terms Acknowledged Confirmation */}
                                     <div className="p-3 bg-green-500/10 border border-green-500/30 text-xs text-green-300 font-mono flex items-center justify-between flex-wrap gap-2">
                                         <div className="flex items-center gap-2">
-                                            <span>✓</span>
-                                            <span>Terms and Conditions officially accepted (48h Blueprint Rule & LevelUp IP Ownership).</span>
+                                            <span className="font-bold">[VERIFIED]</span>
+                                            <span>Terms and Conditions accepted by {userEmail}.</span>
                                         </div>
-                                        <span className="text-[10px] text-lightgrey">Max 2 coders / problem statement</span>
+                                        <span className="text-[10px] text-lightgrey">Cap: Maximum 2 coders per problem statement</span>
                                     </div>
 
-                                    {/* List of Problem Statements */}
-                                    <div className="space-y-4">
-                                        {PROBLEM_STATEMENTS.filter(p => p.category === selectedTrack).map((problem) => {
-                                            const claimedCount = slotsData[problem.id] || 0;
-                                            const isFull = claimedCount >= 2;
-                                            const isExpanded = expandedProblemId === problem.id;
+                                    {/* If Real Problem Statements array has items, display them. Otherwise show official preparation notice */}
+                                    {PROBLEM_STATEMENTS.filter(p => p.category === selectedTrack).length > 0 ? (
+                                        <div className="space-y-4">
+                                            {PROBLEM_STATEMENTS.filter(p => p.category === selectedTrack).map((problem) => {
+                                                const claimedCount = slotsData[problem.id] || 0;
+                                                const isFull = claimedCount >= 2;
+                                                const isExpanded = expandedProblemId === problem.id;
 
-                                            return (
-                                                <div
-                                                    key={problem.id}
-                                                    className={`border transition-all sharp ${isFull ? 'border-white/10 bg-black/40 opacity-70' : 'border-gold/40 bg-pitchblack/80 hover:border-gold shadow-[0_0_15px_rgba(212,175,55,0.08)]'}`}
-                                                >
-                                                    {/* Card Top Row */}
-                                                    <div className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/10">
-                                                        <div className="space-y-1">
-                                                            <div className="flex items-center gap-2 flex-wrap">
-                                                                <span className="text-xs font-mono font-bold bg-gold/20 text-gold border border-gold/40 px-2 py-0.5 sharp">
-                                                                    {problem.id}
-                                                                </span>
-                                                                <span className="text-xs font-mono text-lightgrey">
-                                                                    {problem.domain}
-                                                                </span>
-                                                                <span className="text-[10px] font-mono uppercase px-2 py-0.5 bg-white/5 border border-white/10 text-white/80">
-                                                                    {problem.difficulty}
-                                                                </span>
-                                                            </div>
-                                                            <h4 className="text-base sm:text-lg font-bold font-heading text-white">
-                                                                {problem.title}
-                                                            </h4>
-                                                            <div className="text-[11px] font-mono text-gold/90">
-                                                                {problem.compensationType}
-                                                            </div>
-                                                        </div>
-
-                                                        {/* Live Slot Status (Max 2 people) */}
-                                                        <div className="flex items-center gap-2 self-end sm:self-center">
-                                                            <div className={`text-[11px] font-mono px-3 py-1 font-bold sharp border ${isFull ? 'bg-red-500/20 text-red-400 border-red-500/40' : claimedCount === 1 ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/40' : 'bg-green-500/20 text-green-400 border-green-500/40'}`}>
-                                                                {claimedCount}/2 Hackers {isFull ? '(FULL)' : claimedCount === 1 ? '(1 SPOT LEFT)' : '(OPEN)'}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    {/* Card Middle: Summary & Deliverables */}
-                                                    <div className="p-4 sm:p-5 space-y-3">
-                                                        <p className="text-xs sm:text-sm text-lightgrey font-grotesk leading-relaxed">
-                                                            {problem.summary}
-                                                        </p>
-
-                                                        {isExpanded && (
-                                                            <motion.div
-                                                                initial={{ opacity: 0, height: 0 }}
-                                                                animate={{ opacity: 1, height: 'auto' }}
-                                                                className="space-y-3 pt-3 border-t border-white/10"
-                                                            >
-                                                                <div>
-                                                                    <span className="text-[11px] font-heading uppercase text-gold block mb-1">
-                                                                        Key Deliverables Required:
+                                                return (
+                                                    <div
+                                                        key={problem.id}
+                                                        className={`border transition-all sharp ${isFull ? 'border-white/10 bg-black/40 opacity-70' : 'border-gold/40 bg-pitchblack/80 hover:border-gold shadow-[0_0_15px_rgba(212,175,55,0.08)]'}`}
+                                                    >
+                                                        <div className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/10">
+                                                            <div className="space-y-1">
+                                                                <div className="flex items-center gap-2 flex-wrap">
+                                                                    <span className="text-xs font-mono font-bold bg-gold/20 text-gold border border-gold/40 px-2 py-0.5 sharp">
+                                                                        {problem.id}
                                                                     </span>
-                                                                    <ul className="list-disc list-inside text-xs text-lightgrey space-y-1 pl-1">
-                                                                        {problem.deliverables.map((item, idx) => (
-                                                                            <li key={idx}>{item}</li>
-                                                                        ))}
-                                                                    </ul>
+                                                                    <span className="text-xs font-mono text-lightgrey">
+                                                                        {problem.domain}
+                                                                    </span>
                                                                 </div>
+                                                                <h4 className="text-base sm:text-lg font-bold font-heading text-white">
+                                                                    {problem.title}
+                                                                </h4>
+                                                            </div>
 
-                                                                <div className="text-xs font-mono text-lightgrey">
-                                                                    <span className="text-gold font-bold">Suggested Stack:</span> {problem.techStack}
+                                                            <div className="flex items-center gap-2 self-end sm:self-center">
+                                                                <div className={`text-[11px] font-mono px-3 py-1 font-bold sharp border ${isFull ? 'bg-red-500/20 text-red-400 border-red-500/40' : claimedCount === 1 ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/40' : 'bg-green-500/20 text-green-400 border-green-500/40'}`}>
+                                                                    {claimedCount}/2 Hackers {isFull ? '(FULL)' : claimedCount === 1 ? '(1 SPOT LEFT)' : '(OPEN)'}
                                                                 </div>
-                                                            </motion.div>
-                                                        )}
+                                                            </div>
+                                                        </div>
 
-                                                        {/* Action Bar */}
-                                                        <div className="flex items-center justify-between pt-2 gap-3 flex-wrap">
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => setExpandedProblemId(isExpanded ? null : problem.id)}
-                                                                className="text-xs text-gold/80 hover:text-white font-mono tracking-wider underline cursor-pointer"
-                                                            >
-                                                                {isExpanded ? '▲ Hide Full Specifications' : '▼ View Full Deliverables & Tech Stack'}
-                                                            </button>
+                                                        <div className="p-4 sm:p-5 space-y-3">
+                                                            <p className="text-xs sm:text-sm text-lightgrey font-grotesk leading-relaxed">
+                                                                {problem.summary}
+                                                            </p>
 
-                                                            <button
-                                                                type="button"
-                                                                disabled={isFull}
-                                                                onClick={() => handleClaimProblem(problem)}
-                                                                className={`py-2.5 px-6 font-heading font-bold text-xs uppercase tracking-widest sharp transition-all ${isFull ? 'bg-white/10 text-white/30 cursor-not-allowed border border-white/10' : 'bg-gold text-pitchblack hover:bg-white cursor-pointer shadow-[0_0_15px_rgba(212,175,55,0.3)]'}`}
-                                                            >
-                                                                {isFull ? 'LOCKED (MAX 2 MEMBERS REACHED)' : 'CLAIM & LOCK PROBLEM STATEMENT →'}
-                                                            </button>
+                                                            {isExpanded && (
+                                                                <div className="space-y-3 pt-3 border-t border-white/10">
+                                                                    <div>
+                                                                        <span className="text-[11px] font-heading uppercase text-gold block mb-1">
+                                                                            Key Deliverables Required:
+                                                                        </span>
+                                                                        <ul className="list-disc list-inside text-xs text-lightgrey space-y-1 pl-1">
+                                                                            {problem.deliverables.map((item, idx) => (
+                                                                                <li key={idx}>{item}</li>
+                                                                            ))}
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+
+                                                            <div className="flex items-center justify-between pt-2 gap-3 flex-wrap">
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => setExpandedProblemId(isExpanded ? null : problem.id)}
+                                                                    className="text-xs text-gold/80 hover:text-white font-mono tracking-wider underline cursor-pointer"
+                                                                >
+                                                                    {isExpanded ? '[-] Hide Specifications' : '[+] View Deliverables'}
+                                                                </button>
+
+                                                                <button
+                                                                    type="button"
+                                                                    disabled={isFull}
+                                                                    onClick={() => handleClaimProblem(problem)}
+                                                                    className={`py-2.5 px-6 font-heading font-bold text-xs uppercase tracking-widest sharp transition-all ${isFull ? 'bg-white/10 text-white/30 cursor-not-allowed border border-white/10' : 'bg-gold text-pitchblack hover:bg-white cursor-pointer shadow-[0_0_15px_rgba(212,175,55,0.3)]'}`}
+                                                                >
+                                                                    {isFull ? 'LOCKED (MAX CAPACITY REACHED)' : 'CLAIM & LOCK PROBLEM STATEMENT →'}
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
+                                                );
+                                            })}
+                                        </div>
+                                    ) : (
+                                        /* Official Release Notice Card (Sample statements removed) */
+                                        <div className="p-8 bg-pitchblack/90 border-2 border-gold/40 sharp space-y-6 text-center">
+                                            <div className="w-14 h-14 border border-gold/50 bg-gold/10 text-gold mx-auto flex items-center justify-center sharp shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7">
+                                                    <circle cx="12" cy="12" r="10"></circle>
+                                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                                </svg>
+                                            </div>
+
+                                            <div className="space-y-2 max-w-xl mx-auto">
+                                                <div className="text-[11px] font-mono font-bold text-gold uppercase tracking-widest">
+                                                    OFFICIAL STATEMENTS RELEASE // PRE-HACKATHON
                                                 </div>
-                                            );
-                                        })}
-                                    </div>
+                                                <h4 className="text-xl sm:text-2xl font-black font-heading uppercase text-white">
+                                                    PROBLEM STATEMENTS PREPARING FOR RELEASE
+                                                </h4>
+                                                <p className="text-xs sm:text-sm text-lightgrey font-grotesk leading-relaxed">
+                                                    The official problem statements for <strong>{selectedTrack === 'standard' ? 'Category A: Standard Problem Statements (Earning Track)' : 'Category B: Corporate Partner Statements'}</strong> are currently being curated by the Technical Committee and partner engineering teams.
+                                                </p>
+                                            </div>
+
+                                            {/* Key Rules Snapshot */}
+                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl mx-auto text-left text-xs font-mono">
+                                                <div className="p-3 bg-black/60 border border-white/10 sharp">
+                                                    <span className="text-gold block font-bold mb-1">48-Hour Timer:</span>
+                                                    <span className="text-lightgrey text-[11px]">Will commence automatically as soon as your problem statement is revealed and locked.</span>
+                                                </div>
+                                                <div className="p-3 bg-black/60 border border-white/10 sharp">
+                                                    <span className="text-gold block font-bold mb-1">Rejection Limits:</span>
+                                                    <span className="text-lightgrey text-[11px]">Maximum 3 blueprint reviews and 2 final product evaluation attempts.</span>
+                                                </div>
+                                                <div className="p-3 bg-black/60 border border-white/10 sharp">
+                                                    <span className="text-gold block font-bold mb-1">Team Restrictions:</span>
+                                                    <span className="text-lightgrey text-[11px]">Strictly maximum 2 hackers permitted per problem statement.</span>
+                                                </div>
+                                            </div>
+
+                                            {/* Registration Confirmation Button */}
+                                            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+                                                {isRegisteredForRelease ? (
+                                                    <div className="py-3 px-6 bg-green-500/20 border border-green-500 text-green-300 font-heading font-bold text-xs uppercase tracking-wider sharp">
+                                                        [CONFIRMED] REGISTERED FOR {selectedTrack === 'standard' ? 'CATEGORY A' : 'CATEGORY B'} RELEASE
+                                                    </div>
+                                                ) : (
+                                                    <button
+                                                        type="button"
+                                                        onClick={handleRegisterForRelease}
+                                                        className="py-3 px-8 bg-gold hover:bg-white text-pitchblack font-heading font-bold text-xs uppercase tracking-widest sharp transition-all cursor-pointer shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+                                                    >
+                                                        CONFIRM REGISTRATION FOR STATEMENT RELEASE &rarr;
+                                                    </button>
+                                                )}
+
+                                                <a
+                                                    href="https://discord.gg/5Jxbas2Rkv"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="py-3 px-6 border border-gold/40 hover:border-gold text-gold hover:text-white font-heading font-bold text-xs uppercase tracking-wider sharp transition-all no-underline"
+                                                >
+                                                    DISCORD: #ANNOUNCEMENTS
+                                                </a>
+                                            </div>
+                                        </div>
+                                    )}
 
                                     <div className="flex justify-between items-center pt-4 border-t border-white/10">
                                         <button
@@ -1086,7 +929,7 @@ const ProblemStatementRegistrationModal = ({
                                     {/* 48-Hour Countdown Display */}
                                     <div className="p-3 bg-black/90 border border-[#E63946] text-center sharp min-w-[200px]">
                                         <span className="text-[10px] font-mono text-[#E63946] uppercase font-bold tracking-widest block mb-1">
-                                            ⚡ 48-HOUR BLUEPRINT DEADLINE
+                                            48-HOUR BLUEPRINT DEADLINE
                                         </span>
                                         <div className="text-lg sm:text-xl font-heading font-bold text-white tracking-widest">
                                             {timeRemaining.isExpired ? (
@@ -1131,7 +974,7 @@ const ProblemStatementRegistrationModal = ({
                                         </span>
                                     </div>
                                     <p className="text-[11px] text-lightgrey">
-                                        ℹ️ Reminder: Per the agreed Terms and Conditions, your blueprint must be approved by the LevelUp team before the 45-day building cycle commences. Max 3 blueprint rejections allowed.
+                                        Notice: Per the agreed Terms and Conditions, your blueprint must be approved by the LevelUp team before the 45-day building cycle commences. Maximum 3 blueprint rejections allowed.
                                     </p>
                                 </div>
                             </div>
@@ -1140,7 +983,7 @@ const ProblemStatementRegistrationModal = ({
                             <div className="p-6 bg-pitchblack/80 border border-white/15 sharp space-y-4">
                                 <div className="flex items-center justify-between border-b border-white/10 pb-3 flex-wrap gap-2">
                                     <h4 className="text-base sm:text-lg font-bold font-heading uppercase text-white flex items-center gap-2">
-                                        <span>📝</span> SUBMIT SYSTEM BLUEPRINT FOR APPROVAL
+                                        SUBMIT SYSTEM BLUEPRINT FOR APPROVAL
                                     </h4>
                                     <span className="text-xs font-mono text-gold">
                                         Max 3 Rejections Permitted
@@ -1149,7 +992,7 @@ const ProblemStatementRegistrationModal = ({
 
                                 {submissionSuccessMsg && (
                                     <div className="p-3 bg-green-500/20 border border-green-500 text-green-300 text-xs font-mono">
-                                        ✓ {submissionSuccessMsg}
+                                        Status: {submissionSuccessMsg}
                                     </div>
                                 )}
 
@@ -1202,9 +1045,9 @@ const ProblemStatementRegistrationModal = ({
                                             href="https://discord.gg/5Jxbas2Rkv"
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="py-3 px-5 border border-[#5865F2]/50 bg-[#5865F2]/10 hover:bg-[#5865F2] text-[#5865F2] hover:text-white font-heading font-bold text-xs uppercase tracking-wider sharp transition-all flex items-center gap-2 no-underline"
+                                            className="py-3 px-5 border border-gold/40 bg-black hover:bg-gold/15 text-gold hover:text-white font-heading font-bold text-xs uppercase tracking-wider sharp transition-all flex items-center gap-2 no-underline"
                                         >
-                                            💬 DISCORD #BLUEPRINT-HELP
+                                            DISCORD: #BLUEPRINT-HELP
                                         </a>
 
                                         <button
@@ -1224,7 +1067,7 @@ const ProblemStatementRegistrationModal = ({
                 {/* Modal Footer */}
                 <div className="p-4 sm:p-5 border-t border-gold/30 bg-pitchblack/90 flex items-center justify-between text-xs text-lightgrey font-mono">
                     <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        <span className="w-2 h-2 rounded-full bg-gold"></span>
                         <span>Uprise 2027 // LevelUp Events Private Limited</span>
                     </div>
 
