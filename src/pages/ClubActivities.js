@@ -1002,7 +1002,7 @@ const ClubActivities = () => {
                                             ✉️ Email Committee
                                         </a>
                                         <a
-                                            href="https://discord.gg/BxkRwU6X5"
+                                            href="https://discord.gg/5Jxbas2Rkv"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="py-3 px-4 bg-black hover:bg-[#5865F2]/20 text-[#5865F2] hover:text-white border border-[#5865F2]/40 text-center font-bold text-xs uppercase tracking-wider transition-all no-underline"

@@ -75,7 +75,7 @@ const socialTasks = [
             title: "Discord",
             action: "Join LevelUp Discord Server & Community",
             xp: "40 XP",
-            link: "https://discord.gg/BxkRwU6X5",
+            link: "https://discord.gg/5Jxbas2Rkv",
             btnText: "Join Discord",
             icon: (
                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
@@ -201,7 +201,7 @@ const socialTasks = [
             title: "Discord Roll-Call",
             action: "Introduce yourself on the #introduction channel in the LevelUp Discord server.",
             xp: "100 XP",
-            link: "https://discord.gg/BxkRwU6X5",
+            link: "https://discord.gg/5Jxbas2Rkv",
             btnText: "Introduce Yourself",
             icon: (
                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
@@ -230,7 +230,7 @@ const socialTasks = [
             title: "The Veteran",
             action: "Post a valid certificate from a recognized national level Hackathon on Showcase channel.",
             xp: "50 XP",
-            link: "https://discord.gg/BxkRwU6X5",
+            link: "https://discord.gg/5Jxbas2Rkv",
             btnText: "Post Certificate",
             icon: (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
@@ -259,7 +259,7 @@ const socialTasks = [
             title: "GitHub Audit",
             action: "Submit Profile URL and ensure you have a profile picture and a bio.",
             xp: "30 XP",
-            link: "https://discord.gg/BxkRwU6X5",
+            link: "https://discord.gg/5Jxbas2Rkv",
             btnText: "Submit Profile",
             icon: (
                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
@@ -331,7 +331,7 @@ const socialTasks = [
             title: "DOM Manipulation",
             action: "Open Uprise page and right click and select inspect to open DevTools, edit the DOM HTML to change the main header text to say '{Your name} owns this system', upload the screenshot on showcase channel",
             xp: "35 XP",
-            link: "https://discord.gg/BxkRwU6X5",
+            link: "https://discord.gg/5Jxbas2Rkv",
             btnText: "Upload Screenshot",
             icon: (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
@@ -379,7 +379,7 @@ const socialTasks = [
             title: "Post A Meme",
             action: "Create a meme yourself and post on Uprise Discord server",
             xp: "20 XP",
-            link: "https://discord.gg/BxkRwU6X5",
+            link: "https://discord.gg/5Jxbas2Rkv",
             btnText: "Post On Discord",
             icon: (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
@@ -395,7 +395,7 @@ const socialTasks = [
             title: "Study Along",
             action: "Join the Study Along activity in the Uprise Discord server. Your presence will give you 100 XP!",
             xp: "100 XP",
-            link: "https://discord.gg/BxkRwU6X5",
+            link: "https://discord.gg/5Jxbas2Rkv",
             btnText: "Join Study Along",
             icon: (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
@@ -939,7 +939,7 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
                 hint: "Take a clear screenshot of your modified DOM header showing your name, and upload it in the Discord #showcase channel to claim +35 XP!",
                 isInfoOnly: true,
                 actionBtnText: 'GO TO DISCORD SHOWCASE',
-                actionLink: 'https://discord.gg/BxkRwU6X5'
+                actionLink: 'https://discord.gg/5Jxbas2Rkv'
             });
             return;
         }
@@ -1231,7 +1231,7 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
 
                 <div className="flex items-center gap-1.5 mt-auto">
                     <a
-                        href={isManualClicked ? 'https://discord.gg/BxkRwU6X5' : task.link}
+                        href={isManualClicked ? 'https://discord.gg/5Jxbas2Rkv' : task.link}
                         target={task.link?.startsWith('http') ? '_blank' : '_self'}
                         rel="noopener noreferrer"
                         onClick={(e) => handleTaskClick(e, task)}
@@ -1567,7 +1567,7 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
                                     {shareModalData.platformName} &rarr;
                                 </a>
                                 <a
-                                    href="https://discord.gg/BxkRwU6X5"
+                                    href="https://discord.gg/5Jxbas2Rkv"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="py-2.5 px-3 border border-gold/50 bg-gold/10 hover:bg-gold hover:text-pitchblack text-gold font-heading font-bold text-center text-xs tracking-wider uppercase transition-colors"
@@ -1687,7 +1687,7 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
                                             {quizSubmitting ? 'VERIFYING & CLAIMING XP...' : 'SUBMIT ANSWER'}
                                         </button>
                                         <a
-                                            href="https://discord.gg/BxkRwU6X5"
+                                            href="https://discord.gg/5Jxbas2Rkv"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="py-3 px-4 border border-gold/40 hover:border-gold text-gold hover:text-white font-heading font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center sharp"
@@ -1699,7 +1699,7 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
                             ) : (
                                 <div className="space-y-4">
                                     <a
-                                        href={quizModalData.actionLink || "https://discord.gg/BxkRwU6X5"}
+                                        href={quizModalData.actionLink || "https://discord.gg/5Jxbas2Rkv"}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="w-full py-3.5 px-6 bg-gold text-pitchblack hover:bg-white font-heading font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 cursor-pointer sharp text-center"
@@ -2035,7 +2035,7 @@ const PreHackathonTasks = ({ currentUser, setCurrentUser, onOpenLogin, isStandal
                                     </div>
                                 ) : (
                                     <a
-                                        href={manualClickedTasks.includes(spotlightTask.key) ? 'https://discord.gg/BxkRwU6X5' : spotlightTask.link}
+                                        href={manualClickedTasks.includes(spotlightTask.key) ? 'https://discord.gg/5Jxbas2Rkv' : spotlightTask.link}
                                         target={spotlightTask.link?.startsWith('http') ? '_blank' : '_self'}
                                         rel="noopener noreferrer"
                                         onClick={(e) => {
