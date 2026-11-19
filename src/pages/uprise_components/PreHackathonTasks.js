@@ -62,7 +62,7 @@ const socialTasks = [
             title: "Uprise WhatsApp Group",
             action: "Join Official Uprise WhatsApp Group",
             xp: "40 XP",
-            link: "https://chat.whatsapp.com/BWRaFrpD9bkGPpi0vWS2M9",
+            link: "https://chat.whatsapp.com/G8JuYWr1rND1iZsNgA5aVV",
             btnText: "Join Group",
             icon: (
                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
