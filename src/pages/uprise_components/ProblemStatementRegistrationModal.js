@@ -490,33 +490,47 @@ const ProblemStatementRegistrationModal = ({
 
                 {/* Flow Stepper Navigation (Only shown if no active claim) */}
                 {!activeClaim && (
-                    <div className="bg-black/60 border-b border-white/10 px-4 sm:px-6 py-3 flex items-center justify-between text-[11px] sm:text-xs font-heading tracking-wider uppercase overflow-x-auto gap-2">
+                    <div className="bg-black/80 border-b border-gold/30 px-4 sm:px-6 py-3 flex items-center justify-between text-[11px] sm:text-xs font-heading tracking-wider uppercase overflow-x-auto gap-2">
                         <button
                             type="button"
                             onClick={() => setCurrentStep('track')}
-                            className={`flex items-center gap-1.5 px-3 py-1.5 transition-colors cursor-pointer sharp ${currentStep === 'track' ? 'bg-gold text-pitchblack font-bold shadow-[0_0_10px_rgba(212,175,55,0.4)]' : 'text-lightgrey hover:text-gold'}`}
+                            className={`flex items-center gap-1.5 px-3.5 py-2 transition-all cursor-pointer sharp font-heading text-xs uppercase tracking-wider ${
+                                currentStep === 'track'
+                                    ? 'bg-gold text-pitchblack font-black border border-gold shadow-[0_0_14px_rgba(212,175,55,0.45)]'
+                                    : 'bg-pitchblack border border-gold/50 text-gold hover:bg-gold hover:text-pitchblack font-bold shadow-[0_0_8px_rgba(212,175,55,0.15)]'
+                            }`}
                         >
                             <span>1.</span> Choose Track
                         </button>
-                        <span className="text-gold/40">→</span>
+                        <span className="text-gold/50 font-bold">→</span>
                         <button
                             type="button"
                             onClick={() => setCurrentStep('terms')}
-                            className={`flex items-center gap-1.5 px-3 py-1.5 transition-colors cursor-pointer sharp ${currentStep === 'terms' ? 'bg-gold text-pitchblack font-bold shadow-[0_0_10px_rgba(212,175,55,0.4)]' : 'text-lightgrey hover:text-gold'}`}
+                            className={`flex items-center gap-1.5 px-3.5 py-2 transition-all cursor-pointer sharp font-heading text-xs uppercase tracking-wider ${
+                                currentStep === 'terms'
+                                    ? 'bg-gold text-pitchblack font-black border border-gold shadow-[0_0_14px_rgba(212,175,55,0.45)]'
+                                    : 'bg-pitchblack border border-gold/50 text-gold hover:bg-gold hover:text-pitchblack font-bold shadow-[0_0_8px_rgba(212,175,55,0.15)]'
+                            }`}
                         >
-                            <span>2.</span> Terms & Conditions {!allTermsAccepted && <span className="text-[#E63946] font-bold">(!)</span>}
+                            <span>2.</span> Terms & Conditions {!allTermsAccepted && <span className={`${currentStep === 'terms' ? 'text-red-700' : 'text-[#E63946]'} font-bold`}>(!)</span>}
                         </button>
-                        <span className="text-gold/40">→</span>
+                        <span className="text-gold/50 font-bold">→</span>
                         <button
                             type="button"
                             onClick={() => {
                                 if (allTermsAccepted) setCurrentStep('list');
                                 else alert('Access Denied: You must review and tick all Terms & Conditions checkboxes in Step 2 before viewing problem statements.');
                             }}
-                            className={`flex items-center gap-1.5 px-3 py-1.5 transition-colors cursor-pointer sharp ${currentStep === 'list' ? 'bg-gold text-pitchblack font-bold shadow-[0_0_10px_rgba(212,175,55,0.4)]' : allTermsAccepted ? 'text-lightgrey hover:text-gold' : 'text-white/20 cursor-not-allowed opacity-50'}`}
-                            title={!allTermsAccepted ? 'Locked: Accept Terms & Conditions first' : ''}
+                            className={`flex items-center gap-1.5 px-3.5 py-2 transition-all cursor-pointer sharp font-heading text-xs uppercase tracking-wider ${
+                                currentStep === 'list'
+                                    ? 'bg-gold text-pitchblack font-black border border-gold shadow-[0_0_14px_rgba(212,175,55,0.45)]'
+                                    : allTermsAccepted
+                                    ? 'bg-pitchblack border border-gold/50 text-gold hover:bg-gold hover:text-pitchblack font-bold shadow-[0_0_8px_rgba(212,175,55,0.15)]'
+                                    : 'bg-pitchblack/90 border border-gold/40 text-gold/60 hover:bg-gold/15 hover:text-gold hover:border-gold'
+                            }`}
+                            title={!allTermsAccepted ? 'Click to view (requires accepting terms in Step 2)' : ''}
                         >
-                            <span>3.</span> Browse Statements {!allTermsAccepted && '🔒'}
+                            <span>3.</span> Browse Statements {!allTermsAccepted ? '🔒' : ''}
                         </button>
                     </div>
                 )}
@@ -633,7 +647,7 @@ const ProblemStatementRegistrationModal = ({
                                             setSelectedTrack('corporate');
                                             setCurrentStep('terms');
                                         }}
-                                        className="w-full mt-6 py-3 bg-cyan-400 text-pitchblack font-heading font-bold text-xs uppercase tracking-widest hover:bg-white transition-colors sharp text-center"
+                                        className="w-full mt-6 py-3 bg-gold text-pitchblack font-heading font-bold text-xs uppercase tracking-widest hover:bg-white transition-colors sharp text-center"
                                     >
                                         SELECT CATEGORY B &rarr;
                                     </button>
