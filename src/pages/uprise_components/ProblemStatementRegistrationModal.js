@@ -469,7 +469,7 @@ const ProblemStatementRegistrationModal = ({
                                 <button
                                     type="button"
                                     onClick={toggleAllTerms}
-                                    className="text-xs text-gold hover:text-white border border-gold/40 hover:border-gold px-3.5 py-1.5 font-mono tracking-wider sharp cursor-pointer transition-colors whitespace-nowrap"
+                                    className="text-xs text-gold hover:text-white bg-pitchblack border border-gold/40 hover:border-gold px-3.5 py-1.5 font-mono tracking-wider sharp cursor-pointer transition-colors whitespace-nowrap"
                                 >
                                     {allTermsAccepted ? '[ DESELECT ALL ]' : '[ SELECT ALL ]'}
                                 </button>
@@ -656,7 +656,7 @@ const ProblemStatementRegistrationModal = ({
                                 <button
                                     type="button"
                                     onClick={() => setCurrentStep('track')}
-                                    className="py-3 px-5 border border-white/20 text-lightgrey hover:text-white font-heading font-bold text-xs uppercase tracking-wider sharp transition-colors"
+                                    className="py-3 px-5 bg-pitchblack border border-gold/40 text-gold hover:text-white hover:bg-gold/15 font-heading font-bold text-xs uppercase tracking-wider sharp transition-colors"
                                 >
                                     &larr; Back to Tracks
                                 </button>
@@ -715,18 +715,26 @@ const ProblemStatementRegistrationModal = ({
                                         </div>
 
                                         {/* Category Filter Tabs */}
-                                        <div className="flex items-center gap-1 bg-black p-1 border border-white/15 sharp">
+                                        <div className="flex items-center gap-2 bg-pitchblack/90 p-1 border border-gold/40 sharp">
                                             <button
                                                 type="button"
                                                 onClick={() => setSelectedTrack('standard')}
-                                                className={`px-3 py-1.5 text-xs font-heading uppercase tracking-wider sharp transition-colors ${selectedTrack === 'standard' ? 'bg-gold text-pitchblack font-bold' : 'text-lightgrey hover:text-white'}`}
+                                                className={`px-3.5 py-1.5 text-xs font-heading uppercase tracking-wider sharp transition-all cursor-pointer ${
+                                                    selectedTrack === 'standard'
+                                                        ? 'bg-gold text-pitchblack font-black border border-gold shadow-[0_0_12px_rgba(212,175,55,0.45)]'
+                                                        : 'bg-pitchblack border border-gold/50 text-gold hover:bg-gold hover:text-pitchblack font-bold shadow-[0_0_8px_rgba(212,175,55,0.15)]'
+                                                }`}
                                             >
                                                 Category A: Standard
                                             </button>
                                             <button
                                                 type="button"
                                                 onClick={() => setSelectedTrack('corporate')}
-                                                className={`px-3 py-1.5 text-xs font-heading uppercase tracking-wider sharp transition-colors ${selectedTrack === 'corporate' ? 'bg-gold text-pitchblack font-bold' : 'text-lightgrey hover:text-white'}`}
+                                                className={`px-3.5 py-1.5 text-xs font-heading uppercase tracking-wider sharp transition-all cursor-pointer ${
+                                                    selectedTrack === 'corporate'
+                                                        ? 'bg-gold text-pitchblack font-black border border-gold shadow-[0_0_12px_rgba(212,175,55,0.45)]'
+                                                        : 'bg-pitchblack border border-gold/50 text-gold hover:bg-gold hover:text-pitchblack font-bold shadow-[0_0_8px_rgba(212,175,55,0.15)]'
+                                                }`}
                                             >
                                                 Category B: Corporate
                                             </button>
@@ -891,7 +899,7 @@ const ProblemStatementRegistrationModal = ({
                                         <button
                                             type="button"
                                             onClick={() => setCurrentStep('terms')}
-                                            className="py-2.5 px-4 border border-white/20 text-lightgrey hover:text-white font-heading text-xs uppercase tracking-wider sharp transition-colors"
+                                            className="py-2.5 px-4 bg-pitchblack border border-gold/40 text-gold hover:text-white hover:bg-gold/15 font-heading text-xs uppercase tracking-wider sharp transition-colors"
                                         >
                                             &larr; Back to Terms
                                         </button>
