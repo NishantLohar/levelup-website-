@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import UpriseNavbar from './uprise_components/UpriseNavbar';
 import UpriseLoginModal from './uprise_components/UpriseLoginModal';
 import PreHackathonTasks from './uprise_components/PreHackathonTasks';
+import ProblemStatementRegistrationModal from './uprise_components/ProblemStatementRegistrationModal';
 import './Uprise.css'; // Reuse the same CSS for consistent animations
 
 const PreHackathonPage = () => {
@@ -104,6 +105,7 @@ const PreHackathonPage = () => {
     });
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isRevealingSoonOpen, setIsRevealingSoonOpen] = useState(false);
+    const [isProblemModalOpen, setIsProblemModalOpen] = useState(false);
     const [toastMsg, setToastMsg] = useState(null);
 
     // Carousel and Quiz Modal State
@@ -232,7 +234,7 @@ const PreHackathonPage = () => {
                             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 flex-wrap">
                                 <button 
                                     type="button"
-                                    onClick={() => setIsRevealingSoonOpen(true)}
+                                    onClick={() => setIsProblemModalOpen(true)}
                                     className="magnetic-btn sharp bg-gold bright hover:bg-white text-pitchblack font-heading font-bold py-5 px-10 transition-all duration-300 text-center tracking-widest text-sm hover:shadow-[0_0_20px_#FFFFFF] shimmer-btn animate-pulse-gold cursor-pointer inline-flex items-center justify-center"
                                 >
                                     REGISTER TO RECEIVE THE PROBLEM
@@ -351,6 +353,13 @@ const PreHackathonPage = () => {
                     </div>
                 )}
             </AnimatePresence>
+
+            <ProblemStatementRegistrationModal
+                isOpen={isProblemModalOpen}
+                onClose={() => setIsProblemModalOpen(false)}
+                currentUser={currentUser}
+                onOpenLogin={() => setIsLoginModalOpen(true)}
+            />
 
             <UpriseLoginModal
                 isOpen={isLoginModalOpen}
