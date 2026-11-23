@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-// --- OFFICIAL PROBLEM STATEMENTS ---
-// Sample problem statements removed per client directive. Real statements will be populated upon official release.
-const PROBLEM_STATEMENTS = [];
-
 const ProblemStatementRegistrationModal = ({
     isOpen,
     onClose,
@@ -15,6 +11,11 @@ const ProblemStatementRegistrationModal = ({
     const [currentStep, setCurrentStep] = useState('track');
     const [selectedTrack, setSelectedTrack] = useState('standard'); // 'standard' | 'corporate'
     const [expandedProblemId, setExpandedProblemId] = useState(null);
+
+    // Dynamic Problem Statements loaded from LevelUp Database API
+    const [problemStatements, setProblemStatements] = useState([]);
+    const [isLoadingStatements, setIsLoadingStatements] = useState(false);
+    const [statementCounts, setStatementCounts] = useState({ standard: 0, corporate: 0, total: 0 });
 
     // Terms & Conditions Mandatory Checkboxes
     const [termsAgreed, setTermsAgreed] = useState({
@@ -80,6 +81,34 @@ const ProblemStatementRegistrationModal = ({
             } catch (e) {}
         }
     }, [currentUser?.email]);
+
+    // Fetch dynamic problem statements from LevelUp Database API
+    useEffect(() => {
+        if (!isOpen) return;
+        let isMounted = true;
+        const fetchStatements = async () => {
+            setIsLoadingStatements(true);
+            try {
+                const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
+                const res = await fetch(`${API_BASE_URL}/api/v1/uprise/problem-statements`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (isMounted && data.success) {
+                        setProblemStatements(data.statements || []);
+                        if (data.counts) {
+                            setStatementCounts(data.counts);
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error('Failed to load problem statements from LevelUp database API:', err);
+            } finally {
+                if (isMounted) setIsLoadingStatements(false);
+            }
+        };
+        fetchStatements();
+        return () => { isMounted = false; };
+    }, [isOpen]);
 
     // Save active claim to localStorage
     const saveClaim = (claimObj) => {
@@ -721,7 +750,7 @@ const ProblemStatementRegistrationModal = ({
                                                     selectedTrack === 'standard' ? 'ring-2 ring-white font-black' : 'opacity-85'
                                                 }`}
                                             >
-                                                Category A: Standard
+                                                Category A: Standard {statementCounts.standard > 0 ? `(${statementCounts.standard})` : ''}
                                             </button>
                                             <button
                                                 type="button"
@@ -730,7 +759,7 @@ const ProblemStatementRegistrationModal = ({
                                                     selectedTrack === 'corporate' ? 'ring-2 ring-white font-black' : 'opacity-85'
                                                 }`}
                                             >
-                                                Category B: Corporate
+                                                Category B: Corporate {statementCounts.corporate > 0 ? `(${statementCounts.corporate})` : ''}
                                             </button>
                                         </div>
                                     </div>
@@ -744,12 +773,23 @@ const ProblemStatementRegistrationModal = ({
                                         <span className="text-[10px] text-lightgrey">Cap: Maximum 2 coders per problem statement</span>
                                     </div>
 
-                                    {/* If Real Problem Statements array has items, display them. Otherwise show official preparation notice */}
-                                    {PROBLEM_STATEMENTS.filter(p => p.category === selectedTrack).length > 0 ? (
+                                    {/* Real-time Loading Indicator */}
+                                    {isLoadingStatements ? (
+                                        <div className="p-10 bg-pitchblack/90 border border-gold/40 sharp text-center space-y-4 shadow-[0_0_20px_rgba(212,175,55,0.15)]">
+                                            <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin mx-auto"></div>
+                                            <div className="text-xs font-mono text-gold uppercase tracking-widest font-bold">
+                                                CONNECTING TO LEVELUP DATABASE // FETCHING PROBLEM STATEMENTS...
+                                            </div>
+                                            <p className="text-[11px] text-lightgrey">
+                                                Loading official statements from technical committee database...
+                                            </p>
+                                        </div>
+                                    ) : problemStatements.filter(p => p.category === selectedTrack).length > 0 ? (
                                         <div className="space-y-4">
-                                            {PROBLEM_STATEMENTS.filter(p => p.category === selectedTrack).map((problem) => {
+                                            {problemStatements.filter(p => p.category === selectedTrack).map((problem) => {
                                                 const claimedCount = slotsData[problem.id] || 0;
-                                                const isFull = claimedCount >= 2;
+                                                const maxHackers = problem.maxHackers || 2;
+                                                const isFull = claimedCount >= maxHackers;
                                                 const isExpanded = expandedProblemId === problem.id;
 
                                                 return (
@@ -766,6 +806,11 @@ const ProblemStatementRegistrationModal = ({
                                                                     <span className="text-xs font-mono text-lightgrey">
                                                                         {problem.domain}
                                                                     </span>
+                                                                    {problem.difficulty && (
+                                                                        <span className="text-[10px] font-mono px-2 py-0.5 uppercase bg-white/10 text-white/80 border border-white/20 sharp">
+                                                                            {problem.difficulty}
+                                                                        </span>
+                                                                    )}
                                                                 </div>
                                                                 <h4 className="text-base sm:text-lg font-bold font-heading text-white">
                                                                     {problem.title}
@@ -773,8 +818,8 @@ const ProblemStatementRegistrationModal = ({
                                                             </div>
 
                                                             <div className="flex items-center gap-2 self-end sm:self-center">
-                                                                <div className={`text-[11px] font-mono px-3 py-1 font-bold sharp border ${isFull ? 'bg-red-500/20 text-red-400 border-red-500/40' : claimedCount === 1 ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/40' : 'bg-green-500/20 text-green-400 border-green-500/40'}`}>
-                                                                    {claimedCount}/2 Hackers {isFull ? '(FULL)' : claimedCount === 1 ? '(1 SPOT LEFT)' : '(OPEN)'}
+                                                                <div className={`text-[11px] font-mono px-3 py-1 font-bold sharp border ${isFull ? 'bg-red-500/20 text-red-400 border-red-500/40' : claimedCount === (maxHackers - 1) ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/40' : 'bg-green-500/20 text-green-400 border-green-500/40'}`}>
+                                                                    {claimedCount}/{maxHackers} Hackers {isFull ? '(FULL)' : claimedCount === (maxHackers - 1) ? '(1 SPOT LEFT)' : '(OPEN)'}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -786,16 +831,30 @@ const ProblemStatementRegistrationModal = ({
 
                                                             {isExpanded && (
                                                                 <div className="space-y-3 pt-3 border-t border-white/10">
-                                                                    <div>
-                                                                        <span className="text-[11px] font-heading uppercase text-gold block mb-1">
-                                                                            Key Deliverables Required:
-                                                                        </span>
-                                                                        <ul className="list-disc list-inside text-xs text-lightgrey space-y-1 pl-1">
-                                                                            {problem.deliverables.map((item, idx) => (
-                                                                                <li key={idx}>{item}</li>
-                                                                            ))}
-                                                                        </ul>
-                                                                    </div>
+                                                                    {problem.deliverables && problem.deliverables.length > 0 && (
+                                                                        <div>
+                                                                            <span className="text-[11px] font-heading uppercase text-gold block mb-1">
+                                                                                Key Deliverables Required:
+                                                                            </span>
+                                                                            <ul className="list-disc list-inside text-xs text-lightgrey space-y-1 pl-1">
+                                                                                {problem.deliverables.map((item, idx) => (
+                                                                                    <li key={idx}>{item}</li>
+                                                                                ))}
+                                                                            </ul>
+                                                                        </div>
+                                                                    )}
+                                                                    {problem.techStack && (
+                                                                        <div className="text-xs font-mono text-lightgrey">
+                                                                            <span className="text-gold uppercase tracking-wider block text-[10px] mb-0.5">Recommended Tech Stack:</span>
+                                                                            {problem.techStack}
+                                                                        </div>
+                                                                    )}
+                                                                    {problem.compensationType && (
+                                                                        <div className="text-xs font-mono text-lightgrey">
+                                                                            <span className="text-gold uppercase tracking-wider block text-[10px] mb-0.5">Compensation & Portfolio Authorization:</span>
+                                                                            {problem.compensationType}
+                                                                        </div>
+                                                                    )}
                                                                 </div>
                                                             )}
 
