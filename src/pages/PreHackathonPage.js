@@ -114,7 +114,10 @@ const PreHackathonPage = () => {
 
     // Pre-Hackathon Tasks Share Modal & Copy State
 
-    // Sync status from SaaS API on mount if user is logged in
+    // Active User Problem Statement Claim
+    const [userClaim, setUserClaim] = useState(null);
+
+    // Sync status & active problem statement claim from SaaS API on mount
     useEffect(() => {
         if (currentUser?.email) {
             const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
@@ -134,8 +137,22 @@ const PreHackathonPage = () => {
                     }
                 })
                 .catch(err => console.log('Sync user status error:', err));
+
+            // Fetch live claim status for current user
+            fetch(`${API_BASE_URL}/api/v1/uprise/user-claim?email=${encodeURIComponent(currentUser.email)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.hasActiveClaim && data.claim) {
+                        setUserClaim(data.claim);
+                    } else {
+                        setUserClaim(null);
+                    }
+                })
+                .catch(err => console.log('Sync user claim error:', err));
+        } else {
+            setUserClaim(null);
         }
-    }, []);
+    }, [currentUser?.email]);
 
     const handleLogout = () => {
         localStorage.removeItem('uprise_user');
@@ -232,13 +249,27 @@ const PreHackathonPage = () => {
                             
                             {/* Action Buttons: Register & More About Pre Hackathon */}
                             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 flex-wrap">
-                                <button 
-                                    type="button"
-                                    onClick={() => setIsProblemModalOpen(true)}
-                                    className="magnetic-btn sharp bg-gold bright hover:bg-white text-pitchblack font-heading font-bold py-5 px-10 transition-all duration-300 text-center tracking-widest text-sm hover:shadow-[0_0_20px_#FFFFFF] shimmer-btn animate-pulse-gold cursor-pointer inline-flex items-center justify-center"
-                                >
-                                    REGISTER TO RECEIVE THE PROBLEM
-                                </button>
+                                {userClaim ? (
+                                    <button 
+                                        type="button"
+                                        onClick={() => setIsProblemModalOpen(true)}
+                                        className="magnetic-btn sharp bg-gold bright hover:bg-white text-pitchblack font-heading font-black py-5 px-10 transition-all duration-300 text-center tracking-widest text-sm hover:shadow-[0_0_25px_#FFFFFF] shimmer-btn animate-pulse-gold cursor-pointer inline-flex items-center justify-center gap-2.5"
+                                    >
+                                        <span>VIEW YOUR STATEMENT</span>
+                                        <span className="text-xs font-mono bg-pitchblack text-gold px-2.5 py-1 border border-gold/40 sharp font-bold">
+                                            {userClaim.problemId || 'ACTIVE'}
+                                        </span>
+                                        <span className="text-base">&rarr;</span>
+                                    </button>
+                                ) : (
+                                    <button 
+                                        type="button"
+                                        onClick={() => setIsProblemModalOpen(true)}
+                                        className="magnetic-btn sharp bg-gold bright hover:bg-white text-pitchblack font-heading font-bold py-5 px-10 transition-all duration-300 text-center tracking-widest text-sm hover:shadow-[0_0_20px_#FFFFFF] shimmer-btn animate-pulse-gold cursor-pointer inline-flex items-center justify-center"
+                                    >
+                                        REGISTER TO RECEIVE THE PROBLEM
+                                    </button>
+                                )}
                                 
                                 <a 
                                     href={`${process.env.PUBLIC_URL || ''}/Pre Hackathon detail.pdf`}
@@ -359,6 +390,7 @@ const PreHackathonPage = () => {
                 onClose={() => setIsProblemModalOpen(false)}
                 currentUser={currentUser}
                 onOpenLogin={() => setIsLoginModalOpen(true)}
+                onClaimUpdated={(claim) => setUserClaim(claim)}
             />
 
             <UpriseLoginModal

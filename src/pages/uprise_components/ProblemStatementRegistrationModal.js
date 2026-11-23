@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 
 const ProblemStatementRegistrationModal = ({
     isOpen,
     onClose,
     currentUser,
-    onOpenLogin
+    onOpenLogin,
+    onClaimUpdated
 }) => {
     // Current Step: 'track' -> 'terms' -> 'list' -> 'hud'
     const [currentStep, setCurrentStep] = useState('track');
@@ -42,92 +43,87 @@ const ProblemStatementRegistrationModal = ({
     const [isSubmittingBlueprint, setIsSubmittingBlueprint] = useState(false);
     const [submissionSuccessMsg, setSubmissionSuccessMsg] = useState(null);
 
-    // Active User Claim State
-    const storageClaimKey = `uprise_ps_claim_${userEmail}`;
-    const [activeClaim, setActiveClaim] = useState(() => {
-        try {
-            const saved = localStorage.getItem(storageClaimKey);
-            return saved ? JSON.parse(saved) : null;
-        } catch (e) {
-            return null;
-        }
-    });
+    // 45-Day Development Progress Form state inside HUD
+    const [projectRepoUrl, setProjectRepoUrl] = useState('');
+    const [projectLiveUrl, setProjectLiveUrl] = useState('');
+    const [projectProgressNotes, setProjectProgressNotes] = useState('');
+    const [isSavingProgress, setIsSavingProgress] = useState(false);
+    const [progressSuccessMsg, setProgressSuccessMsg] = useState(null);
 
-    // Global Slots Mapping
-    const [slotsData, setSlotsData] = useState(() => {
-        try {
-            const saved = localStorage.getItem('uprise_ps_global_slots');
-            return saved ? JSON.parse(saved) : {};
-        } catch (e) {
-            return {};
-        }
-    });
-
-    // Sync active claim when user logs in or switches
-    useEffect(() => {
-        if (currentUser?.email) {
-            try {
-                const saved = localStorage.getItem(`uprise_ps_claim_${currentUser.email}`);
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    setActiveClaim(parsed);
-                    setCurrentStep('hud');
-                } else {
-                    setActiveClaim(null);
-                    setCurrentStep('track');
-                }
-                const reg = localStorage.getItem(`uprise_ps_registered_${currentUser.email}`) === 'true';
-                setIsRegisteredForRelease(reg);
-            } catch (e) {}
-        }
-    }, [currentUser?.email]);
+    // Active User Claim State from Backend Database
+    const [activeClaim, setActiveClaim] = useState(null);
+    const [isClaimLoading, setIsClaimLoading] = useState(false);
 
     // Fetch dynamic problem statements from LevelUp Database API
-    useEffect(() => {
-        if (!isOpen) return;
-        let isMounted = true;
-        const fetchStatements = async () => {
-            setIsLoadingStatements(true);
-            try {
-                const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
-                const res = await fetch(`${API_BASE_URL}/api/v1/uprise/problem-statements`);
-                if (res.ok) {
-                    const data = await res.json();
-                    if (isMounted && data.success) {
-                        setProblemStatements(data.statements || []);
-                        if (data.counts) {
-                            setStatementCounts(data.counts);
-                        }
+    const fetchStatements = useCallback(async () => {
+        setIsLoadingStatements(true);
+        try {
+            const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
+            const res = await fetch(`${API_BASE_URL}/api/v1/uprise/problem-statements`);
+            if (res.ok) {
+                const data = await res.json();
+                if (data.success) {
+                    setProblemStatements(data.statements || []);
+                    if (data.counts) {
+                        setStatementCounts(data.counts);
                     }
                 }
-            } catch (err) {
-                console.error('Failed to load problem statements from LevelUp database API:', err);
-            } finally {
-                if (isMounted) setIsLoadingStatements(false);
             }
-        };
-        fetchStatements();
-        return () => { isMounted = false; };
-    }, [isOpen]);
+        } catch (err) {
+            console.error('Failed to load problem statements from LevelUp database API:', err);
+        } finally {
+            setIsLoadingStatements(false);
+        }
+    }, []);
 
-    // Save active claim to localStorage
-    const saveClaim = (claimObj) => {
-        setActiveClaim(claimObj);
+    // Fetch User Active Claim from LevelUp Database API
+    const fetchUserClaim = useCallback(async () => {
+        if (!currentUser?.email) {
+            setActiveClaim(null);
+            return;
+        }
+        setIsClaimLoading(true);
         try {
-            localStorage.setItem(storageClaimKey, JSON.stringify(claimObj));
-            if (claimObj?.problemId) {
-                const currentCount = slotsData[claimObj.problemId] || 0;
-                const updatedSlots = {
-                    ...slotsData,
-                    [claimObj.problemId]: Math.min(2, currentCount + 1)
-                };
-                setSlotsData(updatedSlots);
-                localStorage.setItem('uprise_ps_global_slots', JSON.stringify(updatedSlots));
+            const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
+            const res = await fetch(`${API_BASE_URL}/api/v1/uprise/user-claim?email=${encodeURIComponent(currentUser.email)}`);
+            if (res.ok) {
+                const data = await res.json();
+                if (data.success && data.hasActiveClaim && data.claim) {
+                    setActiveClaim(data.claim);
+                    setCurrentStep('hud');
+                    if (data.claim.blueprintSubmission?.url) {
+                        setBlueprintUrl(data.claim.blueprintSubmission.url);
+                    }
+                    if (data.claim.blueprintSubmission?.notes) {
+                        setBlueprintNotes(data.claim.blueprintSubmission.notes);
+                    }
+                    if (data.claim.projectRepoUrl) setProjectRepoUrl(data.claim.projectRepoUrl);
+                    if (data.claim.projectLiveUrl) setProjectLiveUrl(data.claim.projectLiveUrl);
+                    if (data.claim.projectProgressNotes) setProjectProgressNotes(data.claim.projectProgressNotes);
+                    if (onClaimUpdated) onClaimUpdated(data.claim);
+                } else {
+                    setActiveClaim(null);
+                    if (onClaimUpdated) onClaimUpdated(null);
+                    if (data.wasExpired) {
+                        alert('Notice: Your previous 48-hour blueprint submission window has expired. The claim was forfeited and the statement slot has been freed for other hackers. You may now select a new problem statement.');
+                    }
+                }
             }
-        } catch (e) {}
-    };
+        } catch (e) {
+            console.error('Error fetching user claim:', e);
+        } finally {
+            setIsClaimLoading(false);
+        }
+    }, [currentUser?.email, onClaimUpdated]);
 
-    // Calculate Remaining Time for 48-Hour Blueprint Submission
+    // Initial sync on modal open or user change
+    useEffect(() => {
+        if (!isOpen) return;
+        fetchStatements();
+        fetchUserClaim();
+    }, [isOpen, fetchStatements, fetchUserClaim]);
+
+    // Calculate Remaining Time for 48-Hour Blueprint Submission / 45-Day Sprint
     const [timeRemaining, setTimeRemaining] = useState({ hours: 48, minutes: 0, seconds: 0, isExpired: false });
 
     useEffect(() => {
@@ -191,8 +187,8 @@ const ProblemStatementRegistrationModal = ({
         } catch (e) {}
     };
 
-    // Handle Claiming a Problem Statement (for when real statements are active)
-    const handleClaimProblem = (problem) => {
+    // Handle Claiming a Problem Statement (Connecting to Live Database API)
+    const handleClaimProblem = async (problem) => {
         if (!currentUser?.email) {
             onClose();
             if (onOpenLogin) onOpenLogin();
@@ -205,62 +201,105 @@ const ProblemStatementRegistrationModal = ({
             return;
         }
 
-        const currentSlots = slotsData[problem.id] || 0;
-        if (currentSlots >= 2) {
-            alert(`Problem statement ${problem.id} has reached its maximum team capacity of 2 participants! Please select an available statement.`);
-            return;
+        try {
+            const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
+            const res = await fetch(`${API_BASE_URL}/api/v1/uprise/claim-statement`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: currentUser.email,
+                    name: currentUser.name || currentUser.full_name || '',
+                    contact: currentUser.contact || currentUser.phone || '',
+                    problemId: problem.id
+                })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setActiveClaim(data.claim);
+                setCurrentStep('hud');
+                if (onClaimUpdated) onClaimUpdated(data.claim);
+                fetchStatements(); // Refresh slots
+            } else {
+                alert(data.error || 'Failed to claim problem statement.');
+            }
+        } catch (err) {
+            alert('Network connection error. Please try again.');
         }
-
-        const now = Date.now();
-        const newClaim = {
-            problemId: problem.id,
-            problemTitle: problem.title,
-            category: problem.category,
-            categoryLabel: problem.categoryLabel,
-            domain: problem.domain,
-            difficulty: problem.difficulty,
-            summary: problem.summary,
-            deliverables: problem.deliverables,
-            techStack: problem.techStack,
-            compensationType: problem.compensationType,
-            claimedAt: now,
-            blueprintDeadline: now + (48 * 60 * 60 * 1000),
-            sprintDeadline: now + (45 * 24 * 60 * 60 * 1000),
-            blueprintChancesTotal: 3,
-            blueprintChancesRemaining: 3,
-            productChancesTotal: 2,
-            productChancesRemaining: 2,
-            status: 'blueprint_pending',
-            blueprintSubmission: null,
-            termsAgreedAt: now,
-            teamUser: currentUser.email
-        };
-
-        saveClaim(newClaim);
-        setCurrentStep('hud');
     };
 
     // Handle Blueprint Submission
-    const handleSubmitBlueprint = (e) => {
+    const handleSubmitBlueprint = async (e) => {
         e.preventDefault();
         if (!blueprintUrl.trim()) return;
 
         setIsSubmittingBlueprint(true);
-        setTimeout(() => {
-            const updated = {
-                ...activeClaim,
-                status: 'blueprint_submitted',
-                blueprintSubmission: {
-                    url: blueprintUrl.trim(),
-                    notes: blueprintNotes.trim(),
-                    submittedAt: Date.now()
-                }
-            };
-            saveClaim(updated);
+        try {
+            const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
+            const res = await fetch(`${API_BASE_URL}/api/v1/uprise/submit-blueprint`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: currentUser.email,
+                    claimId: activeClaim?.claimId,
+                    blueprintUrl: blueprintUrl.trim(),
+                    blueprintNotes: blueprintNotes.trim()
+                })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setActiveClaim(data.claim);
+                if (onClaimUpdated) onClaimUpdated(data.claim);
+                setSubmissionSuccessMsg('Blueprint submitted for review! The LevelUp Technical Committee will evaluate within 24 hours.');
+                setTimeout(() => setSubmissionSuccessMsg(null), 6000);
+            } else {
+                alert(data.error || 'Failed to submit blueprint.');
+            }
+        } catch (err) {
+            alert('Network error submitting blueprint.');
+        } finally {
             setIsSubmittingBlueprint(false);
-            setSubmissionSuccessMsg('Blueprint submitted for review. The LevelUp Technical Committee will evaluate within 24 hours.');
-            setTimeout(() => setSubmissionSuccessMsg(null), 5000);
-        }, 1200);
+        }
+    };
+
+    // Handle Ongoing Development Progress Update (45-Day Sprint)
+    const handleSaveProjectProgress = async (e) => {
+        e.preventDefault();
+        setIsSavingProgress(true);
+        try {
+            const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://account.levelupevents.in';
+            const res = await fetch(`${API_BASE_URL}/api/v1/uprise/update-project-progress`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: currentUser.email,
+                    claimId: activeClaim?.claimId,
+                    projectRepoUrl: projectRepoUrl.trim(),
+                    projectLiveUrl: projectLiveUrl.trim(),
+                    projectProgressNotes: projectProgressNotes.trim()
+                })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setActiveClaim(data.claim);
+                if (onClaimUpdated) onClaimUpdated(data.claim);
+                setProgressSuccessMsg('Project development progress & links saved successfully!');
+                setTimeout(() => setProgressSuccessMsg(null), 5000);
+            } else {
+                alert(data.error || 'Failed to update progress.');
+            }
+        } catch (err) {
+            alert('Network error saving progress.');
+        } finally {
+            setIsSavingProgress(false);
+        }
+    };
+
+    // Release / reset claim when expired or choosing a new statement
+    const handleChooseNewStatement = () => {
+        setActiveClaim(null);
+        if (onClaimUpdated) onClaimUpdated(null);
+        setCurrentStep('track');
+        fetchStatements();
     };
 
     if (!isOpen) return null;
@@ -787,9 +826,9 @@ const ProblemStatementRegistrationModal = ({
                                     ) : problemStatements.filter(p => p.category === selectedTrack).length > 0 ? (
                                         <div className="space-y-4">
                                             {problemStatements.filter(p => p.category === selectedTrack).map((problem) => {
-                                                const claimedCount = slotsData[problem.id] || 0;
+                                                const claimedCount = problem.claimedCount !== undefined ? problem.claimedCount : 0;
                                                 const maxHackers = problem.maxHackers || 2;
-                                                const isFull = claimedCount >= maxHackers;
+                                                const isFull = problem.isFull !== undefined ? problem.isFull : (claimedCount >= maxHackers);
                                                 const isExpanded = expandedProblemId === problem.id;
 
                                                 return (
@@ -967,160 +1006,362 @@ const ProblemStatementRegistrationModal = ({
                        ======================================================== */}
                     {(currentStep === 'hud' || activeClaim) && (
                         <div className="space-y-6">
-                            {/* Top HUD Status Card */}
-                            <div className="p-6 bg-pitchblack/90 border-2 border-gold/60 sharp gold-glow relative space-y-4">
-                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-gold/30 pb-4">
-                                    <div>
-                                        <div className="flex items-center gap-2 flex-wrap mb-1">
-                                            <span className="text-[10px] font-mono tracking-widest font-black bg-gold text-pitchblack px-2 py-0.5 uppercase sharp">
-                                                ACTIVE ASSIGNED STATEMENT
-                                            </span>
-                                            <span className="text-xs font-mono text-gold border border-gold/40 px-2 py-0.5 sharp">
-                                                {activeClaim.problemId}
-                                            </span>
-                                            <span className="text-xs font-mono text-lightgrey uppercase">
-                                                {activeClaim.categoryLabel}
-                                            </span>
-                                        </div>
-                                        <h3 className="text-xl sm:text-2xl font-black font-heading text-white">
-                                            {activeClaim.problemTitle}
-                                        </h3>
+                            {isClaimLoading ? (
+                                <div className="p-10 bg-pitchblack/90 border border-gold/40 sharp text-center space-y-4">
+                                    <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin mx-auto"></div>
+                                    <div className="text-xs font-mono text-gold uppercase tracking-widest font-bold">
+                                        SYNCING STATEMENT STATUS WITH LEVELUP DATABASE...
                                     </div>
-
-                                    {/* 48-Hour Countdown Display */}
-                                    <div className="p-3 bg-black/90 border border-[#E63946] text-center sharp min-w-[200px]">
-                                        <span className="text-[10px] font-mono text-[#E63946] uppercase font-bold tracking-widest block mb-1">
-                                            48-HOUR BLUEPRINT DEADLINE
+                                </div>
+                            ) : activeClaim?.isExpired || activeClaim?.status === 'expired' ? (
+                                /* FORFEITED / EXPIRED CLAIM CARD */
+                                <div className="p-8 bg-red-950/40 border-2 border-red-500/70 sharp text-center space-y-4 shadow-[0_0_30px_rgba(239,68,68,0.25)]">
+                                    <div className="w-12 h-12 border border-red-500 bg-red-500/20 text-red-400 mx-auto flex items-center justify-center sharp">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                        </svg>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <span className="text-[10px] font-mono font-bold text-red-400 uppercase tracking-widest block">
+                                            [ 48-HOUR BLUEPRINT DEADLINE EXPIRED ]
                                         </span>
-                                        <div className="text-lg sm:text-xl font-heading font-bold text-white tracking-widest">
-                                            {timeRemaining.isExpired ? (
-                                                <span className="text-red-500">EXPIRED (FORFEITED)</span>
-                                            ) : (
-                                                <span>
-                                                    {String(timeRemaining.hours).padStart(2, '0')}h : {String(timeRemaining.minutes).padStart(2, '0')}m : {String(timeRemaining.seconds).padStart(2, '0')}s
-                                                </span>
-                                            )}
-                                        </div>
+                                        <h4 className="text-xl sm:text-2xl font-black font-heading uppercase text-white">
+                                            STATEMENT FORFEITED & RELEASED
+                                        </h4>
+                                        <p className="text-xs text-lightgrey max-w-lg mx-auto font-grotesk leading-relaxed">
+                                            Per the agreed Terms and Conditions, failure to submit the project blueprint within 48 hours automatically forfeits the statement. The slot on <strong>[{activeClaim.problemId}]</strong> has been released for other hackers.
+                                        </p>
                                     </div>
-                                </div>
-
-                                {/* Rule Badges & Lifelines Remaining */}
-                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
-                                    <div className="p-2.5 bg-black/60 border border-white/10 sharp text-center">
-                                        <span className="text-lightgrey block text-[10px] uppercase">Dev Cycle</span>
-                                        <strong className="text-white font-bold text-sm">45 Days</strong>
-                                    </div>
-                                    <div className="p-2.5 bg-black/60 border border-gold/30 sharp text-center">
-                                        <span className="text-gold block text-[10px] uppercase">Blueprint Rejections</span>
-                                        <strong className="text-gold font-bold text-sm">{activeClaim.blueprintChancesRemaining} / {activeClaim.blueprintChancesTotal} Left</strong>
-                                    </div>
-                                    <div className="p-2.5 bg-black/60 border border-cyan-400/30 sharp text-center">
-                                        <span className="text-cyan-400 block text-[10px] uppercase">Product Review</span>
-                                        <strong className="text-cyan-400 font-bold text-sm">{activeClaim.productChancesRemaining} / {activeClaim.productChancesTotal} Left</strong>
-                                    </div>
-                                    <div className="p-2.5 bg-black/60 border border-white/10 sharp text-center">
-                                        <span className="text-lightgrey block text-[10px] uppercase">IP Ownership</span>
-                                        <strong className="text-white font-bold text-xs">LevelUp Events</strong>
-                                    </div>
-                                </div>
-
-                                {/* Current Status & Gatekeeper Notice */}
-                                <div className="p-3.5 bg-gold/10 border border-gold/40 text-xs font-grotesk text-lightgrey space-y-1">
-                                    <div className="flex items-center gap-2">
-                                        <span className="font-heading font-bold text-gold uppercase">CURRENT PHASE:</span>
-                                        <span className="font-mono bg-pitchblack px-2 py-0.5 border border-gold/40 text-white font-bold">
-                                            {activeClaim.status === 'blueprint_pending' && 'PHASE 1: BLUEPRINT DESIGN (AWAITING INITIAL SUBMISSION)'}
-                                            {activeClaim.status === 'blueprint_submitted' && 'PHASE 1: BLUEPRINT SUBMITTED (UNDER LEVELUP REVIEW)'}
-                                            {activeClaim.status === 'blueprint_approved' && 'PHASE 2: 45-DAY DEVELOPMENT CYCLE UNLOCKED'}
-                                        </span>
-                                    </div>
-                                    <p className="text-[11px] text-lightgrey">
-                                        Notice: Per the agreed Terms and Conditions, your blueprint must be approved by the LevelUp team before the 45-day building cycle commences. Maximum 3 blueprint rejections allowed.
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Blueprint Submission Form */}
-                            <div className="p-6 bg-pitchblack/80 border border-white/15 sharp space-y-4">
-                                <div className="flex items-center justify-between border-b border-white/10 pb-3 flex-wrap gap-2">
-                                    <h4 className="text-base sm:text-lg font-bold font-heading uppercase text-white flex items-center gap-2">
-                                        SUBMIT SYSTEM BLUEPRINT FOR APPROVAL
-                                    </h4>
-                                    <span className="text-xs font-mono text-gold">
-                                        Max 3 Rejections Permitted
-                                    </span>
-                                </div>
-
-                                {submissionSuccessMsg && (
-                                    <div className="p-3 bg-green-500/20 border border-green-500 text-green-300 text-xs font-mono">
-                                        Status: {submissionSuccessMsg}
-                                    </div>
-                                )}
-
-                                {activeClaim.status === 'blueprint_submitted' && activeClaim.blueprintSubmission && (
-                                    <div className="p-4 bg-black/60 border border-gold/40 sharp space-y-2 text-xs font-mono">
-                                        <div className="text-gold font-bold">CURRENT SUBMISSION ON RECORD:</div>
-                                        <div><span className="text-lightgrey">URL:</span> <a href={activeClaim.blueprintSubmission.url} target="_blank" rel="noopener noreferrer" className="text-white underline">{activeClaim.blueprintSubmission.url}</a></div>
-                                        {activeClaim.blueprintSubmission.notes && (
-                                            <div><span className="text-lightgrey">Notes:</span> {activeClaim.blueprintSubmission.notes}</div>
-                                        )}
-                                        <div className="text-[10px] text-lightgrey">
-                                            Submitted At: {new Date(activeClaim.blueprintSubmission.submittedAt).toLocaleString()}
-                                        </div>
-                                    </div>
-                                )}
-
-                                <form onSubmit={handleSubmitBlueprint} className="space-y-4">
-                                    <div>
-                                        <label className="block text-xs font-heading uppercase text-gold mb-1 tracking-wider">
-                                            Blueprint / System Architecture Document URL *
-                                        </label>
-                                        <input
-                                            type="url"
-                                            required
-                                            value={blueprintUrl}
-                                            onChange={(e) => setBlueprintUrl(e.target.value)}
-                                            placeholder="https://drive.google.com/... or https://github.com/... or https://notion.so/..."
-                                            className="w-full p-3 bg-black/90 border border-white/20 focus:border-gold text-white text-xs font-mono sharp outline-none transition-colors"
-                                        />
-                                        <span className="text-[10px] text-lightgrey font-mono mt-1 block">
-                                            Shareable Google Drive PDF, Notion Doc, Figma Architecture Diagram, or GitHub Markdown repository.
-                                        </span>
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-xs font-heading uppercase text-lightgrey mb-1 tracking-wider">
-                                            Architecture Notes & Key Decisions (Optional)
-                                        </label>
-                                        <textarea
-                                            rows="3"
-                                            value={blueprintNotes}
-                                            onChange={(e) => setBlueprintNotes(e.target.value)}
-                                            placeholder="Outline chosen database, framework, API protocols, and scalability considerations..."
-                                            className="w-full p-3 bg-black/90 border border-white/20 focus:border-gold text-white text-xs font-mono sharp outline-none transition-colors"
-                                        />
-                                    </div>
-
-                                    <div className="flex items-center justify-between gap-4 pt-2 flex-wrap">
-                                        <a
-                                            href="https://discord.gg/5Jxbas2Rkv"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="py-3 px-5 border border-gold/40 bg-black hover:bg-gold/15 text-gold hover:text-white font-heading font-bold text-xs uppercase tracking-wider sharp transition-all flex items-center gap-2 no-underline"
-                                        >
-                                            DISCORD: #BLUEPRINT-HELP
-                                        </a>
-
+                                    <div className="pt-2">
                                         <button
-                                            type="submit"
-                                            disabled={isSubmittingBlueprint}
-                                            className="py-3 px-8 bg-gold hover:bg-white text-pitchblack font-heading font-bold text-xs uppercase tracking-widest sharp transition-all cursor-pointer shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+                                            type="button"
+                                            onClick={handleChooseNewStatement}
+                                            className="py-3.5 px-8 bg-gold hover:bg-white text-pitchblack font-heading font-black text-xs uppercase tracking-widest sharp transition-all cursor-pointer shadow-[0_0_20px_rgba(212,175,55,0.4)]"
                                         >
-                                            {isSubmittingBlueprint ? 'SUBMITTING BLUEPRINT...' : activeClaim.status === 'blueprint_submitted' ? 'SUBMIT REVISED BLUEPRINT' : 'SUBMIT BLUEPRINT FOR APPROVAL →'}
+                                            CHOOSE A NEW PROBLEM STATEMENT &rarr;
                                         </button>
                                     </div>
-                                </form>
-                            </div>
+                                </div>
+                            ) : activeClaim?.status === 'blueprint_rejected' && activeClaim?.blueprintChancesRemaining === 0 ? (
+                                /* DISQUALIFIED (3 REJECTIONS) CARD */
+                                <div className="p-8 bg-red-950/40 border-2 border-red-500/70 sharp text-center space-y-4">
+                                    <div className="text-xs font-mono font-bold text-red-400 uppercase tracking-widest">[ MAXIMUM REJECTIONS REACHED ]</div>
+                                    <h4 className="text-xl sm:text-2xl font-black font-heading uppercase text-white">
+                                        DISQUALIFIED FROM THIS PROBLEM STATEMENT
+                                    </h4>
+                                    <p className="text-xs text-lightgrey max-w-lg mx-auto font-grotesk leading-relaxed">
+                                        You have exhausted all 3 blueprint evaluation attempts for <strong>[{activeClaim.problemId}]</strong>. Per the competition rules, this statement has been freed.
+                                    </p>
+                                    {activeClaim.adminFeedback && (
+                                        <div className="p-3 bg-black/60 border border-red-500/40 text-xs font-mono text-red-300 max-w-md mx-auto text-left">
+                                            <strong>Committee Feedback:</strong> {activeClaim.adminFeedback}
+                                        </div>
+                                    )}
+                                    <button
+                                        type="button"
+                                        onClick={handleChooseNewStatement}
+                                        className="py-3 px-8 bg-gold hover:bg-white text-pitchblack font-heading font-bold text-xs uppercase tracking-widest sharp transition-all cursor-pointer"
+                                    >
+                                        CHOOSE ANOTHER STATEMENT &rarr;
+                                    </button>
+                                </div>
+                            ) : (
+                                /* ACTIVE STATEMENT DASHBOARD */
+                                <>
+                                    {/* Top HUD Status Card */}
+                                    <div className="p-6 bg-pitchblack/90 border-2 border-gold/60 sharp gold-glow relative space-y-4 shadow-[0_0_30px_rgba(212,175,55,0.15)]">
+                                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-gold/30 pb-4">
+                                            <div>
+                                                <div className="flex items-center gap-2 flex-wrap mb-1">
+                                                    <span className="text-[10px] font-mono tracking-widest font-black bg-gold text-pitchblack px-2 py-0.5 uppercase sharp">
+                                                        ACTIVE ASSIGNED STATEMENT
+                                                    </span>
+                                                    <span className="text-xs font-mono text-gold border border-gold/40 px-2 py-0.5 sharp">
+                                                        {activeClaim.problemId}
+                                                    </span>
+                                                    <span className="text-xs font-mono text-lightgrey uppercase">
+                                                        {activeClaim.categoryLabel}
+                                                    </span>
+                                                </div>
+                                                <h3 className="text-xl sm:text-2xl font-black font-heading text-white">
+                                                    {activeClaim.problemTitle}
+                                                </h3>
+                                            </div>
+
+                                            {/* Timer / Phase Indicator Box */}
+                                            <div className="p-3 bg-black/90 border border-gold/60 text-center sharp min-w-[220px]">
+                                                {activeClaim.status === 'blueprint_approved' ? (
+                                                    <div>
+                                                        <span className="text-[10px] font-mono text-green-400 uppercase font-bold tracking-widest block mb-0.5">
+                                                            45-DAY SPRINT ACTIVE
+                                                        </span>
+                                                        <span className="text-xs font-mono text-white block">
+                                                            {activeClaim.devDeadline ? new Date(activeClaim.devDeadline).toLocaleDateString() : '45 Days Window'}
+                                                        </span>
+                                                    </div>
+                                                ) : activeClaim.status === 'blueprint_submitted' ? (
+                                                    <div>
+                                                        <span className="text-[10px] font-mono text-cyan-400 uppercase font-bold tracking-widest block mb-0.5">
+                                                            COMMITTEE REVIEW
+                                                        </span>
+                                                        <span className="text-xs font-mono text-white block">
+                                                            Evaluation in progress (24h)
+                                                        </span>
+                                                    </div>
+                                                ) : (
+                                                    <div>
+                                                        <span className="text-[10px] font-mono text-[#E63946] uppercase font-bold tracking-widest block mb-1">
+                                                            48-HOUR BLUEPRINT DEADLINE
+                                                        </span>
+                                                        <div className="text-lg sm:text-xl font-heading font-bold text-white tracking-widest">
+                                                            {timeRemaining.isExpired ? (
+                                                                <span className="text-red-500">EXPIRED</span>
+                                                            ) : (
+                                                                <span>
+                                                                    {String(timeRemaining.hours).padStart(2, '0')}h : {String(timeRemaining.minutes).padStart(2, '0')}m : {String(timeRemaining.seconds).padStart(2, '0')}s
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Rule Badges & Lifelines Remaining */}
+                                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
+                                            <div className="p-2.5 bg-black/60 border border-white/10 sharp text-center">
+                                                <span className="text-lightgrey block text-[10px] uppercase">Dev Cycle</span>
+                                                <strong className="text-white font-bold text-sm">45 Days</strong>
+                                            </div>
+                                            <div className="p-2.5 bg-black/60 border border-gold/30 sharp text-center">
+                                                <span className="text-gold block text-[10px] uppercase">Blueprint Rejections</span>
+                                                <strong className="text-gold font-bold text-sm">{activeClaim.blueprintChancesRemaining} / 3 Left</strong>
+                                            </div>
+                                            <div className="p-2.5 bg-black/60 border border-cyan-400/30 sharp text-center">
+                                                <span className="text-cyan-400 block text-[10px] uppercase">Product Reviews</span>
+                                                <strong className="text-cyan-400 font-bold text-sm">2 Attempts</strong>
+                                            </div>
+                                            <div className="p-2.5 bg-black/60 border border-white/10 sharp text-center">
+                                                <span className="text-lightgrey block text-[10px] uppercase">IP Ownership</span>
+                                                <strong className="text-white font-bold text-xs">LevelUp Events</strong>
+                                            </div>
+                                        </div>
+
+                                        {/* Current Status Notice */}
+                                        <div className="p-3.5 bg-gold/10 border border-gold/40 text-xs font-grotesk text-lightgrey space-y-1">
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                                <span className="font-heading font-bold text-gold uppercase">CURRENT PHASE:</span>
+                                                <span className="font-mono bg-pitchblack px-2 py-0.5 border border-gold/40 text-white font-bold">
+                                                    {activeClaim.status === 'blueprint_pending' && 'PHASE 1: BLUEPRINT DESIGN (48H TIMER RUNNING)'}
+                                                    {activeClaim.status === 'blueprint_submitted' && 'PHASE 1: BLUEPRINT SUBMITTED (UNDER COMMITTEE REVIEW)'}
+                                                    {activeClaim.status === 'blueprint_approved' && 'PHASE 2: 45-DAY DEVELOPMENT SPRINT COMMENCED'}
+                                                    {activeClaim.status === 'blueprint_rejected' && 'PHASE 1: REVISIONS REQUIRED BY TECHNICAL COMMITTEE'}
+                                                </span>
+                                            </div>
+                                            <p className="text-[11px] text-lightgrey">
+                                                {activeClaim.status === 'blueprint_approved'
+                                                    ? 'Your blueprint has been approved. You are authorized to proceed with the 45-day building cycle. Keep updating your GitHub repository and live demo links below.'
+                                                    : 'Your blueprint must be approved by the LevelUp team before the 45-day building cycle commences. Maximum 3 blueprint rejections allowed.'}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Committee Feedback Banner if Rejected */}
+                                    {activeClaim.status === 'blueprint_rejected' && (
+                                        <div className="p-4 bg-red-950/50 border border-red-500 sharp space-y-2 text-xs">
+                                            <div className="flex items-center justify-between text-red-400 font-bold font-mono">
+                                                <span>[!] REVISIONS REQUIRED BY COMMITTEE</span>
+                                                <span>{activeClaim.blueprintChancesRemaining} submission chances remaining</span>
+                                            </div>
+                                            {activeClaim.adminFeedback ? (
+                                                <p className="text-white font-grotesk">
+                                                    <strong>Feedback:</strong> {activeClaim.adminFeedback}
+                                                </p>
+                                            ) : (
+                                                <p className="text-lightgrey font-grotesk">
+                                                    Your blueprint does not fully satisfy the technical criteria. Please review the statement specifications and submit a revised version.
+                                                </p>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* PHASE 2: 45-DAY DEVELOPMENT SPRINT DASHBOARD */}
+                                    {activeClaim.status === 'blueprint_approved' ? (
+                                        <div className="p-6 bg-pitchblack/90 border border-green-500/40 sharp space-y-5">
+                                            <div className="flex items-center justify-between border-b border-white/10 pb-3 flex-wrap gap-2">
+                                                <div>
+                                                    <span className="text-[10px] font-mono text-green-400 uppercase tracking-widest block font-bold">
+                                                        [STAGE 2 UNLOCKED]
+                                                    </span>
+                                                    <h4 className="text-base sm:text-lg font-bold font-heading uppercase text-white">
+                                                        PROJECT DEVELOPMENT PROGRESS & CODEBASE
+                                                    </h4>
+                                                </div>
+                                                <span className="text-xs font-mono text-green-400 border border-green-500/40 px-2.5 py-1 sharp bg-green-500/10">
+                                                    ✓ BLUEPRINT APPROVED
+                                                </span>
+                                            </div>
+
+                                            {progressSuccessMsg && (
+                                                <div className="p-3 bg-green-500/20 border border-green-500 text-green-300 text-xs font-mono">
+                                                    {progressSuccessMsg}
+                                                </div>
+                                            )}
+
+                                            <form onSubmit={handleSaveProjectProgress} className="space-y-4">
+                                                <div>
+                                                    <label className="block text-xs font-heading uppercase text-gold mb-1 tracking-wider">
+                                                        GitHub Repository URL
+                                                    </label>
+                                                    <input
+                                                        type="url"
+                                                        value={projectRepoUrl}
+                                                        onChange={(e) => setProjectRepoUrl(e.target.value)}
+                                                        placeholder="https://github.com/your-username/your-repo"
+                                                        className="w-full p-3 bg-black/90 border border-white/20 focus:border-gold text-white text-xs font-mono sharp outline-none transition-colors"
+                                                    />
+                                                </div>
+
+                                                <div>
+                                                    <label className="block text-xs font-heading uppercase text-gold mb-1 tracking-wider">
+                                                        Live Deployed Demo / Prototype URL
+                                                    </label>
+                                                    <input
+                                                        type="url"
+                                                        value={projectLiveUrl}
+                                                        onChange={(e) => setProjectLiveUrl(e.target.value)}
+                                                        placeholder="https://your-project.vercel.app or https://your-domain.com"
+                                                        className="w-full p-3 bg-black/90 border border-white/20 focus:border-gold text-white text-xs font-mono sharp outline-none transition-colors"
+                                                    />
+                                                </div>
+
+                                                <div>
+                                                    <label className="block text-xs font-heading uppercase text-lightgrey mb-1 tracking-wider">
+                                                        Development Progress Notes & Changelog
+                                                    </label>
+                                                    <textarea
+                                                        rows="4"
+                                                        value={projectProgressNotes}
+                                                        onChange={(e) => setProjectProgressNotes(e.target.value)}
+                                                        placeholder="Share milestones reached, current sprint blockers, completed architecture modules..."
+                                                        className="w-full p-3 bg-black/90 border border-white/20 focus:border-gold text-white text-xs font-mono sharp outline-none transition-colors"
+                                                    />
+                                                </div>
+
+                                                <div className="flex items-center justify-between gap-4 pt-2 flex-wrap">
+                                                    <a
+                                                        href="https://discord.gg/5Jxbas2Rkv"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="py-3 px-5 border border-gold/40 bg-black hover:bg-gold/15 text-gold hover:text-white font-heading font-bold text-xs uppercase tracking-wider sharp transition-all flex items-center gap-2 no-underline"
+                                                    >
+                                                        DISCORD: #BUILDER-CHAT
+                                                    </a>
+
+                                                    <button
+                                                        type="submit"
+                                                        disabled={isSavingProgress}
+                                                        className="py-3 px-8 bg-gold hover:bg-white text-pitchblack font-heading font-bold text-xs uppercase tracking-widest sharp transition-all cursor-pointer shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+                                                    >
+                                                        {isSavingProgress ? 'SAVING PROGRESS...' : 'SAVE & SYNC PROJECT PROGRESS →'}
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    ) : (
+                                        /* PHASE 1: BLUEPRINT SUBMISSION FORM */
+                                        <div className="p-6 bg-pitchblack/80 border border-white/15 sharp space-y-4">
+                                            <div className="flex items-center justify-between border-b border-white/10 pb-3 flex-wrap gap-2">
+                                                <h4 className="text-base sm:text-lg font-bold font-heading uppercase text-white flex items-center gap-2">
+                                                    SUBMIT SYSTEM BLUEPRINT FOR APPROVAL
+                                                </h4>
+                                                <span className="text-xs font-mono text-gold">
+                                                    Max 3 Rejections Permitted
+                                                </span>
+                                            </div>
+
+                                            {submissionSuccessMsg && (
+                                                <div className="p-3 bg-green-500/20 border border-green-500 text-green-300 text-xs font-mono">
+                                                    Status: {submissionSuccessMsg}
+                                                </div>
+                                            )}
+
+                                            {activeClaim.blueprintSubmission && (
+                                                <div className="p-4 bg-black/60 border border-gold/40 sharp space-y-2 text-xs font-mono">
+                                                    <div className="text-gold font-bold">CURRENT SUBMISSION ON RECORD:</div>
+                                                    <div>
+                                                        <span className="text-lightgrey">URL:</span>{' '}
+                                                        <a href={activeClaim.blueprintSubmission.url} target="_blank" rel="noopener noreferrer" className="text-white underline">
+                                                            {activeClaim.blueprintSubmission.url}
+                                                        </a>
+                                                    </div>
+                                                    {activeClaim.blueprintSubmission.notes && (
+                                                        <div><span className="text-lightgrey">Notes:</span> {activeClaim.blueprintSubmission.notes}</div>
+                                                    )}
+                                                    {activeClaim.blueprintSubmission.submittedAt && (
+                                                        <div className="text-[10px] text-lightgrey">
+                                                            Submitted: {new Date(activeClaim.blueprintSubmission.submittedAt).toLocaleString()}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+
+                                            <form onSubmit={handleSubmitBlueprint} className="space-y-4">
+                                                <div>
+                                                    <label className="block text-xs font-heading uppercase text-gold mb-1 tracking-wider">
+                                                        Blueprint / Architecture Document URL *
+                                                    </label>
+                                                    <input
+                                                        type="url"
+                                                        required
+                                                        value={blueprintUrl}
+                                                        onChange={(e) => setBlueprintUrl(e.target.value)}
+                                                        placeholder="https://drive.google.com/... or https://github.com/... or https://notion.so/..."
+                                                        className="w-full p-3 bg-black/90 border border-white/20 focus:border-gold text-white text-xs font-mono sharp outline-none transition-colors"
+                                                    />
+                                                    <span className="text-[10px] text-lightgrey font-mono mt-1 block">
+                                                        Shareable Google Drive PDF, Notion Doc, Figma Diagram, or GitHub Markdown repository.
+                                                    </span>
+                                                </div>
+
+                                                <div>
+                                                    <label className="block text-xs font-heading uppercase text-lightgrey mb-1 tracking-wider">
+                                                        Architecture Notes & Key Decisions (Optional)
+                                                    </label>
+                                                    <textarea
+                                                        rows="3"
+                                                        value={blueprintNotes}
+                                                        onChange={(e) => setBlueprintNotes(e.target.value)}
+                                                        placeholder="Outline chosen database, framework, API protocols, and scalability considerations..."
+                                                        className="w-full p-3 bg-black/90 border border-white/20 focus:border-gold text-white text-xs font-mono sharp outline-none transition-colors"
+                                                    />
+                                                </div>
+
+                                                <div className="flex items-center justify-between gap-4 pt-2 flex-wrap">
+                                                    <a
+                                                        href="https://discord.gg/5Jxbas2Rkv"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="py-3 px-5 border border-gold/40 bg-black hover:bg-gold/15 text-gold hover:text-white font-heading font-bold text-xs uppercase tracking-wider sharp transition-all flex items-center gap-2 no-underline"
+                                                    >
+                                                        DISCORD: #BLUEPRINT-HELP
+                                                    </a>
+
+                                                    <button
+                                                        type="submit"
+                                                        disabled={isSubmittingBlueprint}
+                                                        className="py-3 px-8 bg-gold hover:bg-white text-pitchblack font-heading font-bold text-xs uppercase tracking-widest sharp transition-all cursor-pointer shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+                                                    >
+                                                        {isSubmittingBlueprint ? 'SUBMITTING BLUEPRINT...' : activeClaim.status === 'blueprint_submitted' ? 'SUBMIT REVISED BLUEPRINT' : 'SUBMIT BLUEPRINT FOR APPROVAL →'}
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    )}
+                                </>
+                            )}
                         </div>
                     )}
                 </div>
