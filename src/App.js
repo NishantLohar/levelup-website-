@@ -18,12 +18,16 @@ import ClubActivities from "./pages/ClubActivities";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import UpriseProfilePage from "./pages/UpriseProfilePage";
 import PreHackathonTasksPage from "./pages/PreHackathonTasksPage";
+import PreHackathonProblemStatementPage from "./pages/PreHackathonProblemStatementPage";
 import NotFoundWinner from "./pages/NotFoundWinner";
 
 const AppContent = () => {
   const location = useLocation();
   const isUprise = location.pathname === '/uprise' || 
                    location.pathname === '/pre-hackathon' || 
+                   location.pathname === '/pre-hackathon/problem-statement' || 
+                   location.pathname === '/pre-hackathon-problem-statement' || 
+                   location.pathname === '/pre-hackathon/statement' || 
                    location.pathname === '/club-activities' ||
                    location.pathname === '/leaderboard' ||
                    location.pathname === '/uprise/leaderboard' ||
@@ -52,6 +56,9 @@ const AppContent = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/uprise" element={<Uprise />} />
         <Route path="/pre-hackathon" element={<PreHackathonPage />} />
+        <Route path="/pre-hackathon/problem-statement" element={<PreHackathonProblemStatementPage />} />
+        <Route path="/pre-hackathon-problem-statement" element={<PreHackathonProblemStatementPage />} />
+        <Route path="/pre-hackathon/statement" element={<PreHackathonProblemStatementPage />} />
         <Route path="/club-activities" element={<ClubActivities />} />
         <Route path="/leaderboard" element={<LeaderboardPage />} />
         <Route path="/uprise/leaderboard" element={<LeaderboardPage />} />

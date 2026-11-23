@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import UpriseNavbar from './uprise_components/UpriseNavbar';
 import UpriseLoginModal from './uprise_components/UpriseLoginModal';
 import PreHackathonTasks from './uprise_components/PreHackathonTasks';
@@ -9,6 +9,7 @@ import './Uprise.css'; // Reuse the same CSS for consistent animations
 
 const PreHackathonPage = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const isRegisteredParam = new URLSearchParams(location.search).get('registered') === 'true';
 
     useEffect(() => {
@@ -252,7 +253,7 @@ const PreHackathonPage = () => {
                                 {userClaim ? (
                                     <button 
                                         type="button"
-                                        onClick={() => setIsProblemModalOpen(true)}
+                                        onClick={() => navigate('/pre-hackathon/problem-statement')}
                                         className="magnetic-btn sharp bg-gold bright hover:bg-white text-pitchblack font-heading font-black py-5 px-10 transition-all duration-300 text-center tracking-widest text-sm hover:shadow-[0_0_25px_#FFFFFF] shimmer-btn animate-pulse-gold cursor-pointer inline-flex items-center justify-center gap-2.5"
                                     >
                                         <span>VIEW YOUR STATEMENT</span>
@@ -264,7 +265,7 @@ const PreHackathonPage = () => {
                                 ) : (
                                     <button 
                                         type="button"
-                                        onClick={() => setIsProblemModalOpen(true)}
+                                        onClick={() => navigate('/pre-hackathon/problem-statement')}
                                         className="magnetic-btn sharp bg-gold bright hover:bg-white text-pitchblack font-heading font-bold py-5 px-10 transition-all duration-300 text-center tracking-widest text-sm hover:shadow-[0_0_20px_#FFFFFF] shimmer-btn animate-pulse-gold cursor-pointer inline-flex items-center justify-center"
                                     >
                                         REGISTER TO RECEIVE THE PROBLEM
