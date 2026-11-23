@@ -834,7 +834,7 @@ const PreHackathonProblemStatementPage = () => {
                                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-6">
                                     <div>
                                         <span className="text-xs font-mono tracking-widest uppercase text-gold block mb-1">
-                                            STEP 3 // ALLOCATION STATUS (MAX 2 HACKERS / PS)
+                                            STEP 3 // ALLOCATION STATUS
                                         </span>
                                         <h2 className="text-2xl sm:text-3xl font-bold font-heading uppercase text-white">
                                             PROBLEM STATEMENTS ALLOCATION
@@ -870,7 +870,7 @@ const PreHackathonProblemStatementPage = () => {
                                         <span className="font-bold">[VERIFIED]</span>
                                         <span>Terms and Conditions officially accepted by {userEmail}.</span>
                                     </div>
-                                    <span className="text-[11px] text-lightgrey">Rule: Strictly max 2 coders per problem statement</span>
+                                    <span className="text-[11px] text-lightgrey">Official LevelUp Track Allocation</span>
                                 </div>
 
                                 {/* Loading state from DB */}
@@ -1022,7 +1022,7 @@ const PreHackathonProblemStatementPage = () => {
                                         </div>
 
                                         {/* Key Rules Snapshot */}
-                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto text-left text-xs font-mono pt-2">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto text-left text-xs font-mono pt-2">
                                             <div className="p-3.5 bg-black/60 border border-white/10 sharp">
                                                 <span className="text-gold block font-bold mb-1">48-Hour Timer:</span>
                                                 <span className="text-lightgrey text-[11px]">Commences automatically as soon as your problem statement is revealed and locked.</span>
@@ -1030,10 +1030,6 @@ const PreHackathonProblemStatementPage = () => {
                                             <div className="p-3.5 bg-black/60 border border-white/10 sharp">
                                                 <span className="text-gold block font-bold mb-1">Rejection Limits:</span>
                                                 <span className="text-lightgrey text-[11px]">Maximum 3 blueprint reviews and 2 final product evaluation attempts.</span>
-                                            </div>
-                                            <div className="p-3.5 bg-black/60 border border-white/10 sharp">
-                                                <span className="text-gold block font-bold mb-1">Team Restrictions:</span>
-                                                <span className="text-lightgrey text-[11px]">Strictly maximum 2 hackers permitted per problem statement.</span>
                                             </div>
                                         </div>
 
