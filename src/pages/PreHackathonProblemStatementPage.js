@@ -636,31 +636,31 @@ const PreHackathonProblemStatementPage = () => {
                 {currentStep === 'terms' && !activeClaim && (
                     <div className="space-y-8 bg-pitchblack/90 p-6 sm:p-10 border border-gold/40 sharp shadow-[0_0_30px_rgba(212,175,55,0.12)]">
                         <div>
-                            <span className="text-xs font-mono tracking-widest uppercase text-gold block mb-1">
+                            <span className="text-xs sm:text-sm font-mono tracking-widest uppercase text-gold block mb-1 font-bold">
                                 STEP 2 // LEGAL GATEWAY
                             </span>
-                            <h2 className="text-2xl sm:text-3xl font-bold font-heading uppercase text-white">
+                            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black font-heading uppercase text-white tracking-wide">
                                 UPRISE 2027: PROBLEM STATEMENT WORKFLOW TERMS & CONDITIONS
                             </h2>
-                            <p className="text-xs sm:text-sm text-lightgrey mt-1">
+                            <p className="text-sm sm:text-base text-lightgrey mt-2 leading-relaxed">
                                 By selecting a Problem Statement within the LevelUp ecosystem, you agree to the following terms regarding timelines, submissions, compensation, and Intellectual Property (IP) ownership.
                             </p>
                         </div>
 
                         {/* MASTER AGREEMENT CHECKBOX TOP BANNER */}
-                        <div className="p-4 sm:p-5 bg-gold/15 border-2 border-gold sharp space-y-2">
-                            <label className="flex items-start sm:items-center gap-3 cursor-pointer">
+                        <div className="p-4 sm:p-6 bg-gold/15 border-2 border-gold sharp space-y-2">
+                            <label className="flex items-start sm:items-center gap-3.5 cursor-pointer">
                                 <input 
                                     type="checkbox"
                                     checked={allTermsAccepted}
                                     onChange={toggleAllTerms}
-                                    className="mt-0.5 sm:mt-0 w-5 h-5 accent-gold cursor-pointer"
+                                    className="mt-0.5 sm:mt-0 w-6 h-6 accent-gold cursor-pointer shrink-0"
                                 />
                                 <div>
-                                    <span className="font-heading font-black text-white uppercase text-xs sm:text-sm tracking-wider block">
+                                    <span className="font-heading font-black text-white uppercase text-sm sm:text-base tracking-wider block">
                                         CLICK TO AGREE TO ALL TERMS AND CONDITIONS BELOW *
                                     </span>
-                                    <p className="text-[11px] text-lightgrey mt-0.5">
+                                    <p className="text-xs sm:text-sm text-lightgrey/90 mt-1 leading-normal">
                                         I accept the 48-Hour Blueprint submission requirement, max 3 blueprint rejections, 45-day build cycle, and LevelUp IP assignment.
                                     </p>
                                 </div>
@@ -668,102 +668,106 @@ const PreHackathonProblemStatementPage = () => {
                         </div>
 
                         {/* SECTION 1 */}
-                        <div className="p-5 sm:p-6 bg-black/60 border border-white/15 sharp space-y-4">
-                            <h3 className="text-base sm:text-lg font-heading font-black uppercase text-gold border-b border-white/10 pb-2">
+                        <div className="p-6 sm:p-8 bg-black/60 border border-white/15 sharp space-y-5">
+                            <h3 className="text-lg sm:text-xl font-heading font-black uppercase text-gold border-b border-white/10 pb-3 tracking-wide">
                                 1. Timelines and Blueprint Submissions
                             </h3>
-                            <div className="text-xs text-lightgrey leading-relaxed space-y-3 font-grotesk">
+                            <div className="text-sm sm:text-base text-white/90 leading-relaxed space-y-4 font-grotesk">
                                 <p>
-                                    <strong className="text-white">The 48-Hour Blueprint Rule:</strong> Upon selecting a problem statement, you have exactly 48 hours to submit your initial project blueprint. Failure to submit within this window will automatically forfeit your claim to the problem statement, and you will be required to re-apply.
+                                    <strong className="text-white font-bold">The 48-Hour Blueprint Rule:</strong> Upon selecting a problem statement, you have exactly 48 hours to submit your initial project blueprint. Failure to submit within this window will automatically forfeit your claim to the problem statement, and you will be required to re-apply.
                                 </p>
                                 <p>
-                                    <strong className="text-white">Blueprint Approvals and Rejections:</strong> Your blueprint is subject to review by the LevelUp team. If rejected, you may rebuild and resubmit the blueprint. You are allowed a maximum of 3 blueprint rejections per problem statement. If the third submission is rejected, you will be disqualified from that specific problem statement.
+                                    <strong className="text-white font-bold">Blueprint Approvals and Rejections:</strong> Your blueprint is subject to review by the LevelUp team. If rejected, you may rebuild and resubmit the blueprint. You are allowed a maximum of 3 blueprint rejections per problem statement. If the third submission is rejected, you will be disqualified from that specific problem statement.
                                 </p>
                                 <p>
-                                    <strong className="text-white">The 45-Day Development Cycle:</strong> Once your blueprint is officially approved, you have 45 days to complete and submit the final product.
+                                    <strong className="text-white font-bold">The 45-Day Development Cycle:</strong> Once your blueprint is officially approved, you have 45 days to complete and submit the final product.
                                 </p>
                                 <p>
-                                    <strong className="text-white">Failure to Deliver:</strong> If you fail to submit the completed project within the 45-day window, your access to that specific problem statement will be revoked, and you will not be allowed to choose it again in the future.
+                                    <strong className="text-white font-bold">Failure to Deliver:</strong> If you fail to submit the completed project within the 45-day window, your access to that specific problem statement will be revoked, and you will not be allowed to choose it again in the future.
                                 </p>
                             </div>
-                            <label className="flex items-center gap-3 pt-3 border-t border-white/10 cursor-pointer">
+                            <label className="flex items-center gap-3.5 pt-4 border-t border-white/10 cursor-pointer">
                                 <input 
                                     type="checkbox"
                                     checked={termsAgreed.section1_timelines}
                                     onChange={(e) => setTermsAgreed(prev => ({ ...prev, section1_timelines: e.target.checked }))}
-                                    className="w-4 h-4 accent-gold cursor-pointer"
+                                    className="w-5 h-5 accent-gold cursor-pointer shrink-0"
                                 />
-                                <span className="text-xs font-heading uppercase tracking-wider text-white font-bold">
+                                <span className="text-xs sm:text-sm font-heading uppercase tracking-wider text-white font-bold">
                                     I accept Section 1: Timelines and Blueprint Submissions (48h Rule & 45-Day Cycle) *
                                 </span>
                             </label>
                         </div>
 
                         {/* SECTION 2 */}
-                        <div className="p-5 sm:p-6 bg-black/60 border border-white/15 sharp space-y-4">
-                            <h3 className="text-base sm:text-lg font-heading font-black uppercase text-gold border-b border-white/10 pb-2">
+                        <div className="p-6 sm:p-8 bg-black/60 border border-white/15 sharp space-y-5">
+                            <h3 className="text-lg sm:text-xl font-heading font-black uppercase text-gold border-b border-white/10 pb-3 tracking-wide">
                                 2. Problem Statement Categories and Compensation
                             </h3>
-                            <div className="text-xs text-lightgrey leading-relaxed space-y-3 font-grotesk">
+                            <div className="text-sm sm:text-base text-white/90 leading-relaxed space-y-5 font-grotesk">
                                 <div>
-                                    <strong className="text-gold block mb-1">Category A: Standard Problem Statements (Earning Track)</strong>
+                                    <strong className="text-gold text-base sm:text-lg block mb-2 font-bold font-heading uppercase">
+                                        Category A: Standard Problem Statements (Earning Track)
+                                    </strong>
                                     <p>
                                         These problem statements offer an opportunity to earn financial compensation based on the quality of your final build.
                                     </p>
-                                    <p className="mt-1">
-                                        <strong className="text-white">Variable Valuation:</strong> The exact monetary worth or payout for the product is not fixed. Compensation is determined entirely at the discretion of the evaluation panel upon final submission, based on the product's functionality, market readiness, and execution of the approved blueprint.
+                                    <p className="mt-2">
+                                        <strong className="text-white font-bold">Variable Valuation:</strong> The exact monetary worth or payout for the product is not fixed. Compensation is determined entirely at the discretion of the evaluation panel upon final submission, based on the product's functionality, market readiness, and execution of the approved blueprint.
                                     </p>
                                 </div>
-                                <div className="pt-2 border-t border-white/5">
-                                    <strong className="text-cyan-400 block mb-1">Category B: Corporate Partner Problem Statements</strong>
+                                <div className="pt-4 border-t border-white/10">
+                                    <strong className="text-cyan-400 text-base sm:text-lg block mb-2 font-bold font-heading uppercase">
+                                        Category B: Corporate Partner Problem Statements
+                                    </strong>
                                     <p>
                                         These problem statements are provided directly by popular tech companies and corporate partners.
                                     </p>
-                                    <p className="mt-1">
-                                        <strong className="text-white">No Assured Compensation or Employment:</strong> LevelUp and the partner companies provide no guarantee of financial payout, internships, or hiring offers upon completion. While standout builds may attract recruitment opportunities, they are strictly circumstantial and not guaranteed.
+                                    <p className="mt-2">
+                                        <strong className="text-white font-bold">No Assured Compensation or Employment:</strong> LevelUp and the partner companies provide no guarantee of financial payout, internships, or hiring offers upon completion. While standout builds may attract recruitment opportunities, they are strictly circumstantial and not guaranteed.
                                     </p>
-                                    <p className="mt-1">
-                                        <strong className="text-white">Portfolio Authorization:</strong> Regardless of hiring outcomes, you are officially authorized to add the completed project to your professional developer portfolio, explicitly stating that you developed a product addressing a specific problem statement provided by the respective partner company.
+                                    <p className="mt-2">
+                                        <strong className="text-white font-bold">Portfolio Authorization:</strong> Regardless of hiring outcomes, you are officially authorized to add the completed project to your professional developer portfolio, explicitly stating that you developed a product addressing a specific problem statement provided by the respective partner company.
                                     </p>
                                 </div>
                             </div>
-                            <label className="flex items-center gap-3 pt-3 border-t border-white/10 cursor-pointer">
+                            <label className="flex items-center gap-3.5 pt-4 border-t border-white/10 cursor-pointer">
                                 <input 
                                     type="checkbox"
                                     checked={termsAgreed.section2_categories}
                                     onChange={(e) => setTermsAgreed(prev => ({ ...prev, section2_categories: e.target.checked }))}
-                                    className="w-4 h-4 accent-gold cursor-pointer"
+                                    className="w-5 h-5 accent-gold cursor-pointer shrink-0"
                                 />
-                                <span className="text-xs font-heading uppercase tracking-wider text-white font-bold">
+                                <span className="text-xs sm:text-sm font-heading uppercase tracking-wider text-white font-bold">
                                     I accept Section 2: Problem Statement Categories, Discretionary Compensation & Portfolio Authorization *
                                 </span>
                             </label>
                         </div>
 
                         {/* SECTION 3 */}
-                        <div className="p-5 sm:p-6 bg-black/60 border border-white/15 sharp space-y-4">
-                            <h3 className="text-base sm:text-lg font-heading font-black uppercase text-gold border-b border-white/10 pb-2">
+                        <div className="p-6 sm:p-8 bg-black/60 border border-white/15 sharp space-y-5">
+                            <h3 className="text-lg sm:text-xl font-heading font-black uppercase text-gold border-b border-white/10 pb-3 tracking-wide">
                                 3. Intellectual Property (IP) and Ownership
                             </h3>
-                            <div className="text-xs text-lightgrey leading-relaxed space-y-3 font-grotesk">
+                            <div className="text-sm sm:text-base text-white/90 leading-relaxed space-y-4 font-grotesk">
                                 <p>
-                                    <strong className="text-white">Absolute Ownership by LevelUp:</strong> All Intellectual Property (IP) rights, from start to finish, belong solely to LevelUp Events Private Limited. This includes, but is not limited to, the initial blueprint, the written codebase, the architecture, and the final submitted product.
+                                    <strong className="text-white font-bold">Absolute Ownership by LevelUp:</strong> All Intellectual Property (IP) rights, from start to finish, belong solely to LevelUp Events Private Limited. This includes, but is not limited to, the initial blueprint, the written codebase, the architecture, and the final submitted product.
                                 </p>
                                 <p>
-                                    <strong className="text-white">Assignment of Rights:</strong> By selecting a problem statement and submitting a blueprint, you agree to irrevocably assign all rights, title, and interest in the developed project to LevelUp. You may not sell, commercialize, patent, or distribute the product or its underlying code to any third party.
+                                    <strong className="text-white font-bold">Assignment of Rights:</strong> By selecting a problem statement and submitting a blueprint, you agree to irrevocably assign all rights, title, and interest in the developed project to LevelUp. You may not sell, commercialize, patent, or distribute the product or its underlying code to any third party.
                                 </p>
                                 <p>
-                                    <strong className="text-white">Portfolio Usage:</strong> While LevelUp retains full ownership of the IP, you are granted permission to showcase the functionality, architecture, and your specific contributions to the product in your personal portfolio and resume strictly for career, educational, and recruitment purposes.
+                                    <strong className="text-white font-bold">Portfolio Usage:</strong> While LevelUp retains full ownership of the IP, you are granted permission to showcase the functionality, architecture, and your specific contributions to the product in your personal portfolio and resume strictly for career, educational, and recruitment purposes.
                                 </p>
                             </div>
-                            <label className="flex items-center gap-3 pt-3 border-t border-white/10 cursor-pointer">
+                            <label className="flex items-center gap-3.5 pt-4 border-t border-white/10 cursor-pointer">
                                 <input 
                                     type="checkbox"
                                     checked={termsAgreed.section3_ipOwnership}
                                     onChange={(e) => setTermsAgreed(prev => ({ ...prev, section3_ipOwnership: e.target.checked }))}
-                                    className="w-4 h-4 accent-gold cursor-pointer"
+                                    className="w-5 h-5 accent-gold cursor-pointer shrink-0"
                                 />
-                                <span className="text-xs font-heading uppercase tracking-wider text-white font-bold">
+                                <span className="text-xs sm:text-sm font-heading uppercase tracking-wider text-white font-bold">
                                     I accept Section 3: Intellectual Property (IP) and Ownership (Assigned to LevelUp Events Private Limited) *
                                 </span>
                             </label>
