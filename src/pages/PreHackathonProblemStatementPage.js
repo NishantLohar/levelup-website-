@@ -834,7 +834,7 @@ const PreHackathonProblemStatementPage = () => {
                                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-6">
                                     <div>
                                         <span className="text-xs font-mono tracking-widest uppercase text-gold block mb-1">
-                                            STEP 3 // ALLOCATION STATUS
+                                            STEP 3 // ALLOCATION STATUS (MAX 2 HACKERS / PS)
                                         </span>
                                         <h2 className="text-2xl sm:text-3xl font-bold font-heading uppercase text-white">
                                             PROBLEM STATEMENTS ALLOCATION
@@ -870,7 +870,7 @@ const PreHackathonProblemStatementPage = () => {
                                         <span className="font-bold">[VERIFIED]</span>
                                         <span>Terms and Conditions officially accepted by {userEmail}.</span>
                                     </div>
-                                    <span className="text-[11px] text-lightgrey">Official LevelUp Track Allocation</span>
+                                    <span className="text-[11px] text-lightgrey">Rule: Strictly max 2 coders per problem statement</span>
                                 </div>
 
                                 {/* Loading state from DB */}

@@ -443,6 +443,9 @@ const ProblemStatementRegistrationModal = ({
                                             <div className="flex items-center gap-2">
                                                 <span className="text-gold font-bold">Rejection Limit:</span> Maximum 3 Blueprint Rejections
                                             </div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-gold font-bold">Team Capacity:</span> Maximum 2 Coders Per Statement
+                                            </div>
                                         </div>
                                     </div>
 
@@ -492,6 +495,9 @@ const ProblemStatementRegistrationModal = ({
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <span className="text-gold font-bold">Development Cycle:</span> 45 Days post-blueprint approval
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-gold font-bold">Team Capacity:</span> Maximum 2 Coders Per Statement
                                             </div>
                                         </div>
                                     </div>
@@ -767,7 +773,7 @@ const ProblemStatementRegistrationModal = ({
                                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
                                         <div>
                                             <span className="text-[10px] font-mono tracking-widest uppercase text-gold block">
-                                                STEP 3 // ALLOCATION STATUS
+                                                STEP 3 // ALLOCATION STATUS (MAX 2 HACKERS / PS)
                                             </span>
                                             <h3 className="text-xl sm:text-2xl font-bold font-heading uppercase text-white">
                                                 PROBLEM STATEMENTS ALLOCATION
@@ -803,7 +809,7 @@ const ProblemStatementRegistrationModal = ({
                                             <span className="font-bold">[VERIFIED]</span>
                                             <span>Terms and Conditions accepted by {userEmail}.</span>
                                         </div>
-                                        <span className="text-[10px] text-lightgrey">Official LevelUp Track Allocation</span>
+                                        <span className="text-[10px] text-lightgrey">Cap: Maximum 2 coders per problem statement</span>
                                     </div>
 
                                     {/* Real-time Loading Indicator */}
